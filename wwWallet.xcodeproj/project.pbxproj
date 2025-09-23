@@ -18,6 +18,7 @@
 		A099D37C2DB69A71007F6983 /* MessageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A099D37B2DB69A71007F6983 /* MessageHandler.swift */; };
 		A099D37E2DB6A1F7007F6983 /* WKUserContentController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A099D37D2DB6A1F7007F6983 /* WKUserContentController+Extensions.swift */; };
 		A0A611002DE9C7B800BF10CE /* SwiftCBOR in Frameworks */ = {isa = PBXBuildFile; productRef = A0A610FF2DE9C7B800BF10CE /* SwiftCBOR */; };
+		A0C67B872E7D8047008B52E6 /* IdentityProviderExtension.appex in Embed ExtensionKit Extensions */ = {isa = PBXBuildFile; fileRef = A0C67B802E7D8047008B52E6 /* IdentityProviderExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A0E498052E42194300AA9C23 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A0E498042E42194300AA9C23 /* Settings.bundle */; };
 		A0F7A1792DB68B5A009F3178 /* Logger+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F7A1782DB68B5A009F3178 /* Logger+Extensions.swift */; };
 		B40A360A2CF9DDCF0044D2C6 /* YubiKit in Frameworks */ = {isa = PBXBuildFile; productRef = B40A36092CF9DDCF0044D2C6 /* YubiKit */; };
@@ -44,6 +45,13 @@
 			remoteGlobalIDString = A04B09EB2DD2021000A1BFF7;
 			remoteInfo = AutoFillExtension;
 		};
+		A0C67B852E7D8047008B52E6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B40A35EC2CF9DB6A0044D2C6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A0C67B7F2E7D8047008B52E6;
+			remoteInfo = IdentityProviderExtension;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -55,6 +63,15 @@
 				A04B09FA2DD2021000A1BFF7 /* AutoFillExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
+		};
+		A0C67B882E7D8047008B52E6 /* Embed ExtensionKit Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			dstPath = "$(EXTENSIONS_FOLDER_PATH)";
+			dstSubfolder = Product;
+			files = (
+				A0C67B872E7D8047008B52E6 /* IdentityProviderExtension.appex in Embed ExtensionKit Extensions */,
+			);
+			name = "Embed ExtensionKit Extensions";
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -72,6 +89,7 @@
 		A099D3792DB69750007F6983 /* WKUserScript+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WKUserScript+Extensions.swift"; sourceTree = "<group>"; };
 		A099D37B2DB69A71007F6983 /* MessageHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageHandler.swift; sourceTree = "<group>"; };
 		A099D37D2DB6A1F7007F6983 /* WKUserContentController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WKUserContentController+Extensions.swift"; sourceTree = "<group>"; };
+		A0C67B802E7D8047008B52E6 /* IdentityProviderExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.extensionkit-extension"; includeInIndex = 0; path = IdentityProviderExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0E498042E42194300AA9C23 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		A0F7A1782DB68B5A009F3178 /* Logger+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Logger+Extensions.swift"; sourceTree = "<group>"; };
 		B40A35F42CF9DB6A0044D2C6 /* wwWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wwWallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -113,6 +131,13 @@
 			);
 			target = A04B09EB2DD2021000A1BFF7 /* AutoFillExtension */;
 		};
+		A0C67B8C2E7D8047008B52E6 /* Exceptions for "IdentityProviderExtension" folder in "IdentityProviderExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = A0C67B7F2E7D8047008B52E6 /* IdentityProviderExtension */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -130,6 +155,14 @@
 				A062D34C2DE8932600B45142 /* Exceptions for "Shared" folder in "wwWallet" target */,
 			);
 			path = Shared;
+			sourceTree = "<group>";
+		};
+		A0C67B812E7D8047008B52E6 /* IdentityProviderExtension */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A0C67B8C2E7D8047008B52E6 /* Exceptions for "IdentityProviderExtension" folder in "IdentityProviderExtension" target */,
+			);
+			path = IdentityProviderExtension;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -230,6 +263,7 @@
 				B40A36252CFA01CA0044D2C6 /* wwWallet */,
 				A062D3432DE892C300B45142 /* Shared */,
 				A04B09F02DD2021000A1BFF7 /* AutoFillExtension */,
+				A0C67B812E7D8047008B52E6 /* IdentityProviderExtension */,
 				A04B09ED2DD2021000A1BFF7 /* Frameworks */,
 				B40A35F52CF9DB6A0044D2C6 /* Products */,
 			);
@@ -240,6 +274,7 @@
 			children = (
 				B40A35F42CF9DB6A0044D2C6 /* wwWallet.app */,
 				A04B09EC2DD2021000A1BFF7 /* AutoFillExtension.appex */,
+				A0C67B802E7D8047008B52E6 /* IdentityProviderExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -286,6 +321,24 @@
 			productReference = A04B09EC2DD2021000A1BFF7 /* AutoFillExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		A0C67B7F2E7D8047008B52E6 /* IdentityProviderExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A0C67B8B2E7D8047008B52E6 /* Build configuration list for PBXNativeTarget "IdentityProviderExtension" */;
+			buildPhases = (
+				A0C67B7C2E7D8047008B52E6 /* Sources */,
+				A0C67B7D2E7D8047008B52E6 /* Frameworks */,
+				A0C67B7E2E7D8047008B52E6 /* Resources */,
+			);
+			buildRules = (
+			);
+			fileSystemSynchronizedGroups = (
+				A0C67B812E7D8047008B52E6 /* IdentityProviderExtension */,
+			);
+			name = IdentityProviderExtension;
+			productName = IdentityProviderExtension;
+			productReference = A0C67B802E7D8047008B52E6 /* IdentityProviderExtension.appex */;
+			productType = "com.apple.product-type.extensionkit-extension";
+		};
 		B40A35F32CF9DB6A0044D2C6 /* wwWallet */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = B40A36022CF9DB6B0044D2C6 /* Build configuration list for PBXNativeTarget "wwWallet" */;
@@ -295,11 +348,13 @@
 				B40A35F12CF9DB6A0044D2C6 /* Frameworks */,
 				B40A35F22CF9DB6A0044D2C6 /* Resources */,
 				A04B09FF2DD2021000A1BFF7 /* Embed Foundation Extensions */,
+				A0C67B882E7D8047008B52E6 /* Embed ExtensionKit Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				A04B09F92DD2021000A1BFF7 /* PBXTargetDependency */,
+				A0C67B862E7D8047008B52E6 /* PBXTargetDependency */,
 			);
 			name = wwWallet;
 			packageProductDependencies = (
@@ -316,12 +371,15 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1630;
+				LastSwiftUpdateCheck = 2600;
 				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					A04B09EB2DD2021000A1BFF7 = {
 						CreatedOnToolsVersion = 16.3;
 						LastSwiftMigration = 1630;
+					};
+					A0C67B7F2E7D8047008B52E6 = {
+						CreatedOnToolsVersion = 26.0;
 					};
 					B40A35F32CF9DB6A0044D2C6 = {
 						CreatedOnToolsVersion = 16.1;
@@ -349,12 +407,18 @@
 			targets = (
 				B40A35F32CF9DB6A0044D2C6 /* wwWallet */,
 				A04B09EB2DD2021000A1BFF7 /* AutoFillExtension */,
+				A0C67B7F2E7D8047008B52E6 /* IdentityProviderExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		A04B09EA2DD2021000A1BFF7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+		A0C67B7E2E7D8047008B52E6 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			files = (
 			);
@@ -403,6 +467,11 @@
 			files = (
 			);
 		};
+		A0C67B7C2E7D8047008B52E6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
 		B40A35F02CF9DB6A0044D2C6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			files = (
@@ -432,6 +501,11 @@
 			isa = PBXTargetDependency;
 			target = A04B09EB2DD2021000A1BFF7 /* AutoFillExtension */;
 			targetProxy = A04B09F82DD2021000A1BFF7 /* PBXContainerItemProxy */;
+		};
+		A0C67B862E7D8047008B52E6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A0C67B7F2E7D8047008B52E6 /* IdentityProviderExtension */;
+			targetProxy = A0C67B852E7D8047008B52E6 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -488,6 +562,62 @@
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Shared/wwWallet-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		A0C67B892E7D8047008B52E6 /* Debug configuration for PBXNativeTarget "IdentityProviderExtension" */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A04B0A002DD2035C00A1BFF7 /* Config.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Manual;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = IdentityProviderExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = IdentityProviderExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(EIP_BUNDLE_ID)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "$(EIP_PROVISIONING_PROFILE_SPECIFIER)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A0C67B8A2E7D8047008B52E6 /* Release configuration for PBXNativeTarget "IdentityProviderExtension" */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A04B0A002DD2035C00A1BFF7 /* Config.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Manual;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = IdentityProviderExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = IdentityProviderExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(EIP_BUNDLE_ID)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "$(EIP_PROVISIONING_PROFILE_SPECIFIER)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -695,6 +825,14 @@
 			buildConfigurations = (
 				A04B09FD2DD2021000A1BFF7 /* Debug configuration for PBXNativeTarget "AutoFillExtension" */,
 				A04B09FE2DD2021000A1BFF7 /* Release configuration for PBXNativeTarget "AutoFillExtension" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		A0C67B8B2E7D8047008B52E6 /* Build configuration list for PBXNativeTarget "IdentityProviderExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A0C67B892E7D8047008B52E6 /* Debug configuration for PBXNativeTarget "IdentityProviderExtension" */,
+				A0C67B8A2E7D8047008B52E6 /* Release configuration for PBXNativeTarget "IdentityProviderExtension" */,
 			);
 			defaultConfigurationName = Release;
 		};

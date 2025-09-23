@@ -40,6 +40,10 @@ window.nativeWrapper = (function (nativeWrapper) {
     createBluetoothMethod('bluetoothReceiveFromClient');
     createBluetoothMethod('bluetoothReceiveFromServer');
 
+    nativeWrapper.updateAllCredentials = function(credentials) {
+        console.log("Called updateAllCredentials with credentials", credentials);
+    };
+
     console.log("nativeWrapper initialized");
 
     return nativeWrapper;
