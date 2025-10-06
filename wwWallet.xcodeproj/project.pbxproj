@@ -326,7 +326,6 @@
 			buildConfigurationList = A0C67B8B2E7D8047008B52E6 /* Build configuration list for PBXNativeTarget "IdentityProviderExtension" */;
 			buildPhases = (
 				A0C67B7C2E7D8047008B52E6 /* Sources */,
-				A0C67B7D2E7D8047008B52E6 /* Frameworks */,
 				A0C67B7E2E7D8047008B52E6 /* Resources */,
 			);
 			buildRules = (
@@ -455,6 +454,7 @@
 				"done",
 				"",
 				"sed \"${sed_expressions[@]}\" \"$TEMPLATE\" > \"$DEST\"",
+				"",
 				"",
 				"",
 			);
