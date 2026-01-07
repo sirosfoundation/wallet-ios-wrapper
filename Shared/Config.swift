@@ -29,17 +29,13 @@ extension Config {
         __baseDomain4 as String
     }
 
-    class var baseDomain5: String {
-        __baseDomain5 as String
-    }
-
     class var baseDomains: [String] {
-        [baseDomain1, baseDomain2, baseDomain3, baseDomain4, baseDomain5]
+        [baseDomain1, baseDomain2, baseDomain3, baseDomain4]
     }
 
     class var baseDomain: String {
         if !registered {
-            UserDefaults.standard.register(defaults: ["environment": "0"])
+            UserDefaults.standard.register(defaults: ["environment": "1"])
             registered = true
         }
 
@@ -51,7 +47,7 @@ extension Config {
             return baseDomains[idx]
         }
 
-        return baseDomain1
+        return baseDomain2
     }
 
     private static var registered = false
