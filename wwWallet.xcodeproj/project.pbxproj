@@ -153,6 +153,11 @@
 			path = .github;
 			sourceTree = SOURCE_ROOT;
 		};
+		A096A7C22F7C1FD9006AE2A5 /* fastlane */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = fastlane;
+			sourceTree = SOURCE_ROOT;
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -218,6 +223,7 @@
 				A08D82832DA93BE4009373AB /* .gitignore */,
 				A04B09E72DD1FEB900A1BFF7 /* wwWallet-Info.plist */,
 				A090AC2F2F6448EF00ADE0B2 /* .github */,
+				A096A7C22F7C1FD9006AE2A5 /* fastlane */,
 			);
 			path = Build;
 			sourceTree = "<group>";

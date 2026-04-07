@@ -54,3 +54,6 @@ xcuserdata/
 **/xcshareddata/WorkspaceSettings.xcsettings
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,xcode
+
+fastlane/metadata/review_information
+fastlane/report.xml
