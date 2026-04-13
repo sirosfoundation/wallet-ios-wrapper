@@ -1,4 +1,4 @@
-The SIROS ID Digital Wallet is a secure digital identity wallet that allows you to safely store credentials issued by trusted organizations. The wallet is part of the larger SIROS ID Platform – an ecosystem for digital identity –  and is currently in a BETA phase for learning and testing.
+The SIROS ID Digital Wallet is a secure digital identity wallet that allows you to safely store credentials issued by trusted organizations. The wallet is part of the larger SIROS ID Platform – a production system targeting pilot activities within the EUDI wallet ecosystem.
 
 Key Features & Benefits:
 - Secure & Private Storage: Only you have access to your data: it is stored only your device and is protected by your device's biometric security (Face ID, Fingerprint) or hardware security key.
