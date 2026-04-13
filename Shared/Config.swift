@@ -34,7 +34,11 @@ extension Config {
     }
 
     class var baseDomains: [String] {
+#if ALLOW_DOMAIN_SWITCHING
         [baseDomain1, baseDomain2, baseDomain3, baseDomain4, baseDomain5].filter { !$0.isEmpty }
+#else
+        [baseDomain1]
+#endif
     }
 
     class var baseDomain: String {
