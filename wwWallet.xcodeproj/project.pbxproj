@@ -71,6 +71,7 @@
 		A003932C2F1A69010072EDF5 /* PrfExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrfExtensions.swift; sourceTree = "<group>"; };
 		A00436A92DA7F41D00002721 /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 		A02CF39A2F11676F009D2603 /* WebAuthnClientData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebAuthnClientData.swift; sourceTree = "<group>"; };
+		A031F7052F8D380300EE5ACF /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = SOURCE_ROOT; };
 		A04B09E72DD1FEB900A1BFF7 /* wwWallet-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "wwWallet-Info.plist"; sourceTree = SOURCE_ROOT; };
 		A04B09EC2DD2021000A1BFF7 /* AutoFillExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AutoFillExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		A04B09EE2DD2021000A1BFF7 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
@@ -219,6 +220,7 @@
 		A08D82822DA93BC0009373AB /* Build */ = {
 			isa = PBXGroup;
 			children = (
+				A031F7052F8D380300EE5ACF /* CHANGELOG.md */,
 				A04B0A002DD2035C00A1BFF7 /* Config.xcconfig */,
 				A08D82832DA93BE4009373AB /* .gitignore */,
 				A04B09E72DD1FEB900A1BFF7 /* wwWallet-Info.plist */,
