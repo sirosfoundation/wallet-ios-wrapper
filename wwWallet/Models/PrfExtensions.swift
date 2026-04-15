@@ -90,7 +90,7 @@ struct PrfExtensions {
 
      - returns: web-safe BASE64-encoded first and (optional) second secret
      */
-    private static func getSecrets(from extensions: [String: Any]?, for cid: String? = nil) -> (first: Data, second: Data?)? {
+    internal static func getSecrets(from extensions: [String: Any]?, for cid: String? = nil) -> (first: Data, second: Data?)? {
         guard let prf = extensions?["prf"] as? [String: Any]
         else {
             return nil

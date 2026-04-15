@@ -222,4 +222,48 @@ struct wwWalletTests {
         let algorithm = params.algorithm
         #expect(algorithm.rawValue == -7)
     }
+    
+    @Test("Test PrfExtensions getSecrets helper method")
+    func testPrfExtensionsGetSecrets() {
+        // Test with valid extension data
+        let validExtensions: [String: Any] = [
+            "prf": [
+                "eval": [
+                    "first": Data([0, 1, 2]).webSafeBase64EncodedString(),
+                    "second": Data([3, 4, 5]).webSafeBase64EncodedString()
+                ],
+                "evalByCredential": ["foo": [
+                    "first": Data([6, 7, 8]).webSafeBase64EncodedString(),
+                    "second": Data([9, 10, 11]).webSafeBase64EncodedString()
+                ]]
+            ]
+        ]
+        
+        var secrets = PrfExtensions.getSecrets(from: validExtensions)
+        #expect(secrets != nil)
+        #expect(secrets?.first == Data([0, 1, 2]))
+        #expect(secrets?.second == Data([3, 4, 5]))
+
+        secrets = PrfExtensions.getSecrets(from: validExtensions, for: "foo")
+        #expect(secrets != nil)
+        #expect(secrets?.first == Data([6, 7, 8]))
+        #expect(secrets?.second == Data([9, 10, 11]))
+
+        secrets = PrfExtensions.getSecrets(from: validExtensions, for: "bar")
+        #expect(secrets == nil)
+
+        // Test with no extensions
+        let noExtensionsSecrets = PrfExtensions.getSecrets(from: nil)
+        #expect(noExtensionsSecrets == nil)
+        
+        // Test with invalid extension data
+        let invalidExtensions: [String: Any] = [
+            "prf": [
+                "someOtherKey": "value"
+            ]
+        ]
+        
+        let invalidSecrets = PrfExtensions.getSecrets(from: invalidExtensions)
+        #expect(invalidSecrets == nil)
+    }
 }
