@@ -1,5 +1,5 @@
 //
-//  PrfSecretsTest.swift
+//  ExtensionsTests.swift
 //  wwWalletTests
 //
 //  Created by Benjamin Erhart on 15.04.26.
