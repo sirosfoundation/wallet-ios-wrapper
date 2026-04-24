@@ -31,8 +31,6 @@
 		B40A362A2CFA01CA0044D2C6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40A361E2CFA01CA0044D2C6 /* ContentView.swift */; };
 		B40A362C2CFA01CA0044D2C6 /* wwWalletApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40A36212CFA01CA0044D2C6 /* wwWalletApp.swift */; };
 		B40A362D2CFA01CA0044D2C6 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40A36232CFA01CA0044D2C6 /* WebView.swift */; };
-		B40A36382D0088FF0044D2C6 /* BLEServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40A36372D0088F90044D2C6 /* BLEServer.swift */; };
-		B40A363A2D00890B0044D2C6 /* BLEClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40A36392D0089060044D2C6 /* BLEClient.swift */; };
 		B43CB36F2D030CD900634811 /* WKScriptMessage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43CB36E2D030CC000634811 /* WKScriptMessage+Extensions.swift */; };
 		B49F14722D12BEC30063C12F /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49F14712D12BEBE0063C12F /* ButtonStyles.swift */; };
 		B4FB6A962D0C287600647AED /* NativeWrapper.js in Resources */ = {isa = PBXBuildFile; fileRef = B4FB6A952D0C286700647AED /* NativeWrapper.js */; };
@@ -487,7 +485,6 @@
 			isa = PBXSourcesBuildPhase;
 			files = (
 				A003932D2F1A69050072EDF5 /* PrfExtensions.swift in Sources */,
-				B40A36382D0088FF0044D2C6 /* BLEServer.swift in Sources */,
 				A06638E82EBE657D00D6799D /* Color+Extensions.swift in Sources */,
 				A08D82812DA91AE6009373AB /* Errors.swift in Sources */,
 				A099D37E2DB6A1F7007F6983 /* WKUserContentController+Extensions.swift in Sources */,
@@ -501,7 +498,6 @@
 				A099D37C2DB69A71007F6983 /* MessageHandler.swift in Sources */,
 				A099D37A2DB69750007F6983 /* WKUserScript+Extensions.swift in Sources */,
 				A08D827F2DA91A5D009373AB /* JsonModels.swift in Sources */,
-				B40A363A2D00890B0044D2C6 /* BLEClient.swift in Sources */,
 				B40A362C2CFA01CA0044D2C6 /* wwWalletApp.swift in Sources */,
 				A0F7A1792DB68B5A009F3178 /* Logger+Extensions.swift in Sources */,
 				B40A362D2CFA01CA0044D2C6 /* WebView.swift in Sources */,

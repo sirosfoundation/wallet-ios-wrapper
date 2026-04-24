@@ -7,7 +7,7 @@
 
 import SwiftUI
 @preconcurrency import WebKit
-import CoreBluetooth
+//import CoreBluetooth
 import OSLog
 
 struct WebView: UIViewRepresentable {
@@ -25,8 +25,8 @@ struct WebView: UIViewRepresentable {
 
         var url: URL
         let model: BridgeModel
-        let bleServer = BLEServer.shared
-        let bleClient = BLEClient.shared
+//        let bleServer = BLEServer.shared
+//        let bleClient = BLEClient.shared
         
         private let log = Logger(with: Coordinator.self)
 
@@ -68,8 +68,8 @@ struct WebView: UIViewRepresentable {
             ucc.addPageHandler(named: "__bluetoothTerminate__") {[weak self] message in
                 self?.log.debug("⚙️ Terminate message: \(message.stringBody ?? "(unknown encoding)")")
 
-                self?.bleClient.disconnect()
-                self?.bleServer.disconnect()
+//                self?.bleClient.disconnect()
+//                self?.bleServer.disconnect()
 
                 return true
             }
@@ -85,7 +85,7 @@ struct WebView: UIViewRepresentable {
 
                 let uuidString: String = try message.decode()
 
-                return await self?.bleClient.startScanning(for: CBUUID(string: uuidString))
+                return nil // await self?.bleClient.startScanning(for: CBUUID(string: uuidString))
             }
 
             ucc.addPageHandler(named: "__bluetoothSendToServer__") { [weak self] message in
@@ -97,7 +97,7 @@ struct WebView: UIViewRepresentable {
 
                 let result = try WKScriptMessage.decoder.decode([UInt8].self, from: data)
 
-                return await self?.bleClient.sendToServer(data: Data(result))
+                return nil // await self?.bleClient.sendToServer(data: Data(result))
             }
 
             ucc.addPageHandler(named: "__bluetoothSendToClient__") { [weak self] message in
@@ -115,7 +115,7 @@ struct WebView: UIViewRepresentable {
             ucc.addPageHandler(named: "__bluetoothReceiveFromServer__") { [weak self] _ in
                 self?.log.debug("⚙️ Receive from server")
 
-                return await self?.bleClient.receiveFromServer()
+                return nil //await self?.bleClient.receiveFromServer()
             }
 
 //            ucc.addUserScript(.bluetoothScript!)
