@@ -770,8 +770,6 @@
 				INFOPLIST_FILE = "wwWallet-Info.plist";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NFCReaderUsageDescription = "The application needs access to NFC reading to communicate with your YubiKey.";
-				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Always use bluetooth";
-				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "The app need to communicate with BLE";
 				INFOPLIST_KEY_NSCameraUsageDescription = "The app needs the camera to read QR codes.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -807,8 +805,6 @@
 				INFOPLIST_FILE = "wwWallet-Info.plist";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NFCReaderUsageDescription = "The application needs access to NFC reading to communicate with your YubiKey.";
-				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Always use bluetooth";
-				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "The app need to communicate with BLE";
 				INFOPLIST_KEY_NSCameraUsageDescription = "The app needs the camera to read QR codes.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
