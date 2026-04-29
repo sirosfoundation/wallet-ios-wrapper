@@ -33,5 +33,7 @@
 	<array>
 		<string>A0000006472F0001</string>
 	</array>
+	<key>CFBundleDisplayName</key>
+	<string>SIROS ID</string>
 </dict>
 </plist>
