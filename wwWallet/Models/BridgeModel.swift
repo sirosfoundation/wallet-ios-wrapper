@@ -63,7 +63,7 @@ import OSLog
             let session = try await CTAP2.Session.makeSession(connection: conn!)
 
             let r = request.request
-            var token: CTAP2.ClientPin.Token? = nil
+            var token: CTAP2.Token? = nil
 
             if let pin = pin, !pin.isEmpty {
                 self.pin = pin // Refresh timer
@@ -89,9 +89,9 @@ import OSLog
                     pubKeyCredParams: r.pubKeyCredParams.map({ $0.algorithm }),
                     excludeList: r.excludeCredentials?.compactMap({ $0.descriptor }),
                     extensions: extensions,
-                    options: r.options
+                    rk: r.rk
                 ),
-                pinToken: token).value
+                token: token).value
 
             let credentials = try Credentials(r.clientData!, response, prfs)
 
@@ -164,7 +164,7 @@ import OSLog
             let session = try await CTAP2.Session.makeSession(connection: conn!)
 
             let r = request.request
-            var token: CTAP2.ClientPin.Token? = nil
+            var token: CTAP2.Token? = nil
 
             // For subsequent calls, we have the PIN available and try to verify it.
             if needsPin {
@@ -186,7 +186,7 @@ import OSLog
                     allowList: r.allowCredentials?.compactMap({ $0.descriptor }),
                     extensions: extensions
                 ),
-                pinToken: token).value
+                token: token).value
 
             let credentials = try Credentials(r.clientData!, response, prfs)
 

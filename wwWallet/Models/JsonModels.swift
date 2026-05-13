@@ -39,16 +39,11 @@ struct CreateRequest: Decodable {
     var clientData: WebAuthnClientData? {
         WebAuthnClientData(type: .create, challenge: challenge, origin: "https://\(rp.id)")
     }
-
-    var options: CTAP2.MakeCredential.Parameters.Options? {
-        if authenticatorSelection?.residentKey == "preferred"
-            || authenticatorSelection?.residentKey == "required"
-            || authenticatorSelection?.requireResidentKey == true
-        {
-            return CTAP2.MakeCredential.Parameters.Options(rk: true)
-        }
-
-        return nil
+    
+    var rk: Bool {
+        authenticatorSelection?.residentKey == "preferred"
+        || authenticatorSelection?.residentKey == "required"
+        || authenticatorSelection?.requireResidentKey == true
     }
 
 
@@ -85,8 +80,8 @@ struct RelyingParty: Codable {
     let id: String
     let name: String?
 
-    var entity: WebAuthn.PublicKeyCredential.RPEntity {
-        WebAuthn.PublicKeyCredential.RPEntity(id: id, name: name)
+    var entity: WebAuthn.RelyingParty {
+        WebAuthn.RelyingParty(id: id, name: name)
     }
 }
 
@@ -96,12 +91,12 @@ struct User: Codable {
     let name: String?
     let displayName: String?
 
-    var entity: WebAuthn.PublicKeyCredential.UserEntity? {
+    var entity: WebAuthn.User? {
         guard let data = id.webSafeBase64DecodedData() else {
             return nil
         }
 
-        return WebAuthn.PublicKeyCredential.UserEntity(id: data, name: name, displayName: displayName)
+        return WebAuthn.User(id: data, name: name, displayName: displayName)
     }
 }
 
@@ -191,12 +186,14 @@ struct Credentials: Codable {
     let clientExtensionResults: Extensions?
     let authenticatorAttachment: String?
 
-    var descriptor: WebAuthn.PublicKeyCredential.Descriptor? {
+    var descriptor: WebAuthn.CredentialDescriptor? {
         guard let data = id?.webSafeBase64DecodedData() else {
             return nil
         }
+        
+        let transports = transports != nil ? Set(transports!.map({ WebAuthn.Transport(rawValue: $0) })) : nil
 
-        return WebAuthn.PublicKeyCredential.Descriptor(type: type, id: data, transports: transports)
+        return WebAuthn.CredentialDescriptor(type: type, id: data, transports: transports)
     }
 
     init(
