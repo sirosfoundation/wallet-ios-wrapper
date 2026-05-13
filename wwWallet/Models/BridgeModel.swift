@@ -18,8 +18,24 @@ import OSLog
 
     @MainActor
     var loadURLCallback: ((URL) -> Void)?
+    
+    private static let pinCacheTimeoutNs = 60 * NSEC_PER_SEC
+    
+    private var pinResetTask: Task<Void, any Error>?
 
-    private(set) var pin: String?
+    private(set) var pin: String? {
+        didSet {
+            pinResetTask?.cancel()
+            
+            if pin != nil {
+                pinResetTask = Task {
+                    try await Task.sleep(nanoseconds: Self.pinCacheTimeoutNs)
+                    pin = nil
+                    log.debug("PIN cleared after timeout.")
+                }
+            }
+        }
+    }
 
 
     private let log: Logger = Logger(for: BridgeModel.self)
@@ -50,6 +66,7 @@ import OSLog
             var token: CTAP2.ClientPin.Token? = nil
 
             if let pin = pin, !pin.isEmpty {
+                self.pin = pin // Refresh timer
                 token = try await session.getPinUVToken(using: .pin(pin), permissions: .makeCredential, rpId: r.rp.id)
             }
 
@@ -151,6 +168,7 @@ import OSLog
 
             // For subsequent calls, we have the PIN available and try to verify it.
             if needsPin {
+                pin = pin // Refresh timer
                 token = try await session.getPinUVToken(using: .pin(pin ?? ""), permissions: .getAssertion, rpId: r.rpId)
             }
 
