@@ -1,5 +1,5 @@
 //
-//  UserSelectionViewController.swift
+//  CredentialSelectionViewController.swift
 //  wwWallet
 //
 //  Created by Benjamin Erhart on 18.05.26.
@@ -8,11 +8,11 @@
 import UIKit
 import YubiKit
 
-class UserSelectionViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class CredentialSelectionViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
-    var users = [WebAuthn.User]()
+    var responses = [CTAP2.GetAssertion.Response]()
 
-    var resultCallback: ((_ user: WebAuthn.User?) -> Void)? = nil
+    var resultCallback: ((_ user: WebAuthn.CredentialDescriptor?) -> Void)? = nil
 
 
     convenience init() {
@@ -32,13 +32,12 @@ class UserSelectionViewController: UIViewController, UITableViewDataSource, UITa
     // MARK: UITableViewDataSource
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        users.count
+        responses.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
-        cell.textLabel?.text = users[indexPath.row].fallbackName
-        cell.detailTextLabel?.text = users[indexPath.row].id.base64EncodedString()
+        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+        cell.textLabel?.text = responses[indexPath.row].user?.fallbackName
 
         return cell
     }
@@ -49,7 +48,7 @@ class UserSelectionViewController: UIViewController, UITableViewDataSource, UITa
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         dismiss(animated: true)
 
-        resultCallback?(users[indexPath.row])
+        resultCallback?(responses[indexPath.row].credential)
     }
 
 

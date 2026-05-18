@@ -37,7 +37,7 @@ import OSLog
         }
     }
 
-    private var selectedUser: WebAuthn.User? = nil
+    private var selectedCredential: WebAuthn.CredentialDescriptor? = nil
 
     private let log: Logger = Logger(for: BridgeModel.self)
 
@@ -183,10 +183,8 @@ import OSLog
             var allowList: [WebAuthn.CredentialDescriptor]? = nil
 
             // If the user selected a specific Passkey, use that.
-            if let selectedUser = selectedUser {
-                allowList = [.init(id: selectedUser.id)]
-
-                log.debug("Selected ID: \(selectedUser.id.webSafeBase64EncodedString())")
+            if let selectedCredential = selectedCredential {
+                allowList = [selectedCredential]
             }
             else if let credentials = r.allowCredentials {
                 allowList = credentials.compactMap({ $0.descriptor })
@@ -201,19 +199,19 @@ import OSLog
                 ),
                 token: token).value
 
-            // There's multiple Passkeys on the YubiKey. Fetch their IDs and
+            // There's multiple credentials on the YubiKey. Fetch their IDs and
             // show it to the user for selection.
-            if let user = response.user, response.numberOfCredentials ?? 1 > 1 {
-                var users = [user]
+            if response.numberOfCredentials ?? 1 > 1 {
+                var responses = [response]
 
                 for try await nextResponse in await session.getNextAssertion() {
-                    if case .finished(let response) = nextResponse, let user = response.user {
-                        users.append(user)
+                    if case .finished(let response) = nextResponse {
+                        responses.append(response)
                     }
                 }
 
-                if users.count > 1 {
-                    throw Errors.multiplePasskeys(users)
+                if responses.count > 1 {
+                    throw Errors.multipleCredentials(responses)
                 }
             }
 
@@ -226,7 +224,7 @@ import OSLog
             await conn?.close()
 
             // Remove user selection again after use.
-            selectedUser = nil
+            selectedCredential = nil
 
             return ["data": json]
         }
@@ -249,20 +247,20 @@ import OSLog
                     return try await didReceiveGet(message)
 
                 default:
-                    selectedUser = nil
+                    selectedCredential = nil
                     throw error
                 }
 
-            case Errors.multiplePasskeys(let users):
+            case Errors.multipleCredentials(let responses):
                 await conn?.close()
 
                 log.error("\(error)")
 
                 try await Task.sleep(nanoseconds: 1 * NSEC_PER_SEC)
 
-                await acquireUser(message, users)
+                await acquireUser(message, responses)
 
-                if selectedUser == nil {
+                if selectedCredential == nil {
                     // User cancelled.
                     return [:]
                 }
@@ -274,7 +272,7 @@ import OSLog
 
                 log.error("\(error)")
 
-                selectedUser = nil
+                selectedCredential = nil
                 throw error
             }
         }
@@ -303,11 +301,11 @@ import OSLog
     }
 
     @MainActor
-    private func acquireUser(_ message: WKScriptMessage, _ users: [WebAuthn.User]) async {
-        selectedUser = await withCheckedContinuation { continuation in
+    private func acquireUser(_ message: WKScriptMessage, _ responses: [CTAP2.GetAssertion.Response]) async {
+        selectedCredential = await withCheckedContinuation { continuation in
             if let topVc = message.webView?.window?.rootViewController?.top, !topVc.isBeingDismissed {
-                let vc = UserSelectionViewController()
-                vc.users = users
+                let vc = CredentialSelectionViewController()
+                vc.responses = responses
                 vc.resultCallback = {
                     vc.resultCallback = nil // Remove circular reference so ARC can deinit view controller.
 

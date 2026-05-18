@@ -14,7 +14,7 @@ enum Errors: LocalizedError {
     case cannotCreateClientDataHash
     case cannotCreateUserEntity
     case error0x19
-    case multiplePasskeys(_ users: [WebAuthn.User])
+    case multipleCredentials(_ responses: [CTAP2.GetAssertion.Response])
 
     var localizedDescription: String {
         switch self {
@@ -30,8 +30,8 @@ enum Errors: LocalizedError {
         case .error0x19:
             return "0x19"
             
-        case .multiplePasskeys(let users):
-            return "Multiple users available: \(users.map({ $0.fallbackName }))"
+        case .multipleCredentials(let responses):
+            return "Multiple credentials available: \(responses.map({ $0.user?.fallbackName }))"
         }
     }
 }
