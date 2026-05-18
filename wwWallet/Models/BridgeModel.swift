@@ -258,7 +258,7 @@ import OSLog
 
                 try await Task.sleep(nanoseconds: 1 * NSEC_PER_SEC)
 
-                await acquireUser(message, responses)
+                await acquireCredential(message, responses)
 
                 if selectedCredential == nil {
                     // User cancelled.
@@ -301,7 +301,7 @@ import OSLog
     }
 
     @MainActor
-    private func acquireUser(_ message: WKScriptMessage, _ responses: [CTAP2.GetAssertion.Response]) async {
+    private func acquireCredential(_ message: WKScriptMessage, _ responses: [CTAP2.GetAssertion.Response]) async {
         selectedCredential = await withCheckedContinuation { continuation in
             if let topVc = message.webView?.window?.rootViewController?.top, !topVc.isBeingDismissed {
                 let vc = CredentialSelectionViewController()
