@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import YubiKit
 
 enum Errors: LocalizedError {
 
@@ -13,6 +14,7 @@ enum Errors: LocalizedError {
     case cannotCreateClientDataHash
     case cannotCreateUserEntity
     case error0x19
+    case multiplePasskeys(_ users: [WebAuthn.User])
 
     var localizedDescription: String {
         switch self {
@@ -27,6 +29,9 @@ enum Errors: LocalizedError {
 
         case .error0x19:
             return "0x19"
+            
+        case .multiplePasskeys(let users):
+            return "Multiple users available: \(users.map({ $0.fallbackName }))"
         }
     }
 }

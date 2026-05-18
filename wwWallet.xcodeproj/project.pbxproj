@@ -14,10 +14,13 @@
 		A02CF39B2F11676F009D2603 /* WebAuthnClientData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02CF39A2F11676F009D2603 /* WebAuthnClientData.swift */; };
 		A04B09EF2DD2021000A1BFF7 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A04B09EE2DD2021000A1BFF7 /* AuthenticationServices.framework */; };
 		A04B09FA2DD2021000A1BFF7 /* AutoFillExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A04B09EC2DD2021000A1BFF7 /* AutoFillExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A04CCCD42FBB549800C22FC2 /* UserSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04CCCD22FBB549800C22FC2 /* UserSelectionViewController.swift */; };
+		A04CCCD52FBB549800C22FC2 /* UserSelectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A04CCCD32FBB549800C22FC2 /* UserSelectionViewController.xib */; };
 		A05D7AC82DBFB8FB001940B3 /* WebBluetooth.js in Resources */ = {isa = PBXBuildFile; fileRef = A05D7AC72DBFB8F7001940B3 /* WebBluetooth.js */; };
 		A06638E82EBE657D00D6799D /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A06638E72EBE657D00D6799D /* Color+Extensions.swift */; };
 		A08D827F2DA91A5D009373AB /* JsonModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D827E2DA91A5D009373AB /* JsonModels.swift */; };
 		A08D82812DA91AE6009373AB /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D82802DA91AE6009373AB /* Errors.swift */; };
+		A093B0072FB4BEB600FE09F2 /* WebAuthn.User+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A093B0062FB4BEB600FE09F2 /* WebAuthn.User+Extensions.swift */; };
 		A099D37A2DB69750007F6983 /* WKUserScript+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A099D3792DB69750007F6983 /* WKUserScript+Extensions.swift */; };
 		A099D37C2DB69A71007F6983 /* MessageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A099D37B2DB69A71007F6983 /* MessageHandler.swift */; };
 		A099D37E2DB6A1F7007F6983 /* WKUserContentController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A099D37D2DB6A1F7007F6983 /* WKUserContentController+Extensions.swift */; };
@@ -75,12 +78,15 @@
 		A04B09EC2DD2021000A1BFF7 /* AutoFillExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AutoFillExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		A04B09EE2DD2021000A1BFF7 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
 		A04B0A002DD2035C00A1BFF7 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = SOURCE_ROOT; };
+		A04CCCD22FBB549800C22FC2 /* UserSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSelectionViewController.swift; sourceTree = "<group>"; };
+		A04CCCD32FBB549800C22FC2 /* UserSelectionViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserSelectionViewController.xib; sourceTree = "<group>"; };
 		A05D7AC72DBFB8F7001940B3 /* WebBluetooth.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = WebBluetooth.js; sourceTree = "<group>"; };
 		A06638E72EBE657D00D6799D /* Color+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
 		A08D827E2DA91A5D009373AB /* JsonModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonModels.swift; sourceTree = "<group>"; };
 		A08D82802DA91AE6009373AB /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		A08D82832DA93BE4009373AB /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = SOURCE_ROOT; };
 		A090AC232F642E4F00ADE0B2 /* wwWalletTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = wwWalletTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A093B0062FB4BEB600FE09F2 /* WebAuthn.User+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WebAuthn.User+Extensions.swift"; sourceTree = "<group>"; };
 		A099D3792DB69750007F6983 /* WKUserScript+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WKUserScript+Extensions.swift"; sourceTree = "<group>"; };
 		A099D37B2DB69A71007F6983 /* MessageHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageHandler.swift; sourceTree = "<group>"; };
 		A099D37D2DB6A1F7007F6983 /* WKUserContentController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WKUserContentController+Extensions.swift"; sourceTree = "<group>"; };
@@ -201,6 +207,7 @@
 				B43CB36E2D030CC000634811 /* WKScriptMessage+Extensions.swift */,
 				A099D37D2DB6A1F7007F6983 /* WKUserContentController+Extensions.swift */,
 				A099D3792DB69750007F6983 /* WKUserScript+Extensions.swift */,
+				A093B0062FB4BEB600FE09F2 /* WebAuthn.User+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -237,6 +244,8 @@
 				B49F14712D12BEBE0063C12F /* ButtonStyles.swift */,
 				B40A361E2CFA01CA0044D2C6 /* ContentView.swift */,
 				B40A36232CFA01CA0044D2C6 /* WebView.swift */,
+				A04CCCD22FBB549800C22FC2 /* UserSelectionViewController.swift */,
+				A04CCCD32FBB549800C22FC2 /* UserSelectionViewController.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -436,6 +445,7 @@
 			files = (
 				B4FB6A962D0C287600647AED /* NativeWrapper.js in Resources */,
 				B4FB6A982D0C404200647AED /* Shared.js in Resources */,
+				A04CCCD52FBB549800C22FC2 /* UserSelectionViewController.xib in Resources */,
 				B40A36272CFA01CA0044D2C6 /* Assets.xcassets in Resources */,
 				B40A36282CFA01CA0044D2C6 /* Bridge.js in Resources */,
 				A0E498052E42194300AA9C23 /* Settings.bundle in Resources */,
@@ -493,6 +503,7 @@
 				A02CF39B2F11676F009D2603 /* WebAuthnClientData.swift in Sources */,
 				B49F14722D12BEC30063C12F /* ButtonStyles.swift in Sources */,
 				B40A362A2CFA01CA0044D2C6 /* ContentView.swift in Sources */,
+				A04CCCD42FBB549800C22FC2 /* UserSelectionViewController.swift in Sources */,
 				A00436AA2DA7F42C00002721 /* UIViewController+Extensions.swift in Sources */,
 				A0A7BEC62F8FEB0B00F27AE1 /* Extensions.swift in Sources */,
 				A099D37C2DB69A71007F6983 /* MessageHandler.swift in Sources */,
@@ -501,6 +512,7 @@
 				B40A362C2CFA01CA0044D2C6 /* wwWalletApp.swift in Sources */,
 				A0F7A1792DB68B5A009F3178 /* Logger+Extensions.swift in Sources */,
 				B40A362D2CFA01CA0044D2C6 /* WebView.swift in Sources */,
+				A093B0072FB4BEB600FE09F2 /* WebAuthn.User+Extensions.swift in Sources */,
 			);
 		};
 /* End PBXSourcesBuildPhase section */

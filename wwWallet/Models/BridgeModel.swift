@@ -18,15 +18,15 @@ import OSLog
 
     @MainActor
     var loadURLCallback: ((URL) -> Void)?
-    
+
     private static let pinCacheTimeoutNs = 60 * NSEC_PER_SEC
-    
+
     private var pinResetTask: Task<Void, any Error>?
 
     private(set) var pin: String? {
         didSet {
             pinResetTask?.cancel()
-            
+
             if pin != nil {
                 pinResetTask = Task {
                     try await Task.sleep(nanoseconds: Self.pinCacheTimeoutNs)
@@ -37,6 +37,7 @@ import OSLog
         }
     }
 
+    private var selectedUser: WebAuthn.User? = nil
 
     private let log: Logger = Logger(for: BridgeModel.self)
 
@@ -179,14 +180,42 @@ import OSLog
             let prfs = try await PrfExtensions(session, r.extensions, r.allowCredentials)
             let extensions = try prfs.getAssertionInput()
 
+            var allowList: [WebAuthn.CredentialDescriptor]? = nil
+
+            // If the user selected a specific Passkey, use that.
+            if let selectedUser = selectedUser {
+                allowList = [.init(id: selectedUser.id)]
+
+                log.debug("Selected ID: \(selectedUser.id.webSafeBase64EncodedString())")
+            }
+            else if let credentials = r.allowCredentials {
+                allowList = credentials.compactMap({ $0.descriptor })
+            }
+
             let response = try await session.getAssertion(
                 parameters: .init(
                     rpId: r.rpId,
                     clientDataHash: clientDataHash,
-                    allowList: r.allowCredentials?.compactMap({ $0.descriptor }),
+                    allowList: allowList,
                     extensions: extensions
                 ),
                 token: token).value
+
+            // There's multiple Passkeys on the YubiKey. Fetch their IDs and
+            // show it to the user for selection.
+            if let user = response.user, response.numberOfCredentials ?? 1 > 1 {
+                var users = [user]
+
+                for try await nextResponse in await session.getNextAssertion() {
+                    if case .finished(let response) = nextResponse, let user = response.user {
+                        users.append(user)
+                    }
+                }
+
+                if users.count > 1 {
+                    throw Errors.multiplePasskeys(users)
+                }
+            }
 
             let credentials = try Credentials(r.clientData!, response, prfs)
 
@@ -195,6 +224,9 @@ import OSLog
             log.debug("\(json ?? "(nil)")")
 
             await conn?.close()
+
+            // Remove user selection again after use.
+            selectedUser = nil
 
             return ["data": json]
         }
@@ -217,14 +249,32 @@ import OSLog
                     return try await didReceiveGet(message)
 
                 default:
+                    selectedUser = nil
                     throw error
                 }
+
+            case Errors.multiplePasskeys(let users):
+                await conn?.close()
+
+                log.error("\(error)")
+
+                try await Task.sleep(nanoseconds: 1 * NSEC_PER_SEC)
+
+                await acquireUser(message, users)
+
+                if selectedUser == nil {
+                    // User cancelled.
+                    return [:]
+                }
+
+                return try await didReceiveGet(message)
 
             default:
                 await conn?.close(error: error)
 
                 log.error("\(error)")
 
+                selectedUser = nil
                 throw error
             }
         }
@@ -249,6 +299,28 @@ import OSLog
         }
         catch {
             pin = nil
+        }
+    }
+
+    @MainActor
+    private func acquireUser(_ message: WKScriptMessage, _ users: [WebAuthn.User]) async {
+        selectedUser = await withCheckedContinuation { continuation in
+            if let topVc = message.webView?.window?.rootViewController?.top, !topVc.isBeingDismissed {
+                let vc = UserSelectionViewController()
+                vc.users = users
+                vc.resultCallback = {
+                    vc.resultCallback = nil // Remove circular reference so ARC can deinit view controller.
+
+                    continuation.resume(returning: $0)
+                }
+
+                let navC = UINavigationController(rootViewController: vc)
+
+                topVc.present(navC, animated: true)
+            }
+            else {
+                continuation.resume(returning: nil)
+            }
         }
     }
 }
