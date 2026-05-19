@@ -11,7 +11,7 @@ jobs:
     runs-on: macos-latest
 
     env:
-      Destination: 'platform=iOS Simulator,arch=arm64,name=iPhone 17,OS=26.2'
+      Destination: 'platform=iOS Simulator,arch=arm64,name=iPhone 17,OS=latest'
 
     steps:
       - name: Checkout code
@@ -19,6 +19,9 @@ jobs:
 
       - name: Select Xcode
         run: sudo xcode-select -s /Applications/Xcode_26.3.app/Contents/Developer
+
+      - name: List available simulators
+        run: xcrun simctl list devices
 
       - name: Build Project
         run: |
