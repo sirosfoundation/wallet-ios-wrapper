@@ -201,12 +201,14 @@ import OSLog
 
             // There's multiple credentials on the YubiKey. Fetch their IDs and
             // show it to the user for selection.
-            if response.numberOfCredentials ?? 1 > 1 {
+            if let credCount = response.numberOfCredentials, credCount > 1 {
                 var responses = [response]
 
-                for try await nextResponse in await session.getNextAssertion() {
-                    if case .finished(let response) = nextResponse {
-                        responses.append(response)
+                for _ in 1 ..< credCount {
+                    for try await nextResponse in await session.getNextAssertion() {
+                        if case .finished(let response) = nextResponse {
+                            responses.append(response)
+                        }
                     }
                 }
 
