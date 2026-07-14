@@ -1,2 +1,1 @@
-- Forget YubiKey PIN again after 1 minute.
-- Added Passkey selector, when multiple Passkeys are stored on a YubiKey for the same domain.
+Fixed intermittent failures when trying to log in with a YubiKey.
