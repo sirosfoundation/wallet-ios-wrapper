@@ -15,6 +15,15 @@ class WebAuthnClientData: Codable {
         case get = "webauthn.get"
     }
 
+    // Explicit CodingKeys in the canonical WebAuthn spec order:
+    // https://www.w3.org/TR/webauthn/#dictionary-client-data
+    enum CodingKeys: String, CodingKey {
+        case type
+        case challenge
+        case origin
+        case crossOrigin
+    }
+
     /**
      The operation type the Client Data will be used for. This property has the value `create`
      when creating new credentials and `get when getting an assertion from an existing credential.
@@ -26,21 +35,37 @@ class WebAuthnClientData: Codable {
      */
     let challenge: String
 
-
     /**
      This member contains the fully qualified origin of the requester, as provided to the authenticator by the client.
      */
     let origin: String
 
     /**
+     Indicates whether the credential was used in a cross-origin context. Always `false` for
+     direct (same-origin) authentication requests, as required by the WebAuthn spec.
+     */
+    let crossOrigin: Bool = false
+
+    /**
      This is a derived property which returns the clientDataJson as defined by WebAuthN:
      https://www.w3.org/TR/webauthn/#sec-client-data
+
+     The result is cached so that every access returns the exact same bytes. This is critical
+     because `clientDataHash` (sent to the authenticator) and the response construction both
+     call this property — they must hash/encode the identical byte sequence.
      */
     var jsonData: Data {
         get throws {
-            try JSONEncoder().encode(self)
+            if let cached = _jsonData {
+                return cached
+            }
+            let data = try JSONEncoder().encode(self)
+            _jsonData = data
+            return data
         }
     }
+
+    private var _jsonData: Data?
 
     /**
      This is a derived property which returns the SHA-256 of the `jsonData`.
