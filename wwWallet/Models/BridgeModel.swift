@@ -71,9 +71,10 @@ import OSLog
                 token = try await session.getPinUVToken(using: .pin(pin), permissions: .makeCredential, rpId: r.rp.id)
             }
 
-            guard let clientDataHash = try r.clientData?.clientDataHash else {
+            guard let clientData = r.clientData else {
                 throw Errors.cannotCreateClientDataHash
             }
+            let clientDataHash = try clientData.clientDataHash
 
             guard let user = r.user.entity else {
                 throw Errors.cannotCreateUserEntity
@@ -94,7 +95,7 @@ import OSLog
                 ),
                 token: token).value
 
-            let credentials = try Credentials(r.clientData!, response, prfs)
+            let credentials = try Credentials(clientData, response, prfs)
 
             let json = String(data: try JSONEncoder().encode(ResponseWrapper(credentials, "create")), encoding: .utf8)
 
@@ -173,9 +174,10 @@ import OSLog
                 token = try await session.getPinUVToken(using: .pin(pin ?? ""), permissions: .getAssertion, rpId: r.rpId)
             }
 
-            guard let clientDataHash = try r.clientData?.clientDataHash else {
+            guard let clientData = r.clientData else {
                 throw Errors.cannotCreateClientDataHash
             }
+            let clientDataHash = try clientData.clientDataHash
 
             let prfs = try await PrfExtensions(session, r.extensions, r.allowCredentials)
             let extensions = try prfs.getAssertionInput()
@@ -217,7 +219,7 @@ import OSLog
                 }
             }
 
-            let credentials = try Credentials(r.clientData!, response, prfs)
+            let credentials = try Credentials(clientData, response, prfs)
 
             let json = String(data: try JSONEncoder().encode(ResponseWrapper(credentials, "get")), encoding: .utf8)
 

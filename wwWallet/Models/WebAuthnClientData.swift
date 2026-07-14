@@ -7,12 +7,22 @@
 
 import Foundation
 import CryptoKit
+import os
 
 class WebAuthnClientData: Codable {
 
     enum `Type`: String, Codable {
         case create = "webauthn.create"
         case get = "webauthn.get"
+    }
+
+    // Explicit CodingKeys in the canonical WebAuthn spec order:
+    // https://www.w3.org/TR/webauthn/#dictionary-client-data
+    enum CodingKeys: String, CodingKey {
+        case type
+        case challenge
+        case origin
+        case crossOrigin
     }
 
     /**
@@ -26,21 +36,39 @@ class WebAuthnClientData: Codable {
      */
     let challenge: String
 
-
     /**
      This member contains the fully qualified origin of the requester, as provided to the authenticator by the client.
      */
     let origin: String
 
     /**
+     Indicates whether the credential was used in a cross-origin context. Always `false` for
+     direct (same-origin) authentication requests, as required by the WebAuthn spec.
+     */
+    let crossOrigin: Bool
+
+    /**
      This is a derived property which returns the clientDataJson as defined by WebAuthN:
      https://www.w3.org/TR/webauthn/#sec-client-data
+
+     The result is cached so that every access returns the exact same bytes. This is critical
+     because `clientDataHash` (sent to the authenticator) and the response construction both
+     call this property — they must hash/encode the identical byte sequence.
      */
     var jsonData: Data {
         get throws {
-            try JSONEncoder().encode(self)
+            try _jsonDataCache.withLock { (cache: inout Data?) throws -> Data in
+                if let cached = cache {
+                    return cached
+                }
+                let data = try JSONEncoder().encode(self)
+                cache = data
+                return data
+            }
         }
     }
+
+    private let _jsonDataCache = OSAllocatedUnfairLock<Data?>(initialState: nil)
 
     /**
      This is a derived property which returns the SHA-256 of the `jsonData`.
@@ -62,5 +90,6 @@ class WebAuthnClientData: Codable {
         self.type = type
         self.challenge = challenge
         self.origin = origin
+        self.crossOrigin = false
     }
 }
