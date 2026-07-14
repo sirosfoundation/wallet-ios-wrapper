@@ -7,6 +7,7 @@
 
 import Foundation
 import CryptoKit
+import os
 
 class WebAuthnClientData: Codable {
 
@@ -44,7 +45,7 @@ class WebAuthnClientData: Codable {
      Indicates whether the credential was used in a cross-origin context. Always `false` for
      direct (same-origin) authentication requests, as required by the WebAuthn spec.
      */
-    let crossOrigin: Bool = false
+    let crossOrigin: Bool
 
     /**
      This is a derived property which returns the clientDataJson as defined by WebAuthN:
@@ -56,20 +57,18 @@ class WebAuthnClientData: Codable {
      */
     var jsonData: Data {
         get throws {
-            _jsonDataLock.lock()
-            defer { _jsonDataLock.unlock() }
-
-            if let cached = _jsonData {
-                return cached
+            try _jsonDataCache.withLock { (cache: inout Data?) throws -> Data in
+                if let cached = cache {
+                    return cached
+                }
+                let data = try JSONEncoder().encode(self)
+                cache = data
+                return data
             }
-            let data = try JSONEncoder().encode(self)
-            _jsonData = data
-            return data
         }
     }
 
-    private let _jsonDataLock = NSLock()
-    private var _jsonData: Data?
+    private let _jsonDataCache = OSAllocatedUnfairLock<Data?>(initialState: nil)
 
     /**
      This is a derived property which returns the SHA-256 of the `jsonData`.
@@ -91,5 +90,6 @@ class WebAuthnClientData: Codable {
         self.type = type
         self.challenge = challenge
         self.origin = origin
+        self.crossOrigin = false
     }
 }
