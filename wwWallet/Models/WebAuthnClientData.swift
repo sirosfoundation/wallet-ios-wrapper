@@ -56,6 +56,9 @@ class WebAuthnClientData: Codable {
      */
     var jsonData: Data {
         get throws {
+            _jsonDataLock.lock()
+            defer { _jsonDataLock.unlock() }
+
             if let cached = _jsonData {
                 return cached
             }
@@ -65,6 +68,7 @@ class WebAuthnClientData: Codable {
         }
     }
 
+    private let _jsonDataLock = NSLock()
     private var _jsonData: Data?
 
     /**
