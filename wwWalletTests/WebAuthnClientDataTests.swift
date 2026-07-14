@@ -34,11 +34,11 @@ struct WebAuthnClientDataTests {
         #expect(clientData != nil)
 
         do {
-            let jsonData = try clientData!.jsonData
-            #expect(!jsonData.isEmpty)
+            let jsonData = try WebAuthnClientDataJson(clientData!)
+            #expect(!jsonData.json.isEmpty)
 
             // Verify it's valid JSON by attempting to decode it back
-            let decoded = try JSONDecoder().decode(WebAuthnClientData.self, from: jsonData)
+            let decoded = try JSONDecoder().decode(WebAuthnClientData.self, from: jsonData.json)
             #expect(decoded.type == .create)
             #expect(decoded.challenge == challenge)
             #expect(decoded.origin == origin)
@@ -56,7 +56,7 @@ struct WebAuthnClientDataTests {
         #expect(clientData != nil)
 
         do {
-            let hash = try clientData!.clientDataHash
+            let hash = try WebAuthnClientDataJson(clientData!).hash
             #expect(!hash.isEmpty)
 
             // SHA-256 hash should be 32 bytes long
