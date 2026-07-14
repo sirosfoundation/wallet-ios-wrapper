@@ -13,9 +13,18 @@ internal import YubiKit
 @Suite("WebAuthnClientData Test Suite")
 struct WebAuthnClientDataTests {
 
+    // MARK: - Helpers
+
+    /// Returns a valid web-safe base64-encoded challenge for use in tests.
+    private func makeChallenge(_ text: String = "test_challenge") -> String {
+        text.data(using: .utf8)!.webSafeBase64EncodedString()
+    }
+
+    // MARK: - Tests
+
     @Test("Test WebAuthnClientData initialization")
     func testWebAuthnClientDataInit() {
-        let challenge = "test_challenge".data(using: .utf8)!.base64EncodedString().replacingOccurrences(of: "=", with: "")
+        let challenge = makeChallenge()
         let origin = "https://example.com"
 
         // Test successful initialization
@@ -29,7 +38,7 @@ struct WebAuthnClientDataTests {
 
     @Test("Test WebAuthnClientData jsonData property")
     func testWebAuthnClientDataJsonData() {
-        let challenge = "test_challenge".data(using: .utf8)!.base64EncodedString().replacingOccurrences(of: "=", with: "")
+        let challenge = makeChallenge()
         let origin = "https://example.com"
 
         let clientData = WebAuthnClientData(type: .create, challenge: challenge, origin: origin)
@@ -52,7 +61,7 @@ struct WebAuthnClientDataTests {
 
     @Test("Test WebAuthnClientData clientDataHash property")
     func testWebAuthnClientDataClientDataHash() {
-        let challenge = "test_challenge".data(using: .utf8)!.base64EncodedString()
+        let challenge = makeChallenge()
         let origin = "https://example.com"
 
         let clientData = WebAuthnClientData(type: .get, challenge: challenge, origin: origin)
@@ -71,7 +80,7 @@ struct WebAuthnClientDataTests {
 
     @Test("Test jsonData returns identical bytes on repeated calls (caching)")
     func testJsonDataIsCached() {
-        let challenge = "test_challenge".data(using: .utf8)!.base64EncodedString().replacingOccurrences(of: "=", with: "")
+        let challenge = makeChallenge()
         let origin = "https://example.com"
 
         let clientData = WebAuthnClientData(type: .get, challenge: challenge, origin: origin)
@@ -90,7 +99,7 @@ struct WebAuthnClientDataTests {
 
     @Test("Test clientDataHash is consistent with jsonData")
     func testClientDataHashConsistency() {
-        let challenge = "test_challenge".data(using: .utf8)!.base64EncodedString().replacingOccurrences(of: "=", with: "")
+        let challenge = makeChallenge()
         let origin = "https://example.com"
 
         let clientData = WebAuthnClientData(type: .get, challenge: challenge, origin: origin)
@@ -109,7 +118,7 @@ struct WebAuthnClientDataTests {
 
     @Test("Test JSON key ordering follows WebAuthn spec (type, challenge, origin, crossOrigin)")
     func testJsonKeyOrdering() {
-        let challenge = "abc123".data(using: .utf8)!.webSafeBase64EncodedString()
+        let challenge = makeChallenge("abc123")
         let origin = "https://id.example.com"
 
         let clientData = WebAuthnClientData(type: .get, challenge: challenge, origin: origin)
@@ -119,15 +128,25 @@ struct WebAuthnClientDataTests {
             let jsonData = try clientData!.jsonData
             let jsonString = String(data: jsonData, encoding: .utf8)!
 
-            // Verify canonical WebAuthn spec key order: type → challenge → origin → crossOrigin
-            let typeIdx = jsonString.range(of: "\"type\"")!.lowerBound
-            let challengeIdx = jsonString.range(of: "\"challenge\"")!.lowerBound
-            let originIdx = jsonString.range(of: "\"origin\"")!.lowerBound
-            let crossOriginIdx = jsonString.range(of: "\"crossOrigin\"")!.lowerBound
+            // Verify all required keys are present before comparing positions
+            #expect(jsonString.range(of: "\"type\"") != nil, "JSON missing 'type' key")
+            #expect(jsonString.range(of: "\"challenge\"") != nil, "JSON missing 'challenge' key")
+            #expect(jsonString.range(of: "\"origin\"") != nil, "JSON missing 'origin' key")
+            #expect(jsonString.range(of: "\"crossOrigin\"") != nil, "JSON missing 'crossOrigin' key")
 
-            #expect(typeIdx < challengeIdx)
-            #expect(challengeIdx < originIdx)
-            #expect(originIdx < crossOriginIdx)
+            guard let typeIdx = jsonString.range(of: "\"type\"")?.lowerBound,
+                  let challengeIdx = jsonString.range(of: "\"challenge\"")?.lowerBound,
+                  let originIdx = jsonString.range(of: "\"origin\"")?.lowerBound,
+                  let crossOriginIdx = jsonString.range(of: "\"crossOrigin\"")?.lowerBound
+            else {
+                #expect(Bool(false), "One or more expected JSON keys were missing")
+                return
+            }
+
+            // Verify canonical WebAuthn spec key order: type → challenge → origin → crossOrigin
+            #expect(typeIdx < challengeIdx, "Expected 'type' before 'challenge'")
+            #expect(challengeIdx < originIdx, "Expected 'challenge' before 'origin'")
+            #expect(originIdx < crossOriginIdx, "Expected 'origin' before 'crossOrigin'")
         } catch {
             #expect(Bool(false), "Unexpected error: \(error)")
         }
@@ -135,7 +154,7 @@ struct WebAuthnClientDataTests {
 
     @Test("Test JSON contains crossOrigin: false")
     func testJsonContainsCrossOriginFalse() {
-        let challenge = "abc123".data(using: .utf8)!.webSafeBase64EncodedString()
+        let challenge = makeChallenge("abc123")
         let origin = "https://id.example.com"
 
         let clientData = WebAuthnClientData(type: .get, challenge: challenge, origin: origin)
@@ -153,7 +172,7 @@ struct WebAuthnClientDataTests {
 
     @Test("Test JSON origin is not escaped (no backslash before forward slash)")
     func testJsonOriginNotEscaped() {
-        let challenge = "abc123".data(using: .utf8)!.webSafeBase64EncodedString()
+        let challenge = makeChallenge("abc123")
         let origin = "https://id.example.com"
 
         let clientData = WebAuthnClientData(type: .get, challenge: challenge, origin: origin)
