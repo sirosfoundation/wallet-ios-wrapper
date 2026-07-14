@@ -197,7 +197,7 @@ struct Credentials: Codable {
     }
 
     init(
-        _ clientData: WebAuthnClientData,
+        _ clientDataJson: WebAuthnClientDataJson,
         _ response: CTAP2.GetAssertion.Response,
         _ prfs: PrfExtensions
     ) throws {
@@ -205,7 +205,7 @@ struct Credentials: Codable {
         id = response.credential?.id.webSafeBase64EncodedString()
         transports = nil
 
-        self.response = Response(clientData, response)
+        self.response = Response(clientDataJson, response)
         rawId = id
 
         clientExtensionResults = Extensions(try prfs.getAssertionOutput(from: response))
@@ -214,7 +214,7 @@ struct Credentials: Codable {
     }
 
     init(
-        _ clientData: WebAuthnClientData,
+        _ clientDataJson: WebAuthnClientDataJson,
         _ response: CTAP2.MakeCredential.Response,
         _ prfs: PrfExtensions
     ) throws {
@@ -222,7 +222,7 @@ struct Credentials: Codable {
         id = response.authenticatorData.attestedCredentialData?.credentialId.webSafeBase64EncodedString()
         transports = nil
 
-        self.response = Response(clientData, response)
+        self.response = Response(clientDataJson, response)
         rawId = id
 
         clientExtensionResults = Extensions(try prfs.makeCredentialOutput(from: response))
@@ -255,8 +255,8 @@ struct Response: Codable {
     let attestationObject: String?
     let publicKeyAlgorithm: Int?
 
-    init(_ clientData: WebAuthnClientData, _ response: CTAP2.GetAssertion.Response) {
-        clientDataJson = try? clientData.jsonData.webSafeBase64EncodedString()
+    init(_ clientDataJson: WebAuthnClientDataJson, _ response: CTAP2.GetAssertion.Response) {
+        self.clientDataJson = clientDataJson.string
 
         authenticatorData = response.authenticatorData.rawData.webSafeBase64EncodedString()
         signature = response.signature.webSafeBase64EncodedString()
@@ -267,8 +267,8 @@ struct Response: Codable {
         publicKeyAlgorithm = nil
     }
 
-    init(_ clientData: WebAuthnClientData, _ response: CTAP2.MakeCredential.Response) {
-        clientDataJson = try? clientData.jsonData.webSafeBase64EncodedString()
+    init(_ clientDataJson: WebAuthnClientDataJson, _ response: CTAP2.MakeCredential.Response) {
+        self.clientDataJson = clientDataJson.string
 
         authenticatorData = response.authenticatorData.rawData.webSafeBase64EncodedString()
         signature = nil

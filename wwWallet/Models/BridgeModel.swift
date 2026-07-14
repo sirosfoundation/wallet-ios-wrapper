@@ -71,9 +71,10 @@ import OSLog
                 token = try await session.getPinUVToken(using: .pin(pin), permissions: .makeCredential, rpId: r.rp.id)
             }
 
-            guard let clientDataHash = try r.clientData?.clientDataHash else {
+            guard let clientData = r.clientData else {
                 throw Errors.cannotCreateClientDataHash
             }
+            let clientDataJson = try WebAuthnClientDataJson(clientData)
 
             guard let user = r.user.entity else {
                 throw Errors.cannotCreateUserEntity
@@ -84,7 +85,7 @@ import OSLog
 
             let response = try await session.makeCredential(
                 parameters: .init(
-                    clientDataHash: clientDataHash,
+                    clientDataHash: clientDataJson.hash,
                     rp: r.rp.entity,
                     user: user,
                     pubKeyCredParams: r.pubKeyCredParams.map({ $0.algorithm }),
@@ -94,7 +95,7 @@ import OSLog
                 ),
                 token: token).value
 
-            let credentials = try Credentials(r.clientData!, response, prfs)
+            let credentials = try Credentials(clientDataJson, response, prfs)
 
             let json = String(data: try JSONEncoder().encode(ResponseWrapper(credentials, "create")), encoding: .utf8)
 
@@ -173,9 +174,10 @@ import OSLog
                 token = try await session.getPinUVToken(using: .pin(pin ?? ""), permissions: .getAssertion, rpId: r.rpId)
             }
 
-            guard let clientDataHash = try r.clientData?.clientDataHash else {
+            guard let clientData = r.clientData else {
                 throw Errors.cannotCreateClientDataHash
             }
+            let clientDataJson = try WebAuthnClientDataJson(clientData)
 
             let prfs = try await PrfExtensions(session, r.extensions, r.allowCredentials)
             let extensions = try prfs.getAssertionInput()
@@ -193,7 +195,7 @@ import OSLog
             let response = try await session.getAssertion(
                 parameters: .init(
                     rpId: r.rpId,
-                    clientDataHash: clientDataHash,
+                    clientDataHash: clientDataJson.hash,
                     allowList: allowList,
                     extensions: extensions
                 ),
@@ -217,7 +219,7 @@ import OSLog
                 }
             }
 
-            let credentials = try Credentials(r.clientData!, response, prfs)
+            let credentials = try Credentials(clientDataJson, response, prfs)
 
             let json = String(data: try JSONEncoder().encode(ResponseWrapper(credentials, "get")), encoding: .utf8)
 

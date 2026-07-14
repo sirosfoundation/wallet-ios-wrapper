@@ -32,25 +32,6 @@ class WebAuthnClientData: Codable {
      */
     let origin: String
 
-    /**
-     This is a derived property which returns the clientDataJson as defined by WebAuthN:
-     https://www.w3.org/TR/webauthn/#sec-client-data
-     */
-    var jsonData: Data {
-        get throws {
-            try JSONEncoder().encode(self)
-        }
-    }
-
-    /**
-     This is a derived property which returns the SHA-256 of the `jsonData`.
-     */
-    var clientDataHash: Data {
-        get throws {
-            Data(SHA256.hash(data: try jsonData))
-        }
-    }
-
 
     init?(type: `Type`, challenge: String, origin: String) {
         // For an unknown reason, we cannot just pass the string through, but need to reencode,
@@ -62,5 +43,40 @@ class WebAuthnClientData: Codable {
         self.type = type
         self.challenge = challenge
         self.origin = origin
+    }
+}
+
+/**
+ Struct to keep the result of JSON-encoding `WebAuthnClientData` around.
+
+ It needs to be created once before hashing it, so we can send it back as-is to the server.
+
+ Otherwise re-encoding `WebAuthnClientData` would lead to intermittent bugs, where the signature
+ doesn't match the re-encoded `ClientDataJson`, as re-encoding might jumble JSON object key ordering hence
+ changing the value of encoded data, which was formerly hashed.
+
+ https://www.w3.org/TR/webauthn/#sec-client-data
+ */
+struct WebAuthnClientDataJson {
+
+    let json: Data
+
+    /**
+     The SHA-256 hash of `json`.
+     */
+    var hash: Data {
+        Data(SHA256.hash(data: json))
+    }
+
+    /**
+     The web-safe BASE64-encoded `json`.
+     */
+    var string: String {
+        json.webSafeBase64EncodedString()
+    }
+
+
+    init(_ clientData: WebAuthnClientData) throws {
+        json = try JSONEncoder().encode(clientData)
     }
 }
