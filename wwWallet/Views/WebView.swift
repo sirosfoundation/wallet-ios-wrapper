@@ -37,7 +37,7 @@ struct WebView: UIViewRepresentable {
         
         lazy var wkWebView: WKWebView = {
             let ucc = WKUserContentController()
-            
+
             ucc.addUserScript(.sharedScript!)
 
             ucc.addUserScript(.bundledScript(named: "Bridge", ["isLocked": "\(Lock.isLocked)"])!)
@@ -53,6 +53,12 @@ struct WebView: UIViewRepresentable {
 
             ucc.addPageHandler(named: "__login_status_changed__") { [weak self] message in
                 return try await self?.model.loginStatusChanged(message)
+            }
+
+            // Scan Physical ID (FaceTec). Fire-and-forget from the JS side; result
+            // (credentialOfferURI) is fed back via model.loadURLCallback on success.
+            ucc.addPageHandler(named: "__startScanPhysicalId__") { [weak self] message in
+                return try await self?.model.startScanPhysicalId(message)
             }
 
             ucc.addUserScript(.nativeWrapperScript!)

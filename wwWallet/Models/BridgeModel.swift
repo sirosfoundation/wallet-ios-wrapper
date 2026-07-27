@@ -10,6 +10,9 @@ import SwiftUI
 import YubiKit
 import WebKit
 import OSLog
+#if canImport(FaceTecSDK)
+import FaceTecSDK
+#endif
 
 @Observable class BridgeModel {
 
@@ -280,6 +283,74 @@ import OSLog
                 throw error
             }
         }
+    }
+
+    func startScanPhysicalId(_ message: WKScriptMessage) async throws -> Any? {
+        log.debug("Start scan physical ID")
+
+#if canImport(FaceTecSDK)
+        guard
+            let baseURLString = Bundle.main.object(forInfoDictionaryKey: "FaceTecAPIBaseURL") as? String,
+            !baseURLString.isEmpty,
+            let baseURL = URL(string: baseURLString)
+        else {
+            throw Errors.faceTecNotConfigured
+        }
+
+        let bearerToken = Bundle.main.object(forInfoDictionaryKey: "FaceTecAPIBearerToken") as? String ?? ""
+
+        guard let presentingVc = await message.webView?.window?.rootViewController?.top else {
+            throw Errors.faceTecNoPresenter
+        }
+
+        let provider = FaceTecIDVProvider(config: .init(
+            apiURL: baseURL,
+            bearerToken: bearerToken,
+            deviceKeyIdentifier: FaceTecConfig.deviceKeyIdentifier
+        ))
+
+        guard provider.isAvailable() else {
+            throw Errors.faceTecNotAvailable
+        }
+
+        let credentialOfferURI = try await provider.startVerification(presentingViewController: presentingVc)
+
+        // wallet-frontend's UriHandlerProvider expects the credential offer's
+        // query string to arrive at its tenant-scoped `cb` route — it detects
+        // `openid-credential-offer://` by inspecting `window.location.href`
+        // and rewrites to `buildPath('cb?<query>')` itself, but WKWebView
+        // can't navigate to a non-http(s) scheme at all, so that JS never
+        // runs. Replicate the same transform natively: derive the tenant
+        // base (`/id/<tenant>/`) from the *current* page's path — not just
+        // its last component, which breaks on trailing slashes (e.g. the Add
+        // Credentials page's `/id/default/add/`) — and append `cb`.
+        if
+            let currentURL = await message.webView?.url,
+            var targetComponents = URLComponents(url: currentURL, resolvingAgainstBaseURL: false),
+            let offerComponents = URLComponents(string: credentialOfferURI)
+        {
+            let pathComponents = targetComponents.path.split(separator: "/", omittingEmptySubsequences: true).map(String.init)
+            if let idIndex = pathComponents.firstIndex(of: "id"), idIndex + 1 < pathComponents.count {
+                let tenantBase = pathComponents[0...(idIndex + 1)]
+                targetComponents.path = "/" + tenantBase.joined(separator: "/") + "/cb"
+            } else {
+                targetComponents.path = "/cb"
+            }
+            targetComponents.query = offerComponents.query
+
+            if let url = targetComponents.url {
+                openUrl(url)
+            }
+        }
+
+        return nil
+#else
+        // FaceTecSDK is not linked into this build target yet (it's added via
+        // the local Vendor/FaceTecSDK package in Xcode's Package Dependencies).
+        log.error("FaceTecSDK not linked into this build yet.")
+
+        throw Errors.faceTecNotAvailable
+#endif
     }
 
     func loginStatusChanged(_ message: WKScriptMessage) async throws {

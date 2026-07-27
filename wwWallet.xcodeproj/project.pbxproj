@@ -38,6 +38,10 @@
 		B49F14722D12BEC30063C12F /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49F14712D12BEBE0063C12F /* ButtonStyles.swift */; };
 		B4FB6A962D0C287600647AED /* NativeWrapper.js in Resources */ = {isa = PBXBuildFile; fileRef = B4FB6A952D0C286700647AED /* NativeWrapper.js */; };
 		B4FB6A982D0C404200647AED /* Shared.js in Resources */ = {isa = PBXBuildFile; fileRef = B4FB6A972D0C403800647AED /* Shared.js */; };
+		FACE7EC0FACE7EC0FACE0004 /* FaceTecSDK in Frameworks */ = {isa = PBXBuildFile; productRef = FACE7EC0FACE7EC0FACE0002 /* FaceTecSDK */; };
+		FACE7EC0FACE7EC0FACE0008 /* FaceTecConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACE7EC0FACE7EC0FACE0005 /* FaceTecConfig.swift */; };
+		FACE7EC0FACE7EC0FACE0009 /* FaceTecIDVProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACE7EC0FACE7EC0FACE0006 /* FaceTecIDVProvider.swift */; };
+		FACE7EC0FACE7EC0FACE000A /* FaceTec_OCR_Customization.json in Resources */ = {isa = PBXBuildFile; fileRef = FACE7EC0FACE7EC0FACE0007 /* FaceTec_OCR_Customization.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -107,6 +111,9 @@
 		B49F14712D12BEBE0063C12F /* ButtonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyles.swift; sourceTree = "<group>"; };
 		B4FB6A952D0C286700647AED /* NativeWrapper.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = NativeWrapper.js; sourceTree = "<group>"; };
 		B4FB6A972D0C403800647AED /* Shared.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Shared.js; sourceTree = "<group>"; };
+		FACE7EC0FACE7EC0FACE0005 /* FaceTecConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceTecConfig.swift; sourceTree = "<group>"; };
+		FACE7EC0FACE7EC0FACE0006 /* FaceTecIDVProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceTecIDVProvider.swift; sourceTree = "<group>"; };
+		FACE7EC0FACE7EC0FACE0007 /* FaceTec_OCR_Customization.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = FaceTec_OCR_Customization.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -185,6 +192,7 @@
 			files = (
 				A00393302F1A6C400072EDF5 /* YubiKit in Frameworks */,
 				A02CF3992F11675C009D2603 /* YubiKit in Frameworks */,
+				FACE7EC0FACE7EC0FACE0004 /* FaceTecSDK in Frameworks */,
 			);
 		};
 /* End PBXFrameworksBuildPhase section */
@@ -302,12 +310,23 @@
 				A0F7A1732DB6829D009F3178 /* Views */,
 				A0F7A1742DB682EA009F3178 /* Web */,
 				A0F7A1752DB688C6009F3178 /* Bluetooth */,
+				FACE7EC0FACE7EC0FACE000B /* FaceTec */,
 				B40A36212CFA01CA0044D2C6 /* wwWalletApp.swift */,
 				B40A36202CFA01CA0044D2C6 /* wwWallet.entitlements */,
 				B40A361C2CFA01CA0044D2C6 /* Assets.xcassets */,
 				A0E498042E42194300AA9C23 /* Settings.bundle */,
 			);
 			path = wwWallet;
+			sourceTree = "<group>";
+		};
+		FACE7EC0FACE7EC0FACE000B /* FaceTec */ = {
+			isa = PBXGroup;
+			children = (
+				FACE7EC0FACE7EC0FACE0005 /* FaceTecConfig.swift */,
+				FACE7EC0FACE7EC0FACE0006 /* FaceTecIDVProvider.swift */,
+				FACE7EC0FACE7EC0FACE0007 /* FaceTec_OCR_Customization.json */,
+			);
+			path = FaceTec;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -365,6 +384,7 @@
 				B40A35F12CF9DB6A0044D2C6 /* Frameworks */,
 				B40A35F22CF9DB6A0044D2C6 /* Resources */,
 				A04B09FF2DD2021000A1BFF7 /* Embed Foundation Extensions */,
+				FACE7EC0FACE7EC0FACE000F /* Swap FaceTecSDKForDevelopment Framework */,
 			);
 			buildRules = (
 			);
@@ -375,6 +395,7 @@
 			packageProductDependencies = (
 				A02CF3982F11675C009D2603 /* YubiKit */,
 				A003932F2F1A6C400072EDF5 /* YubiKit */,
+				FACE7EC0FACE7EC0FACE0002 /* FaceTecSDK */,
 			);
 			productName = wwWallet;
 			productReference = B40A35F42CF9DB6A0044D2C6 /* wwWallet.app */;
@@ -416,6 +437,7 @@
 			packageReferences = (
 				A0A610FE2DE9C7B800BF10CE /* XCRemoteSwiftPackageReference "SwiftCBOR" */,
 				A003932E2F1A6C400072EDF5 /* XCRemoteSwiftPackageReference "yubikit-swift" */,
+				FACE7EC0FACE7EC0FACE0001 /* XCLocalSwiftPackageReference "Vendor/FaceTecSDK" */,
 			);
 			preferredProjectObjectVersion = 90;
 			productRefGroup = B40A35F52CF9DB6A0044D2C6 /* Products */;
@@ -450,6 +472,7 @@
 				B40A36282CFA01CA0044D2C6 /* Bridge.js in Resources */,
 				A0E498052E42194300AA9C23 /* Settings.bundle in Resources */,
 				A05D7AC82DBFB8FB001940B3 /* WebBluetooth.js in Resources */,
+				FACE7EC0FACE7EC0FACE000A /* FaceTec_OCR_Customization.json in Resources */,
 			);
 		};
 /* End PBXResourcesBuildPhase section */
@@ -477,6 +500,13 @@
 				"",
 				"",
 			);
+		};
+		FACE7EC0FACE7EC0FACE000F /* Swap FaceTecSDKForDevelopment Framework */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			name = "Swap FaceTecSDKForDevelopment Framework";
+			shellPath = /bin/sh;
+			shellScript = "set -euo pipefail\n\n# Debug builds ship the FaceTecSDKForDevelopment framework (paired with our\n# development/sandbox device key) instead of the production one -- the\n# production framework rejects that key with an internal crash rather than a\n# clean error. Uses FaceTec's own documented swap mechanism (bundled inside\n# FaceTecSDK.framework itself), run after the framework has been embedded.\nif [ \"${CONFIGURATION}\" != \"Debug\" ]; then\n    echo \"FaceTecSDK: ${CONFIGURATION} build, keeping production framework.\"\n    exit 0\nfi\n\nEMBEDDED_FRAMEWORK=\"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FaceTecSDK.framework\"\nDEVELOPMENT_XCFRAMEWORK=\"${SRCROOT}/Vendor/FaceTecSDK/Frameworks/FaceTecSDKForDevelopment.xcframework\"\n\nif [ ! -d \"${EMBEDDED_FRAMEWORK}\" ]; then\n    echo \"error: FaceTecSDK.framework has not been embedded at ${EMBEDDED_FRAMEWORK}.\" >&2\n    exit 1\nfi\n\n# FaceTec's swap script falls back to the literal $CODE_SIGN_IDENTITY string\n# (often a generic placeholder like \"iPhone Developer\", which codesign can't\n# resolve to an actual certificate) unless $EXPANDED_CODE_SIGN_IDENTITY is\n# set -- which isn't reliably populated in a plain Run Script phase. Read the\n# identity Xcode already used to sign the embedded framework moments ago and\n# export it, so the swap re-signs with that same identity.\nCODESIGN_INFO=$(codesign -dvvv \"${EMBEDDED_FRAMEWORK}\" 2>&1 || true)\nRESOLVED_IDENTITY=$(printf '%s\\n' \"${CODESIGN_INFO}\" | awk -F'=' '/^Authority=/{print $2; exit}')\nif [ -n \"${RESOLVED_IDENTITY:-}\" ]; then\n    export EXPANDED_CODE_SIGN_IDENTITY=\"${RESOLVED_IDENTITY}\"\nfi\n\nsh \"${EMBEDDED_FRAMEWORK}/swap-development-framework.sh\" \"${DEVELOPMENT_XCFRAMEWORK}\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -513,6 +543,8 @@
 				A0F7A1792DB68B5A009F3178 /* Logger+Extensions.swift in Sources */,
 				B40A362D2CFA01CA0044D2C6 /* WebView.swift in Sources */,
 				A093B0072FB4BEB600FE09F2 /* WebAuthn.User+Extensions.swift in Sources */,
+				FACE7EC0FACE7EC0FACE0008 /* FaceTecConfig.swift in Sources */,
+				FACE7EC0FACE7EC0FACE0009 /* FaceTecIDVProvider.swift in Sources */,
 			);
 		};
 /* End PBXSourcesBuildPhase section */
@@ -869,6 +901,13 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		FACE7EC0FACE7EC0FACE0001 /* XCLocalSwiftPackageReference "Vendor/FaceTecSDK" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Vendor/FaceTecSDK;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		A003932E2F1A6C400072EDF5 /* XCRemoteSwiftPackageReference "yubikit-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -902,6 +941,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A0A610FE2DE9C7B800BF10CE /* XCRemoteSwiftPackageReference "SwiftCBOR" */;
 			productName = SwiftCBOR;
+		};
+		FACE7EC0FACE7EC0FACE0002 /* FaceTecSDK */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FACE7EC0FACE7EC0FACE0001 /* XCLocalSwiftPackageReference "Vendor/FaceTecSDK" */;
+			productName = FaceTecSDK;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

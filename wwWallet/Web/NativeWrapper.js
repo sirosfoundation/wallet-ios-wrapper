@@ -40,6 +40,19 @@ window.nativeWrapper = (function (nativeWrapper) {
     createBluetoothMethod('bluetoothReceiveFromClient');
     createBluetoothMethod('bluetoothReceiveFromServer');
 
+    // Fire-and-forget, matching the `startScanPhysicalId?(): void` contract in
+    // wallet-frontend's NativeWrapperProvider.tsx (no Promise/return value expected,
+    // unlike the bluetooth methods above). Mirrors Android's
+    // WalletJsBridge.startScanPhysicalId -> PhotoIdMatchActivity kickoff.
+    nativeWrapper['startScanPhysicalId'] = function () {
+        console.log("NativeWrapper, startScanPhysicalId");
+
+        window.webkit.messageHandlers.__startScanPhysicalId__.postMessage("")
+        .catch(function (err) {
+            console.log("startScanPhysicalId error: ", err);
+        });
+    };
+
     console.log("nativeWrapper initialized");
 
     return nativeWrapper;
