@@ -506,7 +506,42 @@
 			alwaysOutOfDate = 1;
 			name = "Swap FaceTecSDKForDevelopment Framework";
 			shellPath = /bin/sh;
-			shellScript = "set -euo pipefail\n\n# Debug builds ship the FaceTecSDKForDevelopment framework (paired with our\n# development/sandbox device key) instead of the production one -- the\n# production framework rejects that key with an internal crash rather than a\n# clean error. Uses FaceTec's own documented swap mechanism (bundled inside\n# FaceTecSDK.framework itself), run after the framework has been embedded.\nif [ \"${CONFIGURATION}\" != \"Debug\" ]; then\n    echo \"FaceTecSDK: ${CONFIGURATION} build, keeping production framework.\"\n    exit 0\nfi\n\nEMBEDDED_FRAMEWORK=\"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FaceTecSDK.framework\"\nDEVELOPMENT_XCFRAMEWORK=\"${SRCROOT}/Vendor/FaceTecSDK/Frameworks/FaceTecSDKForDevelopment.xcframework\"\n\nif [ ! -d \"${EMBEDDED_FRAMEWORK}\" ]; then\n    echo \"error: FaceTecSDK.framework has not been embedded at ${EMBEDDED_FRAMEWORK}.\" >&2\n    exit 1\nfi\n\n# FaceTec's swap script falls back to the literal $CODE_SIGN_IDENTITY string\n# (often a generic placeholder like \"iPhone Developer\", which codesign can't\n# resolve to an actual certificate) unless $EXPANDED_CODE_SIGN_IDENTITY is\n# set -- which isn't reliably populated in a plain Run Script phase. Read the\n# identity Xcode already used to sign the embedded framework moments ago and\n# export it, so the swap re-signs with that same identity.\nCODESIGN_INFO=$(codesign -dvvv \"${EMBEDDED_FRAMEWORK}\" 2>&1 || true)\nRESOLVED_IDENTITY=$(printf '%s\\n' \"${CODESIGN_INFO}\" | awk -F'=' '/^Authority=/{print $2; exit}')\nif [ -n \"${RESOLVED_IDENTITY:-}\" ]; then\n    export EXPANDED_CODE_SIGN_IDENTITY=\"${RESOLVED_IDENTITY}\"\nfi\n\nsh \"${EMBEDDED_FRAMEWORK}/swap-development-framework.sh\" \"${DEVELOPMENT_XCFRAMEWORK}\"\n";
+			shellScript = (
+				"set -euo pipefail",
+				"",
+				"# Debug builds ship the FaceTecSDKForDevelopment framework (paired with our",
+				"# development/sandbox device key) instead of the production one -- the",
+				"# production framework rejects that key with an internal crash rather than a",
+				"# clean error. Uses FaceTec's own documented swap mechanism (bundled inside",
+				"# FaceTecSDK.framework itself), run after the framework has been embedded.",
+				"if [ \"${CONFIGURATION}\" != \"Debug\" ]; then",
+				"    echo \"FaceTecSDK: ${CONFIGURATION} build, keeping production framework.\"",
+				"    exit 0",
+				"fi",
+				"",
+				"EMBEDDED_FRAMEWORK=\"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FaceTecSDK.framework\"",
+				"DEVELOPMENT_XCFRAMEWORK=\"${SRCROOT}/Vendor/FaceTecSDK/Frameworks/FaceTecSDKForDevelopment.xcframework\"",
+				"",
+				"if [ ! -d \"${EMBEDDED_FRAMEWORK}\" ]; then",
+				"    echo \"error: FaceTecSDK.framework has not been embedded at ${EMBEDDED_FRAMEWORK}.\" >&2",
+				"    exit 1",
+				"fi",
+				"",
+				"# FaceTec's swap script falls back to the literal $CODE_SIGN_IDENTITY string",
+				"# (often a generic placeholder like \"iPhone Developer\", which codesign can't",
+				"# resolve to an actual certificate) unless $EXPANDED_CODE_SIGN_IDENTITY is",
+				"# set -- which isn't reliably populated in a plain Run Script phase. Read the",
+				"# identity Xcode already used to sign the embedded framework moments ago and",
+				"# export it, so the swap re-signs with that same identity.",
+				"CODESIGN_INFO=$(codesign -dvvv \"${EMBEDDED_FRAMEWORK}\" 2>&1 || true)",
+				"RESOLVED_IDENTITY=$(printf '%s\\n' \"${CODESIGN_INFO}\" | awk -F'=' '/^Authority=/{print $2; exit}')",
+				"if [ -n \"${RESOLVED_IDENTITY:-}\" ]; then",
+				"    export EXPANDED_CODE_SIGN_IDENTITY=\"${RESOLVED_IDENTITY}\"",
+				"fi",
+				"",
+				"sh \"${EMBEDDED_FRAMEWORK}/swap-development-framework.sh\" \"${DEVELOPMENT_XCFRAMEWORK}\"",
+				"",
+			);
 		};
 /* End PBXShellScriptBuildPhase section */
 
