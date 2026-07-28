@@ -59,4 +59,12 @@ extension Config {
     }
 
     private static var registered = false
+
+    class var faceTecApiBaseUrl: String {
+        "https://\(__faceTecApiBaseUrl as String)"
+    }
+
+    class var faceTecApiBearerToken: String {
+        __faceTecApiBearerToken as String
+    }
 }

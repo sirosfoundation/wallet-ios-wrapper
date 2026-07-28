@@ -38,10 +38,6 @@
 	</array>
 	<key>CFBundleDisplayName</key>
 	<string>SIROS ID</string>
-	<key>FaceTecAPIBaseURL</key>
-	<string>$(FACETEC_API_BASE_URL)</string>
-	<key>FaceTecAPIBearerToken</key>
-	<string>$(FACETEC_API_BEARER_TOKEN)</string>
 	<key>NFCReaderUsageDescription</key>
 	<string>Scans the NFC chip in your ID document to verify it.</string>
 </dict>

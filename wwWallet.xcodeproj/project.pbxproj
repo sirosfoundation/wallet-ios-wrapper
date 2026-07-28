@@ -38,7 +38,6 @@
 		B49F14722D12BEC30063C12F /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49F14712D12BEBE0063C12F /* ButtonStyles.swift */; };
 		B4FB6A962D0C287600647AED /* NativeWrapper.js in Resources */ = {isa = PBXBuildFile; fileRef = B4FB6A952D0C286700647AED /* NativeWrapper.js */; };
 		B4FB6A982D0C404200647AED /* Shared.js in Resources */ = {isa = PBXBuildFile; fileRef = B4FB6A972D0C403800647AED /* Shared.js */; };
-		FACE7EC0FACE7EC0FACE0004 /* FaceTecSDK in Frameworks */ = {isa = PBXBuildFile; productRef = FACE7EC0FACE7EC0FACE0002 /* FaceTecSDK */; };
 		FACE7EC0FACE7EC0FACE0008 /* FaceTecConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACE7EC0FACE7EC0FACE0005 /* FaceTecConfig.swift */; };
 		FACE7EC0FACE7EC0FACE0009 /* FaceTecIDVProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACE7EC0FACE7EC0FACE0006 /* FaceTecIDVProvider.swift */; };
 		FACE7EC0FACE7EC0FACE000A /* FaceTec_OCR_Customization.json in Resources */ = {isa = PBXBuildFile; fileRef = FACE7EC0FACE7EC0FACE0007 /* FaceTec_OCR_Customization.json */; };
@@ -172,6 +171,11 @@
 			path = fastlane;
 			sourceTree = SOURCE_ROOT;
 		};
+		A0ABC1F63018FBF6002E01C2 /* Vendor */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Vendor;
+			sourceTree = SOURCE_ROOT;
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -192,7 +196,6 @@
 			files = (
 				A00393302F1A6C400072EDF5 /* YubiKit in Frameworks */,
 				A02CF3992F11675C009D2603 /* YubiKit in Frameworks */,
-				FACE7EC0FACE7EC0FACE0004 /* FaceTecSDK in Frameworks */,
 			);
 		};
 /* End PBXFrameworksBuildPhase section */
@@ -240,6 +243,7 @@
 				A04B0A002DD2035C00A1BFF7 /* Config.xcconfig */,
 				A08D82832DA93BE4009373AB /* .gitignore */,
 				A04B09E72DD1FEB900A1BFF7 /* wwWallet-Info.plist */,
+				A0ABC1F63018FBF6002E01C2 /* Vendor */,
 				A090AC2F2F6448EF00ADE0B2 /* .github */,
 				A096A7C22F7C1FD9006AE2A5 /* fastlane */,
 			);
@@ -382,6 +386,7 @@
 				A0E498062E4220E400AA9C23 /* Prepare Settings.bundle */,
 				B40A35F02CF9DB6A0044D2C6 /* Sources */,
 				B40A35F12CF9DB6A0044D2C6 /* Frameworks */,
+				A0ABC1F730190ABD002E01C2 /* Optionally Embed FaceTecSDK */,
 				B40A35F22CF9DB6A0044D2C6 /* Resources */,
 				A04B09FF2DD2021000A1BFF7 /* Embed Foundation Extensions */,
 				FACE7EC0FACE7EC0FACE000F /* Swap FaceTecSDKForDevelopment Framework */,
@@ -395,7 +400,6 @@
 			packageProductDependencies = (
 				A02CF3982F11675C009D2603 /* YubiKit */,
 				A003932F2F1A6C400072EDF5 /* YubiKit */,
-				FACE7EC0FACE7EC0FACE0002 /* FaceTecSDK */,
 			);
 			productName = wwWallet;
 			productReference = B40A35F42CF9DB6A0044D2C6 /* wwWallet.app */;
@@ -437,7 +441,6 @@
 			packageReferences = (
 				A0A610FE2DE9C7B800BF10CE /* XCRemoteSwiftPackageReference "SwiftCBOR" */,
 				A003932E2F1A6C400072EDF5 /* XCRemoteSwiftPackageReference "yubikit-swift" */,
-				FACE7EC0FACE7EC0FACE0001 /* XCLocalSwiftPackageReference "Vendor/FaceTecSDK" */,
 			);
 			preferredProjectObjectVersion = 90;
 			productRefGroup = B40A35F52CF9DB6A0044D2C6 /* Products */;
@@ -478,6 +481,39 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		A0ABC1F730190ABD002E01C2 /* Optionally Embed FaceTecSDK */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			name = "Optionally Embed FaceTecSDK";
+			shellPath = /bin/sh;
+			shellScript = (
+				"set -euo pipefail",
+				"",
+				"LIB_NAME=\"FaceTecSDK\"",
+				"PROD_XCFRAMEWORK=\"${SRCROOT}/Vendor/FaceTecSDK/Frameworks/${LIB_NAME}.xcframework\"",
+				"",
+				"if [ -d \"${PROD_XCFRAMEWORK}\" ]; then",
+				"    echo \"FaceTecSDK: Embedding production framework for signing...\"",
+				"    ",
+				"    if [[ \"$SDK_NAME\" == *\"iphonesimulator\"* ]]; then",
+				"        SOURCE=\"${PROD_XCFRAMEWORK}/ios-arm64_x86_64-simulator/${LIB_NAME}.framework\"",
+				"    else",
+				"        SOURCE=\"${PROD_XCFRAMEWORK}/ios-arm64/${LIB_NAME}.framework\"",
+				"    fi",
+				"",
+				"    if [ -d \"$SOURCE\" ]; then",
+				"        mkdir -p \"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}\"",
+				"        cp -R \"$SOURCE\" \"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}\"",
+				"    else",
+				"        echo \"Error: Could not find binary inside XCFramework.\"",
+				"        exit 1",
+				"    fi",
+				"else",
+				"    echo \"FaceTecSDK: Production framework missing. Skipping (Open Source build).\"",
+				"fi",
+				"",
+			);
+		};
 		A0E498062E4220E400AA9C23 /* Prepare Settings.bundle */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -523,8 +559,8 @@
 				"DEVELOPMENT_XCFRAMEWORK=\"${SRCROOT}/Vendor/FaceTecSDK/Frameworks/FaceTecSDKForDevelopment.xcframework\"",
 				"",
 				"if [ ! -d \"${EMBEDDED_FRAMEWORK}\" ]; then",
-				"    echo \"error: FaceTecSDK.framework has not been embedded at ${EMBEDDED_FRAMEWORK}.\" >&2",
-				"    exit 1",
+				"    echo \"FaceTecSDK.framework has not been embedded at ${EMBEDDED_FRAMEWORK}.\"",
+				"    exit 0",
 				"fi",
 				"",
 				"# FaceTec's swap script falls back to the literal $CODE_SIGN_IDENTITY string",
@@ -854,6 +890,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				OTHER_LDFLAGS = "$(APP_OTHER_LDFLAGS)";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_ID)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "$(APP_PROVISIONING_PROFILE_SPECIFIER)";
@@ -889,6 +926,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				OTHER_LDFLAGS = "$(APP_OTHER_LDFLAGS)";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_ID)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "$(APP_PROVISIONING_PROFILE_SPECIFIER)";
@@ -936,13 +974,6 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		FACE7EC0FACE7EC0FACE0001 /* XCLocalSwiftPackageReference "Vendor/FaceTecSDK" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = Vendor/FaceTecSDK;
-		};
-/* End XCLocalSwiftPackageReference section */
-
 /* Begin XCRemoteSwiftPackageReference section */
 		A003932E2F1A6C400072EDF5 /* XCRemoteSwiftPackageReference "yubikit-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -976,11 +1007,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A0A610FE2DE9C7B800BF10CE /* XCRemoteSwiftPackageReference "SwiftCBOR" */;
 			productName = SwiftCBOR;
-		};
-		FACE7EC0FACE7EC0FACE0002 /* FaceTecSDK */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FACE7EC0FACE7EC0FACE0001 /* XCLocalSwiftPackageReference "Vendor/FaceTecSDK" */;
-			productName = FaceTecSDK;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

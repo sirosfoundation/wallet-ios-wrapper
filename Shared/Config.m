@@ -37,4 +37,12 @@
     return MACRO_STRING(BASE_DOMAIN5);
 }
 
++ (NSString *) faceTecApiBaseUrl {
+    return MACRO_STRING(FACETEC_API_BASE_URL);
+}
+
++ (NSString *) faceTecApiBearerToken {
+    return MACRO_STRING(FACETEC_API_BEARER_TOKEN);
+}
+
 @end

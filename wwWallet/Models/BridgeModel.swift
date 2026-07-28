@@ -289,15 +289,12 @@ import FaceTecSDK
         log.debug("Start scan physical ID")
 
 #if canImport(FaceTecSDK)
-        guard
-            let baseURLString = Bundle.main.object(forInfoDictionaryKey: "FaceTecAPIBaseURL") as? String,
-            !baseURLString.isEmpty,
-            let baseURL = URL(string: baseURLString)
+        guard let baseURL = URL(string: Config.faceTecApiBaseUrl)
         else {
             throw Errors.faceTecNotConfigured
         }
 
-        let bearerToken = Bundle.main.object(forInfoDictionaryKey: "FaceTecAPIBearerToken") as? String ?? ""
+        let bearerToken = Config.faceTecApiBearerToken
 
         guard let presentingVc = await message.webView?.window?.rootViewController?.top else {
             throw Errors.faceTecNoPresenter
