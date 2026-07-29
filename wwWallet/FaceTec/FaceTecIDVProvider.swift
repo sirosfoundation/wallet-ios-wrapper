@@ -75,7 +75,8 @@ final class FaceTecIDVProvider: @unchecked Sendable {
                         sdkInstanceBox = sdkInstance
                         continuation.resume()
                     },
-                    onError: { _ in
+                    onError: { [log] error in
+                        log.error("FaceTec SDK initialization failed: \(FaceTec.sdk.description(for: error))")
                         continuation.resume(throwing: Errors.faceTecInitializationFailed)
                     }
                 )
