@@ -23,6 +23,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (class, nonatomic, assign, readonly, nonnull) NSString *baseDomain5 NS_REFINED_FOR_SWIFT;
 
+@property (class, nonatomic, assign, readonly, nonnull) NSString *faceTecApiBaseUrl NS_REFINED_FOR_SWIFT;
+
+@property (class, nonatomic, assign, readonly, nonnull) NSString *faceTecApiBearerToken NS_REFINED_FOR_SWIFT;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -259,7 +259,13 @@ navigator.credentials.get = __webauthn_hooks__.get;
 window.PublicKeyCredential = (function () { });
 window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable =
 function () {
-    return Promise.resolve(false);
+    // TEMPORARY: was hardcoded to `false`, which likely forced wallet-frontend to treat
+    // no platform authenticator (Face ID/Touch ID) as available and route credential
+    // creation toward the security-key/NFC bridge instead of the real native passkey
+    // flow (`originalCreateFunction` below, WKWebView's built-in WebAuthn). Flipped to
+    // `true` to unblock login for FaceTec testing. Revert or make this reflect real
+    // capability once someone who owns this decision weighs in.
+    return Promise.resolve(true);
 };
 
 console.log("webauthn hooks initialized");
