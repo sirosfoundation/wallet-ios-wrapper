@@ -45,6 +45,9 @@ BASE_DOMAIN5[config=Release] =
 // 2. Uncomment APP_OTHER_LDFLAGS below.
 // 3. Add FACETEC_API_BASE_URL and FACETEC_API_BEARER_TOKEN below.
 //
+// NOTE: You will need to use the SIROS ID BUNDLE_IDs for this to work in development and in production!
+// (Or you get your own FaceTecSDK access.)
+//
 FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/Vendor/FaceTecSDK/Frameworks/FaceTecSDK.xcframework/ios-arm64" "$(PROJECT_DIR)/Vendor/FaceTecSDK/Frameworks/FaceTecSDK.xcframework/ios-arm64_x86_64-simulator"
 APP_OTHER_LDFLAGS = //-framework FaceTecSDK
 FACETEC_API_BASE_URL =
