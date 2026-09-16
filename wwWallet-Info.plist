@@ -36,9 +36,5 @@
 		<string>A0000002472001</string>
 		<string>00000000000000</string>
 	</array>
-	<key>CFBundleDisplayName</key>
-	<string>SIROS ID</string>
-	<key>NFCReaderUsageDescription</key>
-	<string>Scans the NFC chip in your ID document to verify it.</string>
 </dict>
 </plist>
