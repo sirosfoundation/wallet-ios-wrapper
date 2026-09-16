@@ -125,7 +125,16 @@ final class FaceTecIDVProvider: @unchecked Sendable {
 /// Request/response bodies are opaque encrypted blobs to FaceTec Server and
 /// are never logged, to keep this client's exposure to biometric data as
 /// small as possible.
+///
+/// Every request also carries an `externalDatabaseRefID`: the key FaceTec
+/// Server files the Enrollment Record under during the liveness step of a
+/// session and looks it up again during the ID match step. See that
+/// property for why the app has to be the one to mint it.
 private final class FaceTecPhotoIDMatchProcessor: NSObject, FaceTecSessionRequestProcessor, @unchecked Sendable {
+
+    /// Prefixes the per-session identifier below, so a record in FaceTec
+    /// Server can be traced back to the client that created it.
+    private static let externalDatabaseRefIDPrefix = "wwwallet-ios-"
 
     private let config: FaceTecIDVProvider.Config
     private let log: Logger
@@ -133,6 +142,27 @@ private final class FaceTecPhotoIDMatchProcessor: NSObject, FaceTecSessionReques
     private(set) var credentialOfferURI: String?
 
     private var exitContinuation: CheckedContinuation<FaceTecSessionStatus, Never>?
+
+    /// Identifies this scan's Enrollment Record inside FaceTec Server. It
+    /// must stay stable across the several `/process-request` calls one
+    /// FaceTec session makes — the server files the record under this key
+    /// during the liveness step and retrieves it again during the ID match
+    /// step — and it must differ between sessions, since a record can only
+    /// be enrolled once per key.
+    ///
+    /// One value per processor instance is exactly that:
+    /// `FaceTecIDVProvider.startVerification` constructs one processor per
+    /// session.
+    ///
+    /// The app has to be the one to generate this. facetec-api sees each
+    /// `/process-request` call in isolation — the calls of one session
+    /// carry no correlation identifier, only the tenant-wide bearer token —
+    /// so it cannot tell which of them belong together and cannot
+    /// synthesize a stable key on our behalf. Sending none left every
+    /// session sharing one empty key, and the ID match step then failed
+    /// with "A Record could not be found for the Enrollment" (matches
+    /// wallet-android-wrapper issue #27, fixed there the same way).
+    private let externalDatabaseRefID = FaceTecPhotoIDMatchProcessor.externalDatabaseRefIDPrefix + UUID().uuidString
 
     init(config: FaceTecIDVProvider.Config, log: Logger) {
         self.config = config
@@ -161,7 +191,10 @@ private final class FaceTecPhotoIDMatchProcessor: NSObject, FaceTecSessionReques
                 request.httpMethod = "POST"
                 request.setValue("application/json", forHTTPHeaderField: "Content-Type")
                 request.setValue("Bearer \(config.bearerToken)", forHTTPHeaderField: "Authorization")
-                request.httpBody = try JSONSerialization.data(withJSONObject: ["requestBlob": sessionRequestBlob])
+                request.httpBody = try JSONSerialization.data(withJSONObject: [
+                    "requestBlob": sessionRequestBlob,
+                    "externalDatabaseRefID": externalDatabaseRefID,
+                ])
 
                 let (data, response) = try await URLSession.shared.data(for: request)
 
