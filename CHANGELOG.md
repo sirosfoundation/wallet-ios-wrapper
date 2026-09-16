@@ -1,5 +1,8 @@
 # wwWallet CHANGELOG
 
+## 0.1.4
+- Fixed bugs in physical passport scanning.
+
 ## 0.1.3
 
 - Fixed intermittent failures when trying to log in with a YubiKey.

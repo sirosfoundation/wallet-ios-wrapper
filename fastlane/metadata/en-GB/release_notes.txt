@@ -1,2 +1,1 @@
-- Fixed intermittent failures when trying to log in with a YubiKey.
-- Added support for credentials derived from a physical passport.
+- Fixed bugs in physical passport scanning.
