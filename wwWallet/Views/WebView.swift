@@ -7,7 +7,6 @@
 
 import SwiftUI
 @preconcurrency import WebKit
-//import CoreBluetooth
 import OSLog
 
 struct WebView: UIViewRepresentable {
@@ -25,9 +24,13 @@ struct WebView: UIViewRepresentable {
 
         var url: URL
         let model: BridgeModel
-//        let bleServer = BLEServer.shared
-//        let bleClient = BLEClient.shared
-        
+
+        /// ISO 18013-5 proximity, hosted by the SDK. Replaces the eight
+        /// `bluetooth*` page handlers this class used to expose, which handed
+        /// raw GATT to the page and left it to run the protocol. Created with
+        /// the web view, since it needs to call back into the page.
+        private var proximity: ProximityBridge?
+
         private let log = Logger(with: Coordinator.self)
 
         init(url: URL, model: BridgeModel) {
@@ -64,67 +67,27 @@ struct WebView: UIViewRepresentable {
             ucc.addUserScript(.nativeWrapperScript!)
 
 
-            // BLE hooks
-            ucc.addPageHandler(named: "__bluetoothStatus__") { [weak self] message in
-                self?.log.debug("Status message: \(message)")
+            // Proximity (ISO 18013-5)
+            ucc.addPageHandler(named: "__proximityStart__") { [weak self] message in
+                self?.log.debug("⚙️ Proximity start: \(message.stringBody ?? "(unknown encoding)")")
 
-                return nil
-            }
-
-            ucc.addPageHandler(named: "__bluetoothTerminate__") {[weak self] message in
-                self?.log.debug("⚙️ Terminate message: \(message.stringBody ?? "(unknown encoding)")")
-
-//                self?.bleClient.disconnect()
-//                self?.bleServer.disconnect()
-
-                return true
-            }
-
-            ucc.addPageHandler(named: "__bluetoothCreateServer__") { [weak self] message in
-                self?.log.debug("⚙️ Create server message: \(message.stringBody ?? "(unknown encoding)")")
-
-                return nil
-            }
-
-            ucc.addPageHandler(named: "__bluetoothCreateClient__") { [weak self] message in
-                self?.log.debug("⚙️ Create client message: \(message.stringBody ?? "(unknown encoding)")")
-
-                let uuidString: String = try message.decode()
-
-                return nil // await self?.bleClient.startScanning(for: CBUUID(string: uuidString))
-            }
-
-            ucc.addPageHandler(named: "__bluetoothSendToServer__") { [weak self] message in
-                self?.log.debug("⚙️ Send to server message: \(message.stringBody ?? "(unknown encoding)")")
-
-                guard let data = message.stringBody?.dropFirst().dropLast().data(using: .utf8) else {
-                    throw Errors.cannotDecodeMessage
+                guard let proximity = self?.proximity else {
+                    throw Errors.proximityUnavailable
                 }
 
-                let result = try WKScriptMessage.decoder.decode([UInt8].self, from: data)
-
-                return nil // await self?.bleClient.sendToServer(data: Data(result))
+                return try proximity.start(message.stringBody).base64EncodedString()
             }
 
-            ucc.addPageHandler(named: "__bluetoothSendToClient__") { [weak self] message in
-                self?.log.debug("⚙️ Send to client message: \(message.stringBody ?? "(unknown encoding)")")
+            ucc.addPageHandler(named: "__proximityStop__") { [weak self] _ in
+                self?.log.debug("⚙️ Proximity stop")
 
-                return nil
+                self?.proximity?.stop()
+
+                // Base64 JSON `true`, so the page decodes every proximity
+                // reply the same way.
+                return Data("true".utf8).base64EncodedString()
             }
 
-            ucc.addPageHandler(named: "__bluetoothReceiveFromClient__") { [weak self] message in
-                self?.log.debug("⚙️ Receive from client message: \(message.stringBody ?? "(unknown encoding)")")
-
-                return nil
-            }
-
-            ucc.addPageHandler(named: "__bluetoothReceiveFromServer__") { [weak self] _ in
-                self?.log.debug("⚙️ Receive from server")
-
-                return nil //await self?.bleClient.receiveFromServer()
-            }
-
-//            ucc.addUserScript(.bluetoothScript!)
 
 
             let configuration = WKWebViewConfiguration()
@@ -132,6 +95,8 @@ struct WebView: UIViewRepresentable {
             configuration.userContentController = ucc
 
             let wkWebView = WKWebView(frame: .zero, configuration: configuration)
+
+            proximity = ProximityBridge(calls: PageCallHost(webView: wkWebView))
 
             model.loadURLCallback = { url in
                 wkWebView.load(URLRequest(url: url))

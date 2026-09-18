@@ -16,6 +16,8 @@
 			</array>
 		</dict>
 	</array>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Bluetooth is used to present your credentials to a reader standing in front of you, over ISO 18013-5 proximity.</string>
 	<key>UILaunchScreen</key>
 	<dict>
 		<key>UIColorName</key>
