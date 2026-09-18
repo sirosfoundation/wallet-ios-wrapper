@@ -9,8 +9,6 @@ import WebKit
 
 extension WKUserScript {
 
-    static let bluetoothScript = bundledScript(named: "WebBluetooth")
-
     static let nativeWrapperScript = bundledScript(named: "NativeWrapper")
 
     static let sharedScript = bundledScript(named: "Shared")

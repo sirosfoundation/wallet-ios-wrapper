@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5180BEEF2FA000000000000D /* SirosKeystore in Frameworks */ = {isa = PBXBuildFile; productRef = 5180BEEF2FA000000000000B /* SirosKeystore */; };
+		5180BEEF2FA000000000000E /* SirosCredentials in Frameworks */ = {isa = PBXBuildFile; productRef = 5180BEEF2FA000000000000C /* SirosCredentials */; };
+		5180BEEF2FA0000000000001 /* ProximityBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5180BEEF2FA0000000000003 /* ProximityBridge.swift */; };
+		5180BEEF2FA0000000000002 /* PageCallHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5180BEEF2FA0000000000004 /* PageCallHost.swift */; };
+		A06638E82EBE657D00D6799D /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A06638E72EBE657D00D6799D /* Color+Extensions.swift */; };
 		A003932D2F1A69050072EDF5 /* PrfExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A003932C2F1A69010072EDF5 /* PrfExtensions.swift */; };
 		A00393302F1A6C400072EDF5 /* YubiKit in Frameworks */ = {isa = PBXBuildFile; productRef = A003932F2F1A6C400072EDF5 /* YubiKit */; };
 		A00436AA2DA7F42C00002721 /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00436A92DA7F41D00002721 /* UIViewController+Extensions.swift */; };
@@ -16,8 +21,6 @@
 		A04B09FA2DD2021000A1BFF7 /* AutoFillExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A04B09EC2DD2021000A1BFF7 /* AutoFillExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A04CCCD42FBB549800C22FC2 /* CredentialSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04CCCD22FBB549800C22FC2 /* CredentialSelectionViewController.swift */; };
 		A04CCCD52FBB549800C22FC2 /* CredentialSelectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A04CCCD32FBB549800C22FC2 /* CredentialSelectionViewController.xib */; };
-		A05D7AC82DBFB8FB001940B3 /* WebBluetooth.js in Resources */ = {isa = PBXBuildFile; fileRef = A05D7AC72DBFB8F7001940B3 /* WebBluetooth.js */; };
-		A06638E82EBE657D00D6799D /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A06638E72EBE657D00D6799D /* Color+Extensions.swift */; };
 		A08D827F2DA91A5D009373AB /* JsonModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D827E2DA91A5D009373AB /* JsonModels.swift */; };
 		A08D82812DA91AE6009373AB /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D82802DA91AE6009373AB /* Errors.swift */; };
 		A093B0072FB4BEB600FE09F2 /* WebAuthn.User+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A093B0062FB4BEB600FE09F2 /* WebAuthn.User+Extensions.swift */; };
@@ -73,6 +76,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5180BEEF2FA0000000000003 /* ProximityBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProximityBridge.swift; sourceTree = "<group>"; };
+		5180BEEF2FA0000000000004 /* PageCallHost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageCallHost.swift; sourceTree = "<group>"; };
 		A003932C2F1A69010072EDF5 /* PrfExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrfExtensions.swift; sourceTree = "<group>"; };
 		A00436A92DA7F41D00002721 /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 		A02CF39A2F11676F009D2603 /* WebAuthnClientData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebAuthnClientData.swift; sourceTree = "<group>"; };
@@ -83,7 +88,6 @@
 		A04B0A002DD2035C00A1BFF7 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = SOURCE_ROOT; };
 		A04CCCD22FBB549800C22FC2 /* CredentialSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialSelectionViewController.swift; sourceTree = "<group>"; };
 		A04CCCD32FBB549800C22FC2 /* CredentialSelectionViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CredentialSelectionViewController.xib; sourceTree = "<group>"; };
-		A05D7AC72DBFB8F7001940B3 /* WebBluetooth.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = WebBluetooth.js; sourceTree = "<group>"; };
 		A06638E72EBE657D00D6799D /* Color+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
 		A08D827E2DA91A5D009373AB /* JsonModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonModels.swift; sourceTree = "<group>"; };
 		A08D82802DA91AE6009373AB /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
@@ -104,8 +108,6 @@
 		B40A36212CFA01CA0044D2C6 /* wwWalletApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = wwWalletApp.swift; sourceTree = "<group>"; };
 		B40A36222CFA01CA0044D2C6 /* Bridge.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Bridge.js; sourceTree = "<group>"; };
 		B40A36232CFA01CA0044D2C6 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
-		B40A36372D0088F90044D2C6 /* BLEServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEServer.swift; sourceTree = "<group>"; };
-		B40A36392D0089060044D2C6 /* BLEClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEClient.swift; sourceTree = "<group>"; };
 		B43CB36E2D030CC000634811 /* WKScriptMessage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WKScriptMessage+Extensions.swift"; sourceTree = "<group>"; };
 		B49F14712D12BEBE0063C12F /* ButtonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyles.swift; sourceTree = "<group>"; };
 		B4FB6A952D0C286700647AED /* NativeWrapper.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = NativeWrapper.js; sourceTree = "<group>"; };
@@ -196,6 +198,8 @@
 			files = (
 				A00393302F1A6C400072EDF5 /* YubiKit in Frameworks */,
 				A02CF3992F11675C009D2603 /* YubiKit in Frameworks */,
+				5180BEEF2FA000000000000D /* SirosKeystore in Frameworks */,
+				5180BEEF2FA000000000000E /* SirosCredentials in Frameworks */,
 			);
 		};
 /* End PBXFrameworksBuildPhase section */
@@ -262,25 +266,24 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		5180BEEF2FA0000000000005 /* Proximity */ = {
+			isa = PBXGroup;
+			children = (
+				5180BEEF2FA0000000000003 /* ProximityBridge.swift */,
+			);
+			path = Proximity;
+			sourceTree = "<group>";
+		};
 		A0F7A1742DB682EA009F3178 /* Web */ = {
 			isa = PBXGroup;
 			children = (
 				A099D37B2DB69A71007F6983 /* MessageHandler.swift */,
-				A05D7AC72DBFB8F7001940B3 /* WebBluetooth.js */,
 				B40A36222CFA01CA0044D2C6 /* Bridge.js */,
 				B4FB6A952D0C286700647AED /* NativeWrapper.js */,
+				5180BEEF2FA0000000000004 /* PageCallHost.swift */,
 				B4FB6A972D0C403800647AED /* Shared.js */,
 			);
 			path = Web;
-			sourceTree = "<group>";
-		};
-		A0F7A1752DB688C6009F3178 /* Bluetooth */ = {
-			isa = PBXGroup;
-			children = (
-				B40A36392D0089060044D2C6 /* BLEClient.swift */,
-				B40A36372D0088F90044D2C6 /* BLEServer.swift */,
-			);
-			path = Bluetooth;
 			sourceTree = "<group>";
 		};
 		B40A35EB2CF9DB6A0044D2C6 = {
@@ -313,7 +316,7 @@
 				A08D82762DA9141A009373AB /* Extensions */,
 				A0F7A1732DB6829D009F3178 /* Views */,
 				A0F7A1742DB682EA009F3178 /* Web */,
-				A0F7A1752DB688C6009F3178 /* Bluetooth */,
+				5180BEEF2FA0000000000005 /* Proximity */,
 				FACE7EC0FACE7EC0FACE000B /* FaceTec */,
 				B40A36212CFA01CA0044D2C6 /* wwWalletApp.swift */,
 				B40A36202CFA01CA0044D2C6 /* wwWallet.entitlements */,
@@ -400,6 +403,8 @@
 			packageProductDependencies = (
 				A02CF3982F11675C009D2603 /* YubiKit */,
 				A003932F2F1A6C400072EDF5 /* YubiKit */,
+				5180BEEF2FA000000000000B /* SirosKeystore */,
+				5180BEEF2FA000000000000C /* SirosCredentials */,
 			);
 			productName = wwWallet;
 			productReference = B40A35F42CF9DB6A0044D2C6 /* wwWallet.app */;
@@ -441,6 +446,7 @@
 			packageReferences = (
 				A0A610FE2DE9C7B800BF10CE /* XCRemoteSwiftPackageReference "SwiftCBOR" */,
 				A003932E2F1A6C400072EDF5 /* XCRemoteSwiftPackageReference "yubikit-swift" */,
+				5180BEEF2FA000000000000A /* XCRemoteSwiftPackageReference "siros-sdk-swift" */,
 			);
 			preferredProjectObjectVersion = 90;
 			productRefGroup = B40A35F52CF9DB6A0044D2C6 /* Products */;
@@ -474,7 +480,6 @@
 				B40A36272CFA01CA0044D2C6 /* Assets.xcassets in Resources */,
 				B40A36282CFA01CA0044D2C6 /* Bridge.js in Resources */,
 				A0E498052E42194300AA9C23 /* Settings.bundle in Resources */,
-				A05D7AC82DBFB8FB001940B3 /* WebBluetooth.js in Resources */,
 				FACE7EC0FACE7EC0FACE000A /* FaceTec_OCR_Customization.json in Resources */,
 			);
 		};
@@ -597,6 +602,8 @@
 			files = (
 				A003932D2F1A69050072EDF5 /* PrfExtensions.swift in Sources */,
 				A06638E82EBE657D00D6799D /* Color+Extensions.swift in Sources */,
+				5180BEEF2FA0000000000001 /* ProximityBridge.swift in Sources */,
+				5180BEEF2FA0000000000002 /* PageCallHost.swift in Sources */,
 				A08D82812DA91AE6009373AB /* Errors.swift in Sources */,
 				A099D37E2DB6A1F7007F6983 /* WKUserContentController+Extensions.swift in Sources */,
 				B40A36292CFA01CA0044D2C6 /* BridgeModel.swift in Sources */,
@@ -979,6 +986,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		5180BEEF2FA000000000000A /* XCRemoteSwiftPackageReference "siros-sdk-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sirosfoundation/siros-sdk-swift";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 0.12.0;
+			};
+		};
 		A003932E2F1A6C400072EDF5 /* XCRemoteSwiftPackageReference "yubikit-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Yubico/yubikit-swift";
@@ -998,6 +1013,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		5180BEEF2FA000000000000B /* SirosKeystore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5180BEEF2FA000000000000A /* XCRemoteSwiftPackageReference "siros-sdk-swift" */;
+			productName = SirosKeystore;
+		};
+		5180BEEF2FA000000000000C /* SirosCredentials */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5180BEEF2FA000000000000A /* XCRemoteSwiftPackageReference "siros-sdk-swift" */;
+			productName = SirosCredentials;
+		};
 		A003932F2F1A6C400072EDF5 /* YubiKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = A003932E2F1A6C400072EDF5 /* XCRemoteSwiftPackageReference "yubikit-swift" */;
