@@ -72,7 +72,14 @@ window.nativeWrapper = (function (nativeWrapper) {
     nativeWrapper.onRequest = function (name, handler) {
         nativeWrapper.__handlers__[name] = handler;
 
-        return function () { delete nativeWrapper.__handlers__[name]; };
+        // Only remove this handler, not whatever replaced it: a later
+        // onRequest for the same name wins, and a stale unregister from the
+        // handler it replaced must not silently unhook the live one.
+        return function () {
+            if (nativeWrapper.__handlers__[name] === handler) {
+                delete nativeWrapper.__handlers__[name];
+            }
+        };
     };
 
     function __b64ToJson(b64) {

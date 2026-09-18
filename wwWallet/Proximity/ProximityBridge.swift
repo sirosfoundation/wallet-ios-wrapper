@@ -65,6 +65,12 @@ final class ProximityBridge {
     private var peripheral: BlePeripheralServer?
     private var central: BleCentralClient?
 
+    /// Bumped by every `start`. A transport torn down by the next `start` can
+    /// still have work in flight, and its callbacks would otherwise report the
+    /// old session's outcome to the page and tear down the new transport. Only
+    /// touched on the main queue.
+    private var generation = 0
+
     init(calls: PageCallHost) {
         self.calls = calls
     }
@@ -84,9 +90,16 @@ final class ProximityBridge {
 
         let mode = Self.parseMode(paramsJson, log: log)
 
+        generation += 1
+        let session = generation
+
+        // Advertise ONLY the role actually started. Offering both and serving
+        // one means a reader that picks the other UUID out of the QR
+        // engagement connects to nothing — the engagement would be lying
+        // about what this device answers on.
         let engagement = try DeviceEngagement.create(
-            supportsCentralClientMode: true,
-            supportsPeripheralServerMode: true)
+            supportsCentralClientMode: mode == .central,
+            supportsPeripheralServerMode: mode == .peripheral)
 
         switch mode {
         case .peripheral:
@@ -118,9 +131,9 @@ final class ProximityBridge {
                     return await self.evaluateReaderTrust(x5chain)
                 },
                 filterEligible: Self.filterEligible,
-                onStep: { [weak self] step in self?.onStep(step) },
+                onStep: { [weak self] step in self?.onStep(step, session: session) },
                 onLog: { [weak self] message in self?.log.debug("\(message)") },
-                onComplete: { [weak self] success in self?.onComplete(success) })
+                onComplete: { [weak self] success in self?.onComplete(success, session: session) })
 
             peripheral = server
             server.start()
@@ -154,9 +167,9 @@ final class ProximityBridge {
                     return await self.evaluateReaderTrust(x5chain)
                 },
                 filterEligible: Self.filterEligible,
-                onStep: { [weak self] step in self?.onStep(step) },
+                onStep: { [weak self] step in self?.onStep(step, session: session) },
                 onLog: { [weak self] message in self?.log.debug("\(message)") },
-                onComplete: { [weak self] success in self?.onComplete(success) })
+                onComplete: { [weak self] success in self?.onComplete(success, session: session) })
 
             central = client
             client.start()
@@ -233,8 +246,12 @@ final class ProximityBridge {
 
         guard let answer = try JSONSerialization.jsonObject(with: reply) as? [String: Any],
               let encoded = answer["deviceResponse"] as? String,
-              let deviceResponse = Data(base64Encoded: encoded)
+              let deviceResponse = Data(base64Encoded: encoded),
+              !deviceResponse.isEmpty
         else {
+            // `Data(base64Encoded: "")` succeeds with zero bytes, so emptiness
+            // has to be rejected explicitly or the reader gets an empty
+            // response instead of an error.
             throw PageCallHost.CallError.pageFailed(Handler.sign, "returned no deviceResponse")
         }
 
@@ -285,11 +302,15 @@ final class ProximityBridge {
                 return .denied
             }
 
-            let chosenId = Self.int64(object["credentialId"])
-
-            guard let family = matchingFamilies.first(where: { $0.representative.id == chosenId })
-                    ?? matchingFamilies.first
+            // No falling back to the first family: the page chose from a list
+            // this session handed it, so an absent or unrecognised id means
+            // the answer is stale or malformed, and presenting *something*
+            // would present a credential the user did not pick.
+            guard let chosenId = Self.int64(object["credentialId"]),
+                  let family = matchingFamilies.first(where: { $0.representative.id == chosenId })
             else {
+                log.error("Consent was approved without naming a credential this session offered; denying.")
+
                 return .denied
             }
 
@@ -345,24 +366,36 @@ final class ProximityBridge {
         }
     }
 
-    private func onStep(_ step: String) {
-        guard let payload = try? Self.encode(["step": step]) else { return }
+    /**
+     The SDK reports from whichever thread it is on — `BleCentralClient` can
+     finish from its own sending task — while `start` and `stop` run on the
+     main queue with the page handlers. Land everything there, both to avoid
+     racing over `peripheral`/`central` and to read `generation` consistently.
+     */
+    private func onStep(_ step: String, session: Int) {
+        DispatchQueue.main.async {
+            guard self.generation == session else {
+                return self.log.debug("Ignoring step '\(step)' from a replaced session.")
+            }
 
-        calls.notify(Handler.step, payload: payload)
+            guard let payload = try? Self.encode(["step": step]) else { return }
+
+            self.calls.notify(Handler.step, payload: payload)
+        }
     }
 
-    /**
-     The SDK reports completion from whichever thread it is on —
-     `BleCentralClient` can finish from its own sending task — while `start`
-     and `stop` run on the main queue with the page handlers. Land the
-     teardown there too, rather than racing over `peripheral`/`central`.
-     */
-    private func onComplete(_ success: Bool) {
-        if let payload = try? Self.encode(["success": success]) {
-            calls.notify(Handler.complete, payload: payload)
-        }
+    private func onComplete(_ success: Bool, session: Int) {
+        DispatchQueue.main.async {
+            guard self.generation == session else {
+                return self.log.debug("Ignoring completion from a replaced session.")
+            }
 
-        DispatchQueue.main.async { self.stop() }
+            if let payload = try? Self.encode(["success": success]) {
+                self.calls.notify(Handler.complete, payload: payload)
+            }
+
+            self.stop()
+        }
     }
 
     // MARK: Helpers
