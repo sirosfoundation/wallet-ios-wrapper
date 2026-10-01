@@ -87,6 +87,15 @@ enum Errors: LocalizedError {
             case "policy_rejected":
                 return NSLocalizedString("Your scan could not be accepted: your face did not match the document photo closely enough, or this type of document is not accepted. Please try again in good light, or use another identity document.", comment: "")
 
+            case "match_failed":
+                return NSLocalizedString("Your scan could not be checked. Please try again.", comment: "")
+
+            case "issuance_failed":
+                return NSLocalizedString("Your identity was verified, but the credential could not be issued. Please try again later.", comment: "")
+
+            case "internal_error":
+                return NSLocalizedString("Something went wrong on our side, so no credential was issued. Please try again later.", comment: "")
+
             default:
                 return NSLocalizedString("Your identity could not be verified, so no credential was issued. Please try again.", comment: "")
             }
