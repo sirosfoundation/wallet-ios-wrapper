@@ -1,0 +1,398 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "No credential issued" : {
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δεν εκδόθηκε πιστοποιητικό"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todistusta ei myönnetty"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nenhuma credencial emitida"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inget intyg utfärdat"
+          }
+        }
+      }
+    },
+    "OK" : {
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        }
+      }
+    },
+    "Reading the chip in your document is required. Please try again and hold your document against the top of the phone when asked." : {
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Απαιτείται ανάγνωση του τσιπ του εγγράφου σας. Δοκιμάστε ξανά και κρατήστε το έγγραφο στο επάνω μέρος του τηλεφώνου όταν σας ζητηθεί."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Asiakirjan sirun lukeminen on pakollista. Yritä uudelleen ja pidä asiakirjaa puhelimen yläreunaa vasten, kun sitä pyydetään."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "É necessário ler o chip do seu documento. Tente novamente e encoste o documento à parte de cima do telemóvel quando lhe for pedido."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chippet i ditt dokument måste läsas. Försök igen och håll dokumentet mot telefonens överkant när du blir ombedd."
+          }
+        }
+      }
+    },
+    "Something went wrong on our side, so no credential was issued. Please try again later." : {
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Παρουσιάστηκε σφάλμα από την πλευρά μας, επομένως δεν εκδόθηκε πιστοποιητικό. Δοκιμάστε ξανά αργότερα."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meillä tapahtui virhe, joten todistusta ei myönnetty. Yritä myöhemmin uudelleen."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ocorreu um erro do nosso lado, pelo que não foi emitida nenhuma credencial. Tente novamente mais tarde."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Något gick fel hos oss, så inget intyg utfärdades. Försök igen senare."
+          }
+        }
+      }
+    },
+    "The chip in your document could not be confirmed as issued by a recognised authority, so no credential was issued." : {
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δεν ήταν δυνατό να επιβεβαιωθεί ότι το τσιπ του εγγράφου σας έχει εκδοθεί από αναγνωρισμένη αρχή, επομένως δεν εκδόθηκε πιστοποιητικό."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ei voitu varmistaa, että asiakirjasi sirun on myöntänyt tunnustettu viranomainen, joten todistusta ei myönnetty."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não foi possível confirmar que o chip do seu documento foi emitido por uma autoridade reconhecida, pelo que não foi emitida nenhuma credencial."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Det gick inte att bekräfta att chippet i ditt dokument har utfärdats av en erkänd myndighet, så inget intyg utfärdades."
+          }
+        }
+      }
+    },
+    "The chip in your document could not be read. Please try again and hold the document still against the top of the phone." : {
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δεν ήταν δυνατή η ανάγνωση του τσιπ του εγγράφου σας. Δοκιμάστε ξανά και κρατήστε το έγγραφο σταθερό στο επάνω μέρος του τηλεφώνου."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Asiakirjasi sirua ei voitu lukea. Yritä uudelleen ja pidä asiakirja paikallaan puhelimen yläreunaa vasten."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não foi possível ler o chip do seu documento. Tente novamente e mantenha o documento imóvel encostado à parte de cima do telemóvel."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chippet i ditt dokument kunde inte läsas. Försök igen och håll dokumentet stilla mot telefonens överkant."
+          }
+        }
+      }
+    },
+    "The chip in your document could not be verified, so no credential was issued." : {
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δεν ήταν δυνατή η επαλήθευση του τσιπ του εγγράφου σας, επομένως δεν εκδόθηκε πιστοποιητικό."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Asiakirjasi sirua ei voitu vahvistaa, joten todistusta ei myönnetty."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não foi possível verificar o chip do seu documento, pelo que não foi emitida nenhuma credencial."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chippet i ditt dokument kunde inte verifieras, så inget intyg utfärdades."
+          }
+        }
+      }
+    },
+    "This device cannot read NFC. Reading the chip in your passport or ID card is required, so identity verification is not possible on this device." : {
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αυτή η συσκευή δεν μπορεί να διαβάσει NFC. Απαιτείται ανάγνωση του τσιπ του διαβατηρίου ή της ταυτότητάς σας, επομένως η επαλήθευση ταυτότητας δεν είναι δυνατή σε αυτή τη συσκευή."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tämä laite ei pysty lukemaan NFC:tä. Passin tai henkilökortin sirun lukeminen on pakollista, joten henkilöllisyyttä ei voi vahvistaa tällä laitteella."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este dispositivo não consegue ler NFC. É necessário ler o chip do seu passaporte ou cartão de identificação, pelo que não é possível verificar a identidade neste dispositivo."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Den här enheten kan inte läsa NFC. Chippet i ditt pass eller id-kort måste läsas, så identitetsverifiering är inte möjlig på den här enheten."
+          }
+        }
+      }
+    },
+    "This device could not read the chip. Please try again." : {
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Η συσκευή δεν μπόρεσε να διαβάσει το τσιπ. Δοκιμάστε ξανά."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laite ei pystynyt lukemaan sirua. Yritä uudelleen."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O dispositivo não conseguiu ler o chip. Tente novamente."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enheten kunde inte läsa chippet. Försök igen."
+          }
+        }
+      }
+    },
+    "This document cannot be verified by its chip. Please use an e-passport or an ID card whose chip can be read." : {
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αυτό το έγγραφο δεν μπορεί να επαληθευτεί μέσω του τσιπ του. Χρησιμοποιήστε ηλεκτρονικό διαβατήριο ή ταυτότητα της οποίας το τσιπ μπορεί να διαβαστεί."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tätä asiakirjaa ei voi vahvistaa sen sirun avulla. Käytä sähköistä passia tai henkilökorttia, jonka siru voidaan lukea."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este documento não pode ser verificado através do chip. Utilize um passaporte eletrónico ou um cartão de identificação cujo chip possa ser lido."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Det här dokumentet kan inte verifieras via sitt chip. Använd ett e-pass eller ett id-kort vars chip kan läsas."
+          }
+        }
+      }
+    },
+    "Your identity could not be verified, so no credential was issued. Please try again." : {
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δεν ήταν δυνατή η επαλήθευση της ταυτότητάς σας, επομένως δεν εκδόθηκε πιστοποιητικό. Δοκιμάστε ξανά."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Henkilöllisyyttäsi ei voitu vahvistaa, joten todistusta ei myönnetty. Yritä uudelleen."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não foi possível verificar a sua identidade, pelo que não foi emitida nenhuma credencial. Tente novamente."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Din identitet kunde inte verifieras, så inget intyg utfärdades. Försök igen."
+          }
+        }
+      }
+    },
+    "Your identity was verified, but the credential could not be issued. Please try again later." : {
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Η ταυτότητά σας επαληθεύτηκε, αλλά δεν ήταν δυνατή η έκδοση του πιστοποιητικού. Δοκιμάστε ξανά αργότερα."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Henkilöllisyytesi vahvistettiin, mutta todistusta ei voitu myöntää. Yritä myöhemmin uudelleen."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A sua identidade foi verificada, mas não foi possível emitir a credencial. Tente novamente mais tarde."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Din identitet har verifierats, men intyget kunde inte utfärdas. Försök igen senare."
+          }
+        }
+      }
+    },
+    "Your scan could not be accepted: your face did not match the document photo closely enough, or this type of document is not accepted. Please try again in good light, or use another identity document." : {
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Η σάρωσή σας δεν έγινε αποδεκτή: το πρόσωπό σας δεν ταίριαξε αρκετά με τη φωτογραφία του εγγράφου ή αυτός ο τύπος εγγράφου δεν γίνεται αποδεκτός. Δοκιμάστε ξανά με καλό φωτισμό ή χρησιμοποιήστε άλλο έγγραφο ταυτότητας."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skannaustasi ei voitu hyväksyä: kasvosi eivät vastanneet asiakirjan kuvaa riittävän hyvin, tai tämäntyyppistä asiakirjaa ei hyväksytä. Yritä uudelleen hyvässä valaistuksessa tai käytä toista henkilöllisyysasiakirjaa."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A sua digitalização não pôde ser aceite: o seu rosto não correspondeu suficientemente à fotografia do documento, ou este tipo de documento não é aceite. Tente novamente com boa iluminação ou utilize outro documento de identificação."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Din skanning kunde inte godkännas: ditt ansikte stämde inte tillräckligt väl med dokumentets foto, eller så godtas inte den här typen av dokument. Försök igen i bra ljus eller använd en annan identitetshandling."
+          }
+        }
+      }
+    },
+    "Your scan could not be checked. Please try again." : {
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δεν ήταν δυνατός ο έλεγχος της σάρωσής σας. Δοκιμάστε ξανά."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skannaustasi ei voitu tarkistaa. Yritä uudelleen."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não foi possível verificar a sua digitalização. Tente novamente."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Din skanning kunde inte kontrolleras. Försök igen."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

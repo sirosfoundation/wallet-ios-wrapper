@@ -41,6 +41,7 @@
 		FACE7EC0FACE7EC0FACE0008 /* FaceTecConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACE7EC0FACE7EC0FACE0005 /* FaceTecConfig.swift */; };
 		FACE7EC0FACE7EC0FACE0009 /* FaceTecIDVProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACE7EC0FACE7EC0FACE0006 /* FaceTecIDVProvider.swift */; };
 		FACE7EC0FACE7EC0FACE000A /* FaceTec_OCR_Customization.json in Resources */ = {isa = PBXBuildFile; fileRef = FACE7EC0FACE7EC0FACE0007 /* FaceTec_OCR_Customization.json */; };
+		554471C992E9693CFB004998 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 53DF00D4501F39AE4E96D47D /* Localizable.xcstrings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -114,6 +115,7 @@
 		FACE7EC0FACE7EC0FACE0005 /* FaceTecConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceTecConfig.swift; sourceTree = "<group>"; };
 		FACE7EC0FACE7EC0FACE0006 /* FaceTecIDVProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceTecIDVProvider.swift; sourceTree = "<group>"; };
 		FACE7EC0FACE7EC0FACE0007 /* FaceTec_OCR_Customization.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = FaceTec_OCR_Customization.json; sourceTree = "<group>"; };
+		53DF00D4501F39AE4E96D47D /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -321,6 +323,7 @@
 				B40A36202CFA01CA0044D2C6 /* wwWallet.entitlements */,
 				B40A361C2CFA01CA0044D2C6 /* Assets.xcassets */,
 				A0E498042E42194300AA9C23 /* Settings.bundle */,
+				53DF00D4501F39AE4E96D47D /* Localizable.xcstrings */,
 			);
 			path = wwWallet;
 			sourceTree = "<group>";
@@ -437,6 +440,10 @@
 			knownRegions = (
 				en,
 				Base,
+				el,
+				fi,
+				pt,
+				sv,
 			);
 			mainGroup = B40A35EB2CF9DB6A0044D2C6;
 			minimizedProjectReferenceProxies = 1;
@@ -478,6 +485,7 @@
 				A0E498052E42194300AA9C23 /* Settings.bundle in Resources */,
 				A05D7AC82DBFB8FB001940B3 /* WebBluetooth.js in Resources */,
 				FACE7EC0FACE7EC0FACE000A /* FaceTec_OCR_Customization.json in Resources */,
+				554471C992E9693CFB004998 /* Localizable.xcstrings in Resources */,
 			);
 		};
 /* End PBXResourcesBuildPhase section */
