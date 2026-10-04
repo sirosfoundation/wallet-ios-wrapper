@@ -96,6 +96,15 @@ enum Errors: LocalizedError {
             case "internal_error":
                 return NSLocalizedString("Something went wrong on our side, so no credential was issued. Please try again later.", comment: "")
 
+            case "liveness_failed":
+                return NSLocalizedString("We could not confirm that a live person was in front of the camera, so no credential was issued. Please try again in good light, facing the camera.", comment: "")
+
+            case "document_expired":
+                return NSLocalizedString("This document has expired, so no credential was issued. Please use a valid identity document.", comment: "")
+
+            case "document_unreadable":
+                return NSLocalizedString("The document's details could not be read, so no credential was issued. Please try again, or use another identity document.", comment: "")
+
             default:
                 return NSLocalizedString("Your identity could not be verified, so no credential was issued. Please try again.", comment: "")
             }
