@@ -197,6 +197,34 @@
         }
       }
     },
+    "The document's details could not be read, so no credential was issued. Please try again, or use another identity document." : {
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δεν ήταν δυνατή η ανάγνωση των στοιχείων του εγγράφου, επομένως δεν εκδόθηκε πιστοποιητικό. Δοκιμάστε ξανά ή χρησιμοποιήστε άλλο έγγραφο ταυτότητας."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Asiakirjan tietoja ei voitu lukea, joten todistusta ei myönnetty. Yritä uudelleen tai käytä toista henkilöllisyysasiakirjaa."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não foi possível ler os dados do documento, pelo que não foi emitida nenhuma credencial. Tente novamente ou utilize outro documento de identificação."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dokumentets uppgifter kunde inte läsas, så inget intyg utfärdades. Försök igen eller använd en annan identitetshandling."
+          }
+        }
+      }
+    },
     "This device cannot read NFC. Reading the chip in your passport or ID card is required, so identity verification is not possible on this device." : {
       "localizations" : {
         "el" : {
@@ -277,6 +305,62 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Det här dokumentet kan inte verifieras via sitt chip. Använd ett e-pass eller ett id-kort vars chip kan läsas."
+          }
+        }
+      }
+    },
+    "This document has expired, so no credential was issued. Please use a valid identity document." : {
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αυτό το έγγραφο έχει λήξει, επομένως δεν εκδόθηκε πιστοποιητικό. Χρησιμοποιήστε ένα έγκυρο έγγραφο ταυτότητας."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tämä asiakirja on vanhentunut, joten todistusta ei myönnetty. Käytä voimassa olevaa henkilöllisyysasiakirjaa."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este documento expirou, pelo que não foi emitida nenhuma credencial. Utilize um documento de identificação válido."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Det här dokumentet har gått ut, så inget intyg utfärdades. Använd en giltig identitetshandling."
+          }
+        }
+      }
+    },
+    "We could not confirm that a live person was in front of the camera, so no credential was issued. Please try again in good light, facing the camera." : {
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δεν ήταν δυνατό να επιβεβαιωθεί ότι μπροστά στην κάμερα βρισκόταν ζωντανό πρόσωπο, επομένως δεν εκδόθηκε πιστοποιητικό. Δοκιμάστε ξανά με καλό φωτισμό, κοιτάζοντας την κάμερα."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Emme voineet varmistaa, että kameran edessä oli elävä henkilö, joten todistusta ei myönnetty. Yritä uudelleen hyvässä valaistuksessa kameraan katsoen."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não foi possível confirmar que estava uma pessoa real em frente à câmara, pelo que não foi emitida nenhuma credencial. Tente novamente com boa iluminação, de frente para a câmara."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vi kunde inte bekräfta att en levande person fanns framför kameran, så inget intyg utfärdades. Försök igen i bra ljus och titta mot kameran."
           }
         }
       }
