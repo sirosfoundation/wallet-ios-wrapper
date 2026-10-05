@@ -1,0 +1,9 @@
+{
+  "id" : "69ea956e-4b8b-4d82-bb4c-b8ec8f5d2f1b",
+  "targets" : [
+    {
+      "id" : "4cd4882a-7f22-4f15-9571-e08e9b7748b6",
+      "name" : "wwWallet"
+    }
+  ]
+}
