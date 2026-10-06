@@ -61,10 +61,17 @@ struct FaceTecRefusalMessagesTests {
         #expect(!Self.message(for: "").isEmpty)
     }
 
+    /// The messages come from `NSLocalizedString`, so they are in the test
+    /// host's language, while the catalog is keyed by the English text. The
+    /// check therefore only makes sense in English (as on CI); in another
+    /// language it is reported as skipped rather than failing on valid
+    /// translations.
+    private static let runsInEnglish = Bundle.main.preferredLocalizations.first == "en"
+
     /// The catalog is keyed by the English text, so an edit to a message in
     /// `Errors.swift` without the same edit in the catalog silently drops its
-    /// translations. Needs the tests to run with English as the language.
-    @Test("Every refusal message is translated in every supported language")
+    /// translations.
+    @Test("Every refusal message is translated in every supported language", .enabled(if: runsInEnglish))
     func messagesAreTranslated() throws {
         let catalogURL = URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()
@@ -76,7 +83,8 @@ struct FaceTecRefusalMessagesTests {
         let strings = try #require(catalog["strings"] as? [String: [String: Any]])
 
         let english = Self.codes.map(Self.message(for:))
-            + [Errors.faceTecNFCUnavailable.localizedDescription,
+            + [Self.message(for: "a_code_no_one_has_heard_of"), // what an unknown code gets
+               Errors.faceTecNFCUnavailable.localizedDescription,
                "No credential issued", // title of the alert that shows a refusal
                "OK"]
 
