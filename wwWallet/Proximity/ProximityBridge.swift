@@ -47,15 +47,17 @@ final class ProximityBridge {
         case central
     }
 
-    /// Handler names the page registers. Kept together so the contract is
-    /// readable in one place, and identical to the Android wrapper's.
+    /// Short handler names the page registers with `onProximityRequest`. 
+    // The `proximity` namespace is the call channel.
+    //  Kept together so the contract is readable in one
+    /// place, and identical to the Android wrapper's.
     private enum Handler {
-        static let credentials = "proximity.credentials"
-        static let sign = "proximity.sign"
-        static let consent = "proximity.consent"
-        static let readerTrust = "proximity.readerTrust"
-        static let step = "proximity.step"
-        static let complete = "proximity.complete"
+        static let credentials = "credentials"
+        static let sign = "sign"
+        static let consent = "consent"
+        static let readerTrust = "readerTrust"
+        static let step = "step"
+        static let complete = "complete"
     }
 
     private let calls: PageCallHost
@@ -81,8 +83,8 @@ final class ProximityBridge {
      Starts a session and returns the engagement for the page to render.
 
      Returns as soon as the transport is up: the session itself continues in
-     the background and reports through `proximity.step` and
-     `proximity.complete`. Callers get `{ mdocUri, mode }`, base64-encoded
+     the background and reports through the `step` and `complete`
+     notifications. Callers get `{ mdocUri, mode }`, base64-encoded
      JSON like every other proximity payload.
      */
     func start(_ paramsJson: String?) throws -> Data {
@@ -400,7 +402,7 @@ final class ProximityBridge {
 
     // MARK: Helpers
 
-    /// `null`, as the page's `__invoke__` will decode it. The credentials
+    /// `null`, as the page's `invoke` will decode it. The credentials
     /// handler takes no arguments, and a payload is not optional on the wire.
     private static let nullPayload = Data("null".utf8)
 

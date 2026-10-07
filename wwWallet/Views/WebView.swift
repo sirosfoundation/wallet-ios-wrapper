@@ -96,7 +96,7 @@ struct WebView: UIViewRepresentable {
 
             let wkWebView = WKWebView(frame: .zero, configuration: configuration)
 
-            proximity = ProximityBridge(calls: PageCallHost(webView: wkWebView))
+            proximity = ProximityBridge(calls: PageCallHost(webView: wkWebView, namespace: "__proximity__"))
 
             model.loadURLCallback = { url in
                 wkWebView.load(URLRequest(url: url))

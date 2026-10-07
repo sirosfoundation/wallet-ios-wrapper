@@ -19,15 +19,18 @@ import OSLog
 
  ## Wire shape
 
- Native evaluates `nativeWrapper.__invoke__(name, payloadB64)` and awaits the
- promise it returns. Payloads are UTF-8 JSON in base64 in both directions, so
- quoting, newlines and the U+2028/U+2029 hazard all stop existing, and a
- binary payload needs no separate encoding.
+ One of these is constructed per feature, each with its own `namespace` on
+ `nativeWrapper` (e.g. `__proximity__`), so the mechanics here are shared but
+ no feature can see another's handlers. Native evaluates
+ `nativeWrapper.<namespace>.invoke(name, payloadB64)` and awaits the promise
+ it returns. Payloads are UTF-8 JSON in base64 in both directions, so quoting,
+ newlines and the U+2028/U+2029 hazard all stop existing, and a binary payload
+ needs no separate encoding.
 
  ## How this differs from the Android wrapper
 
  The page-facing contract is identical — same handler names, same payloads,
- same `nativeWrapper.onRequest(name, handler)` registration — but the
+ same `nativeWrapper.onProximityRequest(name, handler)` registration — but the
  plumbing underneath is about half the size, because `callAsyncJavaScript`
  awaits a returned promise for us. Android has to hand the page a call id,
  keep a pending map, expose `__reply__`/`__replyError__` back across the
@@ -36,7 +39,7 @@ import OSLog
  the outstanding call on its own.
 
  The one thing it does not do is time out, so that is below. Like Android's
- `__cancel__`, the timeout only stops us waiting — a handler already running
+ `cancel`, the timeout only stops us waiting — a handler already running
  in the page keeps running, and its answer is dropped.
  */
 final class PageCallHost {
@@ -77,19 +80,27 @@ final class PageCallHost {
     /// reader itself gives up. Same value as the Android wrapper.
     static let defaultTimeoutMs = 60_000
 
-    /// `callAsyncJavaScript` wraps this in an async function whose parameters
+    /// `callAsyncJavaScript` wraps these in an async function whose parameters
     /// are the `arguments` dictionary's keys, so `await` and `return` work and
-    /// nothing is interpolated into a string.
-    private static let invokeBody = "return await window.nativeWrapper.__invoke__(name, payloadB64);"
+    /// only the namespace (our own constant) — is interpolated into a string.
+    private let invokeBody: String
 
-    private static let notifyBody = "window.nativeWrapper.__notify__(name, payloadB64); return null;"
+    private let notifyBody: String
 
     private weak var webView: WKWebView?
 
     private let log = Logger(with: PageCallHost.self)
 
-    init(webView: WKWebView) {
+    init(webView: WKWebView, namespace: String) {
+        // Interpolated into the evaluated script; it is our own constant, so
+        // this guards a typo rather than sanitising untrusted input.
+        precondition(
+            !namespace.isEmpty && namespace.allSatisfy { $0.isLetter || $0.isNumber || $0 == "_" },
+            "namespace '\(namespace)' must be non-empty, alphanumeric with '_'")
+
         self.webView = webView
+        self.invokeBody = "return await window.nativeWrapper.\(namespace).invoke(name, payloadB64);"
+        self.notifyBody = "window.nativeWrapper.\(namespace).notify(name, payloadB64); return null;"
     }
 
     /// Invokes `name` in the page and suspends until it answers.
@@ -116,7 +127,7 @@ final class PageCallHost {
                 DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(timeoutMs), execute: timeout)
 
                 webView.callAsyncJavaScript(
-                    Self.invokeBody,
+                    self.invokeBody,
                     arguments: ["name": name, "payloadB64": payloadB64],
                     in: nil,
                     in: .page)
@@ -154,7 +165,7 @@ final class PageCallHost {
             }
 
             webView.callAsyncJavaScript(
-                Self.notifyBody,
+                self.notifyBody,
                 arguments: ["name": name, "payloadB64": payloadB64],
                 in: nil,
                 in: .page)
