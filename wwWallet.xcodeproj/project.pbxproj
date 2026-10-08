@@ -169,11 +169,6 @@
 			path = .github;
 			sourceTree = SOURCE_ROOT;
 		};
-		A09547C23073F5C900F32929 /* ci */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = ci;
-			sourceTree = SOURCE_ROOT;
-		};
 		A096A7C22F7C1FD9006AE2A5 /* fastlane */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = fastlane;
@@ -182,6 +177,11 @@
 		A0ABC1F63018FBF6002E01C2 /* Vendor */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Vendor;
+			sourceTree = SOURCE_ROOT;
+		};
+		A0E2AE003077D4940054F17C /* ci_scripts */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ci_scripts;
 			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -254,7 +254,7 @@
 				A04B09E72DD1FEB900A1BFF7 /* wwWallet-Info.plist */,
 				A0ABC1F63018FBF6002E01C2 /* Vendor */,
 				A090AC2F2F6448EF00ADE0B2 /* .github */,
-				A09547C23073F5C900F32929 /* ci */,
+				A0E2AE003077D4940054F17C /* ci_scripts */,
 				A096A7C22F7C1FD9006AE2A5 /* fastlane */,
 			);
 			path = Build;
