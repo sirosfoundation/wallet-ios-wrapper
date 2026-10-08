@@ -42,7 +42,7 @@ import OSLog
  `cancel`, the timeout only stops us waiting — a handler already running
  in the page keeps running, and its answer is dropped.
  */
-final class PageCallHost {
+final class PageCallHost: Sendable {
 
     enum CallError: LocalizedError {
 
@@ -87,7 +87,7 @@ final class PageCallHost {
 
     private let notifyBody: String
 
-    private weak var webView: WKWebView?
+    private weak let webView: WKWebView?
 
     private let log = Logger(with: PageCallHost.self)
 
