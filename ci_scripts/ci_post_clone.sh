@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CONFIG_FILE="Config.xcconfig"
+CONFIG_FILE="../Config.xcconfig"
 
 echo "Injecting Release secrets into $CONFIG_FILE…"
 
@@ -21,6 +21,6 @@ FACETEC_API_BEARER_TOKEN = ${RELEASE_FACETEC_API_BEARER_TOKEN}
 EOF
 
 echo "Fetching vendor libraries…"
-./Vendor/FaceTecSDK/fetch.sh
+../Vendor/FaceTecSDK/fetch.sh
 
 echo "CI post-clone preparation complete."
