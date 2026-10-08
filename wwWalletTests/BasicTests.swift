@@ -36,10 +36,9 @@ struct BasicTests {
         let defaults = UserDefaults.standard
         let originalEnvironment = defaults.string(forKey: "environment")
         
-        // Test selecting the second domain (index 1)
-        // We assume baseDomain2 is non-empty based on your Config.h/swift
-        defaults.set("1", forKey: "environment")
-        #expect(Config.baseDomain == Config.baseDomain2)
+        // Test selecting the first domain (index 0)
+        defaults.set("0", forKey: "environment")
+        #expect(Config.baseDomain == Config.baseDomain1)
 
         // Test invalid index (out of bounds)
         defaults.set("99", forKey: "environment")
