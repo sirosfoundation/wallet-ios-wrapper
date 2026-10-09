@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -euo pipefail
 CONFIG_FILE="../Config.xcconfig"
 
 echo "Create new ${CONFIG_FILE}…"
