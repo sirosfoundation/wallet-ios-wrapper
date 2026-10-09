@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		554471C992E9693CFB004998 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 53DF00D4501F39AE4E96D47D /* Localizable.xcstrings */; };
 		A003932D2F1A69050072EDF5 /* PrfExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A003932C2F1A69010072EDF5 /* PrfExtensions.swift */; };
 		A00393302F1A6C400072EDF5 /* YubiKit in Frameworks */ = {isa = PBXBuildFile; productRef = A003932F2F1A6C400072EDF5 /* YubiKit */; };
 		A00436AA2DA7F42C00002721 /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00436A92DA7F41D00002721 /* UIViewController+Extensions.swift */; };
@@ -41,7 +42,6 @@
 		FACE7EC0FACE7EC0FACE0008 /* FaceTecConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACE7EC0FACE7EC0FACE0005 /* FaceTecConfig.swift */; };
 		FACE7EC0FACE7EC0FACE0009 /* FaceTecIDVProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACE7EC0FACE7EC0FACE0006 /* FaceTecIDVProvider.swift */; };
 		FACE7EC0FACE7EC0FACE000A /* FaceTec_OCR_Customization.json in Resources */ = {isa = PBXBuildFile; fileRef = FACE7EC0FACE7EC0FACE0007 /* FaceTec_OCR_Customization.json */; };
-		554471C992E9693CFB004998 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 53DF00D4501F39AE4E96D47D /* Localizable.xcstrings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +74,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		53DF00D4501F39AE4E96D47D /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		A003932C2F1A69010072EDF5 /* PrfExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrfExtensions.swift; sourceTree = "<group>"; };
 		A00436A92DA7F41D00002721 /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 		A02CF39A2F11676F009D2603 /* WebAuthnClientData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebAuthnClientData.swift; sourceTree = "<group>"; };
@@ -115,7 +116,6 @@
 		FACE7EC0FACE7EC0FACE0005 /* FaceTecConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceTecConfig.swift; sourceTree = "<group>"; };
 		FACE7EC0FACE7EC0FACE0006 /* FaceTecIDVProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceTecIDVProvider.swift; sourceTree = "<group>"; };
 		FACE7EC0FACE7EC0FACE0007 /* FaceTec_OCR_Customization.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = FaceTec_OCR_Customization.json; sourceTree = "<group>"; };
-		53DF00D4501F39AE4E96D47D /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -177,6 +177,11 @@
 		A0ABC1F63018FBF6002E01C2 /* Vendor */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Vendor;
+			sourceTree = SOURCE_ROOT;
+		};
+		A0E2AE003077D4940054F17C /* ci_scripts */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ci_scripts;
 			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -249,6 +254,7 @@
 				A04B09E72DD1FEB900A1BFF7 /* wwWallet-Info.plist */,
 				A0ABC1F63018FBF6002E01C2 /* Vendor */,
 				A090AC2F2F6448EF00ADE0B2 /* .github */,
+				A0E2AE003077D4940054F17C /* ci_scripts */,
 				A096A7C22F7C1FD9006AE2A5 /* fastlane */,
 			);
 			path = Build;
@@ -650,7 +656,6 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = AutoFillExtension/AutoFillExtension.entitlements;
-				CODE_SIGN_STYLE = Manual;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AutoFillExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = AutoFillExtension;
@@ -679,7 +684,6 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = AutoFillExtension/AutoFillExtension.entitlements;
-				CODE_SIGN_STYLE = Manual;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AutoFillExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = AutoFillExtension;
@@ -706,7 +710,6 @@
 			baseConfigurationReference = A04B0A002DD2035C00A1BFF7 /* Config.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Manual;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
@@ -734,7 +737,6 @@
 			baseConfigurationReference = A04B0A002DD2035C00A1BFF7 /* Config.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Manual;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
@@ -886,7 +888,6 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = wwWallet/wwWallet.entitlements;
-				CODE_SIGN_STYLE = Manual;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -923,7 +924,6 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = wwWallet/wwWallet.entitlements;
-				CODE_SIGN_STYLE = Manual;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
