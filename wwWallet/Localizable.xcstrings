@@ -365,6 +365,34 @@
         }
       }
     },
+    "Your face did not match the photo stored in your document's chip, so no credential was issued. Please try again, or use another identity document." : {
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Το πρόσωπό σας δεν ταίριαξε με τη φωτογραφία που είναι αποθηκευμένη στο τσιπ του εγγράφου σας, επομένως δεν εκδόθηκε πιστοποιητικό. Δοκιμάστε ξανά ή χρησιμοποιήστε άλλο έγγραφο ταυτότητας."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kasvosi eivät vastanneet asiakirjasi siruun tallennettua kuvaa, joten todistusta ei myönnetty. Yritä uudelleen tai käytä toista henkilöllisyysasiakirjaa."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O seu rosto não correspondeu à fotografia guardada no chip do seu documento, pelo que não foi emitida nenhuma credencial. Tente novamente ou utilize outro documento de identificação."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ditt ansikte stämde inte med fotot som är lagrat i dokumentets chip, så inget intyg utfärdades. Försök igen eller använd en annan identitetshandling."
+          }
+        }
+      }
+    },
     "Your identity could not be verified, so no credential was issued. Please try again." : {
       "localizations" : {
         "el" : {
