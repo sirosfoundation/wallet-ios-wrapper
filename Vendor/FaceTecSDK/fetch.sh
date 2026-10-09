@@ -7,7 +7,7 @@
 # ID rather than its name, so we look that up first via the release-by-tag
 # call.
 #
-# To provide the Github Personal Access Token (PAT) that has read
+# To provide the GitHub Personal Access Token (PAT) that has read
 # access to sirosfoundation/vendor-swift-packages, there are 2 ways:
 #
 # 1. environment variable `$GITHUB_PAT`.
