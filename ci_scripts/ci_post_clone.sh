@@ -44,7 +44,7 @@ if [ "$CI_XCODEBUILD_ACTION" != "build-for-testing" ]; then
     echo "Fetching vendor libraries…"
     ../Vendor/FaceTecSDK/fetch.sh
 else
-    echo "Skiping vendor libraries for testing"
+    echo "Skipping vendor libraries for testing"
 fi
 
 echo "CI post-clone preparation complete."
