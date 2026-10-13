@@ -24,7 +24,7 @@ set -euo pipefail
 cd "$(dirname "$0")"
 
 REPO="sirosfoundation/vendor-swift-packages"
-RELEASE_TAG="facetec-10.1.17"
+RELEASE_TAG="facetec-10.1.24"
 
 PAT=$(awk '/machine github\.com/{f=1} f && /password/{print $2; exit}' ~/.netrc)
 if [ -z "${PAT:-}" ]; then
