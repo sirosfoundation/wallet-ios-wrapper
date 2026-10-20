@@ -22,6 +22,7 @@ import YubiKit
  * have to cancel the NFC request and start over instead. But probably better than having the
  * user choose in the UI instead.
  */
+@MainActor
 final class WiredConnectionManager {
 
     static let shared = WiredConnectionManager()
@@ -68,6 +69,9 @@ final class WiredConnectionManager {
                 }
                 catch {
                     self.error = error
+
+                    // Reduce CPU load when errors happen.
+                    try? await Task.sleep(nanoseconds: NSEC_PER_SEC)
                 }
             }
         }
