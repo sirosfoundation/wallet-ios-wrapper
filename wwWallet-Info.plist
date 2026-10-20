@@ -21,6 +21,10 @@
 		<key>UIColorName</key>
 		<string>LaunchScreenColor</string>
 	</dict>
+	<key>UISupportedExternalAccessoryProtocols</key>
+	<array>
+		<string>com.yubico.ylp</string>
+	</array>
 	<key>WKAppBoundDomains</key>
 	<array>
 		<string>$(BASE_DOMAIN1)</string>
