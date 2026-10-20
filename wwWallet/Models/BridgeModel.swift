@@ -64,7 +64,7 @@ import FaceTecSDK
 
             // Use a wired connection, if the user plugged in a key in the meantime,
             // otherwise initiate a NFC connection.
-            if let wired = WiredConnectionManager.shared.wiredConnection {
+            if let wired = await WiredConnectionManager.shared.wiredConnection {
                 conn = wired
             }
             else {
@@ -173,7 +173,7 @@ import FaceTecSDK
 
             // Use a wired connection, if the user plugged in a key in the meantime,
             // otherwise initiate a NFC connection.
-            if let wired = WiredConnectionManager.shared.wiredConnection {
+            if let wired = await WiredConnectionManager.shared.wiredConnection {
                 conn = wired
             }
             else {
