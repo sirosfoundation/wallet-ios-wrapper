@@ -54,7 +54,7 @@ import FaceTecSDK
     }
 
     func didReceiveCreate(_ message: WKScriptMessage) async throws -> [String: String?] {
-        var conn: NFCSmartCardConnection? = nil
+        var conn: SmartCardConnection? = nil
 
         do {
             let sb = await message.stringBody
@@ -62,7 +62,14 @@ import FaceTecSDK
 
             let request: CreateRequestWrapper = try await message.decode()
 
-            conn = try await NFCSmartCardConnection.makeConnection()
+            // Use a wired connection, if the user plugged in a key in the meantime,
+            // otherwise initiate a NFC connection.
+            if let wired = WiredConnectionManager.shared.wiredConnection {
+                conn = wired
+            }
+            else {
+                conn = try await NFCSmartCardConnection.makeConnection()
+            }
 
             let session = try await CTAP2.Session.makeSession(connection: conn!)
 
@@ -102,7 +109,7 @@ import FaceTecSDK
 
             let json = String(data: try JSONEncoder().encode(ResponseWrapper(credentials, "create")), encoding: .utf8)
 
-            await conn?.close()
+            await conn?.close(error: nil)
 
             log.debug("\(json ?? "(nil)")")
 
@@ -141,7 +148,7 @@ import FaceTecSDK
     }
 
     func didReceiveGet(_ message: WKScriptMessage) async throws -> [String: String?] {
-        var conn: NFCSmartCardConnection? = nil
+        var conn: SmartCardConnection? = nil
 
         do {
             let sb = await message.stringBody
@@ -164,7 +171,14 @@ import FaceTecSDK
                 throw CTAP2.SessionError.ctapError(CTAP2.Error.puatRequired, source: .here())
             }
 
-            conn = try await NFCSmartCardConnection.makeConnection()
+            // Use a wired connection, if the user plugged in a key in the meantime,
+            // otherwise initiate a NFC connection.
+            if let wired = WiredConnectionManager.shared.wiredConnection {
+                conn = wired
+            }
+            else {
+                conn = try await NFCSmartCardConnection.makeConnection()
+            }
 
             let session = try await CTAP2.Session.makeSession(connection: conn!)
 
@@ -228,7 +242,7 @@ import FaceTecSDK
 
             log.debug("\(json ?? "(nil)")")
 
-            await conn?.close()
+            await conn?.close(error: nil)
 
             // Remove user selection again after use.
             selectedCredential = nil
@@ -259,7 +273,7 @@ import FaceTecSDK
                 }
 
             case Errors.multipleCredentials(let responses):
-                await conn?.close()
+                await conn?.close(error: nil)
 
                 log.error("\(error)")
 
