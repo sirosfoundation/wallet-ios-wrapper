@@ -9,33 +9,69 @@ import SwiftUI
 
 struct PinEntryView: View {
 
+    var onFinished: (String?) -> Void
+
+    @Environment(\.dismiss)
+    private var dismiss
 
     @State
     private var pin: String = ""
 
+    @FocusState
+    private var pinFieldFocused: Bool
+
     var body: some View {
-        Text(NSLocalizedString("Enter Your Security Key PIN", comment: ""))
+        ZStack {
+            Color(.label).opacity(0.4)
+                .ignoresSafeArea()
 
-        TextField(NSLocalizedString("PIN", comment: ""), text: $pin)
-            .autocorrectionDisabled()
-            .textFieldStyle(.roundedBorder)
-            .padding(.horizontal, 12)
-            .padding(.vertical, 8)
+            VStack {
+                Title(NSLocalizedString("Enter Your Security Key PIN", comment: ""))
 
-        Button {
-            // TODO
-        } label: {
-            Text(NSLocalizedString("Confirm", comment: ""))
+                SecureField(NSLocalizedString("PIN", comment: ""), text: $pin)
+                    .focused($pinFieldFocused)
+                    .autocapitalization(.none)
+                    .autocorrectionDisabled()
+                    .textFieldStyle(.roundedBorder)
+                    .padding(.vertical, 8)
+
+                Button {
+                    onFinished(pin)
+
+                    dismiss()
+                } label: {
+                    Text(NSLocalizedString("Confirm", comment: ""))
+                }
+                .disabled(pin.isEmpty)
+                .padding(.top, 32)
+                .padding(.vertical, 8)
+                .buttonStyle(.primaryButton)
+
+                Button {
+                    onFinished(nil)
+
+                    dismiss()
+                } label: {
+                    Text(NSLocalizedString("Cancel", comment: ""))
+                }
+                .padding(.vertical, 8)
+                .buttonStyle(.outlineButton)
+            }
+            .padding()
+            .background(Color(.secondarySystemBackground))
+            .cornerRadius(16)
+            .shadow(radius: 10)
+            .padding()
+            .frame(maxWidth: 400)
         }
-
-        Button {
-            // TODO
-        } label: {
-            Text(NSLocalizedString("Cancel", comment: ""))
+        .onAppear {
+            pinFieldFocused = true
         }
     }
 }
 
 #Preview {
-    PinEntryView()
+    PinEntryView(onFinished: { pin in
+        print("PIN: \(pin ?? "(nil)")")
+    })
 }

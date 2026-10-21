@@ -411,16 +411,19 @@ import FaceTecSDK
         }
     }
 
+    @MainActor
     private func acquirePin(_ message: WKScriptMessage) async {
-        do {
-            let value = try await message.webView?.callAsyncJavaScript(
-                "return prompt(\"\(NSLocalizedString("Please enter your FIDO2/WebAuthn PIN.", comment: ""))\", \"\(WebView.isSecureTextEntry)\")",
-                contentWorld: message.world)
+        pin = await withCheckedContinuation { continuation in
+            if let topVc = message.webView?.window?.rootViewController?.top, !topVc.isBeingDismissed {
+                let vc = ModalViewController(rootView: PinEntryView(onFinished: { pin in
+                    continuation.resume(returning: pin)
+                }))
 
-            pin = value as? String
-        }
-        catch {
-            pin = nil
+                topVc.present(vc, animated: true)
+            }
+            else {
+                continuation.resume(returning: nil)
+            }
         }
     }
 

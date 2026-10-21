@@ -19,6 +19,8 @@
 		A04CCCD52FBB549800C22FC2 /* CredentialSelectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A04CCCD32FBB549800C22FC2 /* CredentialSelectionViewController.xib */; };
 		A05D7AC82DBFB8FB001940B3 /* WebBluetooth.js in Resources */ = {isa = PBXBuildFile; fileRef = A05D7AC72DBFB8F7001940B3 /* WebBluetooth.js */; };
 		A06638E82EBE657D00D6799D /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A06638E72EBE657D00D6799D /* Color+Extensions.swift */; };
+		A0833D09308914780037EFB5 /* Title.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0833D08308914780037EFB5 /* Title.swift */; };
+		A0833D0B30891BD30037EFB5 /* ModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0833D0A30891BD30037EFB5 /* ModalViewController.swift */; };
 		A08D827F2DA91A5D009373AB /* JsonModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D827E2DA91A5D009373AB /* JsonModels.swift */; };
 		A08D82812DA91AE6009373AB /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D82802DA91AE6009373AB /* Errors.swift */; };
 		A093B0072FB4BEB600FE09F2 /* WebAuthn.User+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A093B0062FB4BEB600FE09F2 /* WebAuthn.User+Extensions.swift */; };
@@ -88,6 +90,8 @@
 		A04CCCD32FBB549800C22FC2 /* CredentialSelectionViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CredentialSelectionViewController.xib; sourceTree = "<group>"; };
 		A05D7AC72DBFB8F7001940B3 /* WebBluetooth.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = WebBluetooth.js; sourceTree = "<group>"; };
 		A06638E72EBE657D00D6799D /* Color+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
+		A0833D08308914780037EFB5 /* Title.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Title.swift; sourceTree = "<group>"; };
+		A0833D0A30891BD30037EFB5 /* ModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalViewController.swift; sourceTree = "<group>"; };
 		A08D827E2DA91A5D009373AB /* JsonModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonModels.swift; sourceTree = "<group>"; };
 		A08D82802DA91AE6009373AB /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		A08D82832DA93BE4009373AB /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = SOURCE_ROOT; };
@@ -224,6 +228,7 @@
 			children = (
 				A06638E72EBE657D00D6799D /* Color+Extensions.swift */,
 				A0F7A1782DB68B5A009F3178 /* Logger+Extensions.swift */,
+				A0833D0A30891BD30037EFB5 /* ModalViewController.swift */,
 				A00436A92DA7F41D00002721 /* UIViewController+Extensions.swift */,
 				B43CB36E2D030CC000634811 /* WKScriptMessage+Extensions.swift */,
 				A099D37D2DB6A1F7007F6983 /* WKUserContentController+Extensions.swift */,
@@ -265,6 +270,7 @@
 		A0F7A1732DB6829D009F3178 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				A0833D08308914780037EFB5 /* Title.swift */,
 				B49F14712D12BEBE0063C12F /* ButtonStyles.swift */,
 				B40A361E2CFA01CA0044D2C6 /* ContentView.swift */,
 				B40A36232CFA01CA0044D2C6 /* WebView.swift */,
@@ -614,6 +620,7 @@
 		B40A35F02CF9DB6A0044D2C6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			files = (
+				A0833D0B30891BD30037EFB5 /* ModalViewController.swift in Sources */,
 				A003932D2F1A69050072EDF5 /* PrfExtensions.swift in Sources */,
 				A06638E82EBE657D00D6799D /* Color+Extensions.swift in Sources */,
 				A08D82812DA91AE6009373AB /* Errors.swift in Sources */,
@@ -636,6 +643,7 @@
 				A093B0072FB4BEB600FE09F2 /* WebAuthn.User+Extensions.swift in Sources */,
 				FACE7EC0FACE7EC0FACE0008 /* FaceTecConfig.swift in Sources */,
 				FACE7EC0FACE7EC0FACE0009 /* FaceTecIDVProvider.swift in Sources */,
+				A0833D09308914780037EFB5 /* Title.swift in Sources */,
 			);
 		};
 /* End PBXSourcesBuildPhase section */
