@@ -15,6 +15,7 @@ enum Errors: LocalizedError {
     case cannotCreateUserEntity
     case error0x19
     case multipleCredentials(_ responses: [CTAP2.GetAssertion.Response])
+    case genericNfc
     case faceTecNotAvailable
     case faceTecNotConfigured
     case faceTecNoPresenter
@@ -42,6 +43,9 @@ enum Errors: LocalizedError {
 
         case .multipleCredentials(let responses):
             return "Multiple credentials available: \(responses.map({ $0.user?.fallbackName }))"
+
+        case .genericNfc:
+            return NSLocalizedString("Hold the security key against your device's NFC reader until it is recognized.", comment: "")
 
         case .faceTecNotAvailable:
             return NSLocalizedString("FaceTec Scan Physical ID is not available in this build.", comment: "")

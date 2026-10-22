@@ -472,22 +472,34 @@ import FaceTecSDK
             return result
         }
         catch {
+            var errorToShow: Error?
+            var errorToReturn: Error?
+
             switch error {
             case CTAP2.SessionError.ctapError(let ctapError, source: _):
-                await conn.close(error: ctapError)
-
-                throw ctapError
+                errorToShow = ctapError
+                errorToReturn = ctapError
 
             case Errors.multipleCredentials(_):
                 // Do NOT show this as an error in the UI.
                 // This will trigger another modal for credential selection instead.
-                await conn.close(error: nil)
+                errorToShow = nil
+                errorToReturn = error
 
             default:
-                await conn.close(error: error)
+                errorToShow = error
+                errorToReturn = error
             }
 
-            throw error
+            // YubiKit implemented proper error descriptions almost nowhere, hence we show a
+            // generic message. As currently only NFC has error UI, it's fine to refer to NFC here.
+            if errorToShow != nil && errorToShow is CTAP2.SessionError {
+                errorToShow = Errors.genericNfc
+            }
+
+            await conn.close(error: errorToShow)
+
+            throw errorToReturn ?? error
         }
     }
 }
