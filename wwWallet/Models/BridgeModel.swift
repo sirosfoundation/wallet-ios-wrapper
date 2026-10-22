@@ -415,7 +415,7 @@ import FaceTecSDK
     private func acquirePin(_ message: WKScriptMessage) async {
         pin = await withCheckedContinuation { continuation in
             if let topVc = message.webView?.window?.rootViewController?.top, !topVc.isBeingDismissed {
-                let vc = ModalViewController(rootView: PinEntryView(onFinished: { pin in
+                let vc = ModalViewController(rootView: PinEntryView({ pin in
                     continuation.resume(returning: pin)
                 }))
 
@@ -431,17 +431,11 @@ import FaceTecSDK
     private func acquireCredential(_ message: WKScriptMessage, _ responses: [CTAP2.GetAssertion.Response]) async {
         selectedCredential = await withCheckedContinuation { continuation in
             if let topVc = message.webView?.window?.rootViewController?.top, !topVc.isBeingDismissed {
-                let vc = CredentialSelectionViewController()
-                vc.responses = responses
-                vc.resultCallback = {
-                    vc.resultCallback = nil // Remove circular reference so ARC can deinit view controller.
+                let vc = ModalViewController(rootView: CredentialSelectionView(responses, { user in
+                    continuation.resume(returning: user)
+                }))
 
-                    continuation.resume(returning: $0)
-                }
-
-                let navC = UINavigationController(rootViewController: vc)
-
-                topVc.present(navC, animated: true)
+                topVc.present(vc, animated: true)
             }
             else {
                 continuation.resume(returning: nil)

@@ -11,6 +11,7 @@ struct PinEntryView: View {
 
     var onFinished: (String?) -> Void
 
+
     @Environment(\.dismiss)
     private var dismiss
 
@@ -20,11 +21,14 @@ struct PinEntryView: View {
     @FocusState
     private var pinFieldFocused: Bool
 
-    var body: some View {
-        ZStack {
-            Color(.label).opacity(0.4)
-                .ignoresSafeArea()
 
+    init(_ onFinished: @escaping (String?) -> Void) {
+        self.onFinished = onFinished
+    }
+
+
+    var body: some View {
+        Modal {
             VStack {
                 Title(NSLocalizedString("Enter Your Security Key PIN", comment: ""))
 
@@ -57,12 +61,6 @@ struct PinEntryView: View {
                 .padding(.vertical, 8)
                 .buttonStyle(.outlineButton)
             }
-            .padding()
-            .background(Color(.secondarySystemBackground))
-            .cornerRadius(16)
-            .shadow(radius: 10)
-            .padding()
-            .frame(maxWidth: 400)
         }
         .onAppear {
             pinFieldFocused = true
@@ -71,7 +69,7 @@ struct PinEntryView: View {
 }
 
 #Preview {
-    PinEntryView(onFinished: { pin in
+    PinEntryView { pin in
         print("PIN: \(pin ?? "(nil)")")
-    })
+    }
 }
