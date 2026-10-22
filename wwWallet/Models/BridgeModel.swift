@@ -453,11 +453,16 @@ import FaceTecSDK
 
                 throw ctapError
 
+            case Errors.multipleCredentials(_):
+                // Do NOT show this as an error in the UI.
+                // This will trigger another modal for credential selection instead.
+                await conn.close(error: nil)
+
             default:
                 await conn.close(error: error)
-
-                throw error
             }
+
+            throw error
         }
     }
 }
