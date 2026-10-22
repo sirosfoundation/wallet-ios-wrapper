@@ -11,6 +11,7 @@ extension WKScriptMessage {
 
     static let decoder = JSONDecoder()
 
+
     var stringBody: String? {
         body as? String
     }
@@ -18,6 +19,14 @@ extension WKScriptMessage {
     var dataBody: Data? {
         stringBody?.data(using: .utf8)
     }
+
+    /**
+     Returns the top-most view controller, which *isn't currently being dismissed.*
+     */
+    var topVc: UIViewController? {
+        webView?.window?.rootViewController?.top
+    }
+
 
     func decode<T: Decodable>() throws -> T {
         guard let data = dataBody else {

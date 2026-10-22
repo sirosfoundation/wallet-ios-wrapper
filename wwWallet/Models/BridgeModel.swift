@@ -266,7 +266,7 @@ import FaceTecSDK
 
         let bearerToken = Config.faceTecApiBearerToken
 
-        guard let presentingVc = await message.webView?.window?.rootViewController?.top else {
+        guard let presentingVc = await message.topVc else {
             throw Errors.faceTecNoPresenter
         }
 
@@ -283,7 +283,7 @@ import FaceTecSDK
         // The web app ignores this call's result, so an error the user can act
         // on is shown natively; anything else is only thrown, as before.
         guard provider.isNFCReadingAvailable() else {
-            await showAlert(Errors.faceTecNFCUnavailable, on: presentingVc)
+            await showAlert(Errors.faceTecNFCUnavailable, on: await message.topVc ?? presentingVc)
             throw Errors.faceTecNFCUnavailable
         }
 
@@ -293,7 +293,7 @@ import FaceTecSDK
         }
         catch Errors.faceTecIssuanceRefused(let code) {
             let error = Errors.faceTecIssuanceRefused(code: code)
-            await showAlert(error, on: presentingVc, title: NSLocalizedString("No credential issued", comment: ""))
+            await showAlert(error, on: await message.topVc ?? presentingVc, title: NSLocalizedString("No credential issued", comment: ""))
             throw error
         }
 
@@ -347,22 +347,12 @@ import FaceTecSDK
 
     // MARK: Private Methods
 
-    /// Presents `error` as a simple alert and waits until the user dismisses
-    /// it. The bridge call waits on this, so it must always return.
-    ///
-    /// `viewController` is the one that presented the FaceTec session, which
-    /// may still be dismissing when `onFaceTecExit` fires; UIKit refuses to
-    /// present from a controller in that state. So this waits (bounded) for
-    /// the dismissal to finish and presents from whatever is then on top; if
-    /// UIKit still refuses, it gives up rather than leave the call suspended.
+    /**
+     Presents `error` as a simple alert and waits until the user dismisses it.
+     The bridge call waits on this, so it must always return.
+     */
     @MainActor
     private func showAlert(_ error: Errors, on viewController: UIViewController, title: String? = nil) async {
-        var waited = 0
-        while viewController.presentedViewController?.isBeingDismissed == true, waited < 30 {
-            try? await Task.sleep(nanoseconds: 100_000_000)
-            waited += 1
-        }
-
         let once = AlertContinuation()
         await withCheckedContinuation { (continuation: CheckedContinuation<Void, Never>) in
             once.continuation = continuation
@@ -372,14 +362,14 @@ import FaceTecSDK
                 once.resume()
             })
 
-            viewController.top.present(alert, animated: true)
-
-            Task { @MainActor in
-                try? await Task.sleep(nanoseconds: 1_000_000_000)
-                if alert.presentingViewController == nil {
-                    self.log.error("Could not present the FaceTec refusal alert: \(error.localizedDescription)")
-                    once.resume()
-                }
+            // This should not happen anymore, since you should call this with a
+            // fresh vc reference, which *isn't currently dismissed* (use `WkScriptMessage.topVC`!),
+            // but just in case, we're checking anyway.
+            if viewController.isBeingDismissed {
+                once.resume()
+            }
+            else {
+                viewController.present(alert, animated: true)
             }
         }
     }
@@ -387,7 +377,7 @@ import FaceTecSDK
     @MainActor
     private func acquirePin(_ message: WKScriptMessage) async {
         pin = await withCheckedContinuation { continuation in
-            if let topVc = message.webView?.window?.rootViewController?.top, !topVc.isBeingDismissed {
+            if let topVc = message.topVc {
                 let vc = ModalViewController(rootView: PinEntryView({ pin in
                     continuation.resume(returning: pin)
                 }))
@@ -403,7 +393,7 @@ import FaceTecSDK
     @MainActor
     private func acquireCredential(_ message: WKScriptMessage, _ responses: [CTAP2.GetAssertion.Response]) async {
         selectedCredential = await withCheckedContinuation { continuation in
-            if let topVc = message.webView?.window?.rootViewController?.top, !topVc.isBeingDismissed {
+            if let topVc = message.topVc {
                 let vc = ModalViewController(rootView: CredentialSelectionView(responses, { user in
                     continuation.resume(returning: user)
                 }))

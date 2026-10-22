@@ -9,8 +9,11 @@ import UIKit
 
 extension UIViewController {
 
+    /**
+     Returns the top-most view controller, which *isn't currently being dismissed.*
+     */
     public var top: UIViewController {
-        if let vc = subViewController {
+        if let vc = subViewController, !vc.isBeingDismissed {
             return vc.top
         }
 
