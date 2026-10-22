@@ -59,6 +59,8 @@ import FaceTecSDK
 
         let request: CreateRequestWrapper = try await message.decode()
 
+        var infoVc: UIViewController?
+
         do {
             return try await withConnection { conn in
                 let session = try await CTAP2.Session.makeSession(connection: conn)
@@ -83,6 +85,9 @@ import FaceTecSDK
                 let prfs = try await PrfExtensions(session, r.extensions)
                 let extensions = try prfs.makeCredentialInput()
 
+                // Eventually show instructions for wired security keys.
+                infoVc = await showKeyTouchInfo(message, conn)
+
                 let response = try await session.makeCredential(
                     parameters: .init(
                         clientDataHash: clientDataJson.hash,
@@ -95,6 +100,8 @@ import FaceTecSDK
                     ),
                     token: token).value
 
+                await infoVc?.dismiss(animated: true)
+
                 let credentials = try Credentials(clientDataJson, response, prfs)
 
                 let json = String(data: try JSONEncoder().encode(ResponseWrapper(credentials, "create")), encoding: .utf8)
@@ -105,6 +112,8 @@ import FaceTecSDK
             }
         }
         catch {
+            await infoVc?.dismiss(animated: true)
+
             switch error {
             case CTAP2.Error.pinInvalid, CTAP2.Error.puatRequired:
                 await acquirePin(message)
@@ -150,6 +159,8 @@ import FaceTecSDK
             }
         }
 
+        var infoVc: UIViewController?
+
         do {
             return try await withConnection { conn in
                 let session = try await CTAP2.Session.makeSession(connection: conn)
@@ -181,6 +192,9 @@ import FaceTecSDK
                     allowList = credentials.compactMap({ $0.descriptor })
                 }
 
+                // Eventually show instructions for wired security keys.
+                infoVc = await showKeyTouchInfo(message, conn)
+
                 let response = try await session.getAssertion(
                     parameters: .init(
                         rpId: r.rpId,
@@ -189,6 +203,8 @@ import FaceTecSDK
                         extensions: extensions
                     ),
                     token: token).value
+
+                await infoVc?.dismiss(animated: true)
 
                 // There's multiple credentials on the YubiKey. Fetch their IDs and
                 // show it to the user for selection.
@@ -221,6 +237,8 @@ import FaceTecSDK
             }
         }
         catch {
+            await infoVc?.dismiss(animated: true)
+
             switch error {
             case CTAP2.Error.pinInvalid, CTAP2.Error.puatRequired:
                 await acquirePin(message)
@@ -404,6 +422,26 @@ import FaceTecSDK
                 continuation.resume(returning: nil)
             }
         }
+    }
+
+    /**
+     Show a modal with instructions for wired security keys. *only*, if wired. When NFC, the OS will display its own UI.
+
+     - parameter message: Used to find the top-most UIViewController to present this modal on top of.
+     - parameter conn: The currently used connection to evaluate, if this is a wired connection or not.
+     - returns: The modal UIViewController, if one has been presented.
+     */
+    @MainActor
+    private func showKeyTouchInfo(_ message: WKScriptMessage, _ conn: SmartCardConnection) -> UIViewController? {
+        if !(conn is NFCSmartCardConnection), let topVc = message.topVc {
+            let vc = ModalViewController(rootView: KeyTouchInfoView())
+
+            topVc.present(vc, animated: true)
+
+            return vc
+        }
+
+        return nil
     }
 
     /**

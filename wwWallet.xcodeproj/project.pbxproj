@@ -29,8 +29,9 @@
 		A099D37E2DB6A1F7007F6983 /* WKUserContentController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A099D37D2DB6A1F7007F6983 /* WKUserContentController+Extensions.swift */; };
 		A0A611002DE9C7B800BF10CE /* SwiftCBOR in Frameworks */ = {isa = PBXBuildFile; productRef = A0A610FF2DE9C7B800BF10CE /* SwiftCBOR */; };
 		A0A7BEC62F8FEB0B00F27AE1 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A7BEC52F8FEB0B00F27AE1 /* Extensions.swift */; };
-		A0D3D81A3087C88F0075B8F2 /* PinEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D3D8193087C88F0075B8F2 /* PinEntryView.swift */; };
 		A0D3D71030879AB40075B8F2 /* WiredConnectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D3D70F30879AB40075B8F2 /* WiredConnectionManager.swift */; };
+		A0D3D81A3087C88F0075B8F2 /* PinEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D3D8193087C88F0075B8F2 /* PinEntryView.swift */; };
+		A0DAF6D8308A4718009F4DC9 /* KeyTouchInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DAF6D7308A4718009F4DC9 /* KeyTouchInfoView.swift */; };
 		A0E498052E42194300AA9C23 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A0E498042E42194300AA9C23 /* Settings.bundle */; };
 		A0F7A1792DB68B5A009F3178 /* Logger+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F7A1782DB68B5A009F3178 /* Logger+Extensions.swift */; };
 		B40A36272CFA01CA0044D2C6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B40A361C2CFA01CA0044D2C6 /* Assets.xcassets */; };
@@ -103,8 +104,9 @@
 		A099D37B2DB69A71007F6983 /* MessageHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageHandler.swift; sourceTree = "<group>"; };
 		A099D37D2DB6A1F7007F6983 /* WKUserContentController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WKUserContentController+Extensions.swift"; sourceTree = "<group>"; };
 		A0A7BEC52F8FEB0B00F27AE1 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		A0D3D8193087C88F0075B8F2 /* PinEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinEntryView.swift; sourceTree = "<group>"; };
 		A0D3D70F30879AB40075B8F2 /* WiredConnectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WiredConnectionManager.swift; sourceTree = "<group>"; };
+		A0D3D8193087C88F0075B8F2 /* PinEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinEntryView.swift; sourceTree = "<group>"; };
+		A0DAF6D7308A4718009F4DC9 /* KeyTouchInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyTouchInfoView.swift; sourceTree = "<group>"; };
 		A0E498042E42194300AA9C23 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		A0F7A1782DB68B5A009F3178 /* Logger+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Logger+Extensions.swift"; sourceTree = "<group>"; };
 		B40A35F42CF9DB6A0044D2C6 /* wwWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wwWallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -276,6 +278,7 @@
 				B49F14712D12BEBE0063C12F /* ButtonStyles.swift */,
 				A0991DD6308A34D8005C3B98 /* CredentialSelectionView.swift */,
 				B40A361E2CFA01CA0044D2C6 /* ContentView.swift */,
+				A0DAF6D7308A4718009F4DC9 /* KeyTouchInfoView.swift */,
 				A0991DD7308A34D8005C3B98 /* Modal.swift */,
 				A0D3D8193087C88F0075B8F2 /* PinEntryView.swift */,
 				A0833D08308914780037EFB5 /* Title.swift */,
@@ -622,6 +625,7 @@
 		B40A35F02CF9DB6A0044D2C6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			files = (
+				A0DAF6D8308A4718009F4DC9 /* KeyTouchInfoView.swift in Sources */,
 				A0833D0B30891BD30037EFB5 /* ModalViewController.swift in Sources */,
 				A003932D2F1A69050072EDF5 /* PrfExtensions.swift in Sources */,
 				A06638E82EBE657D00D6799D /* Color+Extensions.swift in Sources */,
