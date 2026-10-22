@@ -54,213 +54,185 @@ import FaceTecSDK
     }
 
     func didReceiveCreate(_ message: WKScriptMessage) async throws -> [String: String?] {
-        var conn: NFCSmartCardConnection? = nil
+        let sb = await message.stringBody
+        log.debug("\(sb ?? "(nil)")")
+
+        let request: CreateRequestWrapper = try await message.decode()
 
         do {
-            let sb = await message.stringBody
-            log.debug("\(sb ?? "(nil)")")
+            return try await withConnection { conn in
+                let session = try await CTAP2.Session.makeSession(connection: conn)
 
-            let request: CreateRequestWrapper = try await message.decode()
+                let r = request.request
+                var token: CTAP2.Token? = nil
 
-            conn = try await NFCSmartCardConnection.makeConnection()
+                if let pin = pin, !pin.isEmpty {
+                    self.pin = pin // Refresh timer
+                    token = try await session.getPinUVToken(using: .pin(pin), permissions: .makeCredential, rpId: r.rp.id)
+                }
 
-            let session = try await CTAP2.Session.makeSession(connection: conn!)
+                guard let clientData = r.clientData else {
+                    throw Errors.cannotCreateClientDataHash
+                }
+                let clientDataJson = try WebAuthnClientDataJson(clientData)
 
-            let r = request.request
-            var token: CTAP2.Token? = nil
+                guard let user = r.user.entity else {
+                    throw Errors.cannotCreateUserEntity
+                }
 
-            if let pin = pin, !pin.isEmpty {
-                self.pin = pin // Refresh timer
-                token = try await session.getPinUVToken(using: .pin(pin), permissions: .makeCredential, rpId: r.rp.id)
+                let prfs = try await PrfExtensions(session, r.extensions)
+                let extensions = try prfs.makeCredentialInput()
+
+                let response = try await session.makeCredential(
+                    parameters: .init(
+                        clientDataHash: clientDataJson.hash,
+                        rp: r.rp.entity,
+                        user: user,
+                        pubKeyCredParams: r.pubKeyCredParams.map({ $0.algorithm }),
+                        excludeList: r.excludeCredentials?.compactMap({ $0.descriptor }),
+                        extensions: extensions,
+                        rk: r.rk
+                    ),
+                    token: token).value
+
+                let credentials = try Credentials(clientDataJson, response, prfs)
+
+                let json = String(data: try JSONEncoder().encode(ResponseWrapper(credentials, "create")), encoding: .utf8)
+
+                log.debug("\(json ?? "(nil)")")
+
+                return ["data": json]
             }
-
-            guard let clientData = r.clientData else {
-                throw Errors.cannotCreateClientDataHash
-            }
-            let clientDataJson = try WebAuthnClientDataJson(clientData)
-
-            guard let user = r.user.entity else {
-                throw Errors.cannotCreateUserEntity
-            }
-
-            let prfs = try await PrfExtensions(session, r.extensions)
-            let extensions = try prfs.makeCredentialInput()
-
-            let response = try await session.makeCredential(
-                parameters: .init(
-                    clientDataHash: clientDataJson.hash,
-                    rp: r.rp.entity,
-                    user: user,
-                    pubKeyCredParams: r.pubKeyCredParams.map({ $0.algorithm }),
-                    excludeList: r.excludeCredentials?.compactMap({ $0.descriptor }),
-                    extensions: extensions,
-                    rk: r.rk
-                ),
-                token: token).value
-
-            let credentials = try Credentials(clientDataJson, response, prfs)
-
-            let json = String(data: try JSONEncoder().encode(ResponseWrapper(credentials, "create")), encoding: .utf8)
-
-            await conn?.close()
-
-            log.debug("\(json ?? "(nil)")")
-
-            return ["data": json]
         }
         catch {
             switch error {
-            case CTAP2.SessionError.ctapError(let error, source: _):
-                await conn?.close(error: error)
+            case CTAP2.Error.pinInvalid, CTAP2.Error.puatRequired:
+                await acquirePin(message)
 
-                switch error {
-                case CTAP2.Error.pinInvalid, CTAP2.Error.puatRequired:
-                    await acquirePin(message)
-
-                    // User cancelled.
-                    if pin?.isEmpty ?? true {
-                        return [:]
-                    }
-
-                    return try await didReceiveCreate(message)
-
-                case CTAP2.Error.credentialExcluded:
-                    // Special treatment for unclear reasons.
-                    throw Errors.error0x19
-
-                default:
-                    throw error
+                // User cancelled.
+                if pin?.isEmpty ?? true {
+                    return [:]
                 }
 
-            default:
-                await conn?.close(error: error)
+                return try await didReceiveCreate(message)
 
+            case CTAP2.Error.credentialExcluded:
+                // Special treatment for unclear reasons.
+                throw Errors.error0x19
+
+            default:
                 throw error
             }
         }
     }
 
     func didReceiveGet(_ message: WKScriptMessage) async throws -> [String: String?] {
-        var conn: NFCSmartCardConnection? = nil
+        let sb = await message.stringBody
+        log.debug("\(sb ?? "(nil)")")
+
+        let request: GetRequestWrapper = try await message.decode()
+
+        // If wwWallet wants user verification, we *do need to use a PIN*.
+        // For subsequent calls, we then have the PIN available.
+        // See https://developers.yubico.com/WebAuthn/WebAuthn_Developer_Guide/User_Presence_vs_User_Verification.html
+        //
+        // Also, the PRF extension *always requires* user verification, so force it,
+        // even when the frontend didn't explicitly ask for it.
+        let needsPin = request.request.userVerification?.lowercased() == "required" || request.request.extensions?["prf"] != nil
+
+        // At the first time, this PIN will be empty, so we ask right away before we even establish a connection.
+        if needsPin && (pin?.isEmpty ?? true) {
+            await acquirePin(message)
+
+            // User cancelled.
+            if pin?.isEmpty ?? true {
+                return [:]
+            }
+        }
 
         do {
-            let sb = await message.stringBody
-            log.debug("\(sb ?? "(nil)")")
+            return try await withConnection { conn in
+                let session = try await CTAP2.Session.makeSession(connection: conn)
 
-            let request: GetRequestWrapper = try await message.decode()
+                let r = request.request
+                var token: CTAP2.Token? = nil
 
-            // If wwWallet wants user verification, we *do need to use a PIN*.
-            // For subsequent calls, we then have the PIN available.
-            // See https://developers.yubico.com/WebAuthn/WebAuthn_Developer_Guide/User_Presence_vs_User_Verification.html
-            //
-            // Also, the PRF extension *always requires* user verification, so force it,
-            // even when the frontend didn't explicitly ask for it.
-            let needsPin = request.request.userVerification?.lowercased() == "required" || request.request.extensions?["prf"] != nil
+                // For subsequent calls, we have the PIN available and try to verify it.
+                if needsPin {
+                    pin = pin // Refresh timer
+                    token = try await session.getPinUVToken(using: .pin(pin ?? ""), permissions: .getAssertion, rpId: r.rpId)
+                }
 
-            // At the first time, this PIN will be empty, so we throw right away
-            // in order to trigger the PIN entry UI.
-            if needsPin && (pin?.isEmpty ?? true) {
-                // Error message unneeded, because it will not be shown when we throw before session initialization.
-                throw CTAP2.SessionError.ctapError(CTAP2.Error.puatRequired, source: .here())
-            }
+                guard let clientData = r.clientData else {
+                    throw Errors.cannotCreateClientDataHash
+                }
+                let clientDataJson = try WebAuthnClientDataJson(clientData)
 
-            conn = try await NFCSmartCardConnection.makeConnection()
+                let prfs = try await PrfExtensions(session, r.extensions, r.allowCredentials)
+                let extensions = try prfs.getAssertionInput()
 
-            let session = try await CTAP2.Session.makeSession(connection: conn!)
+                var allowList: [WebAuthn.CredentialDescriptor]? = nil
 
-            let r = request.request
-            var token: CTAP2.Token? = nil
+                // If the user selected a specific Passkey, use that.
+                if let selectedCredential = selectedCredential {
+                    allowList = [selectedCredential]
+                }
+                else if let credentials = r.allowCredentials {
+                    allowList = credentials.compactMap({ $0.descriptor })
+                }
 
-            // For subsequent calls, we have the PIN available and try to verify it.
-            if needsPin {
-                pin = pin // Refresh timer
-                token = try await session.getPinUVToken(using: .pin(pin ?? ""), permissions: .getAssertion, rpId: r.rpId)
-            }
+                let response = try await session.getAssertion(
+                    parameters: .init(
+                        rpId: r.rpId,
+                        clientDataHash: clientDataJson.hash,
+                        allowList: allowList,
+                        extensions: extensions
+                    ),
+                    token: token).value
 
-            guard let clientData = r.clientData else {
-                throw Errors.cannotCreateClientDataHash
-            }
-            let clientDataJson = try WebAuthnClientDataJson(clientData)
+                // There's multiple credentials on the YubiKey. Fetch their IDs and
+                // show it to the user for selection.
+                if let credCount = response.numberOfCredentials, credCount > 1 {
+                    var responses = [response]
 
-            let prfs = try await PrfExtensions(session, r.extensions, r.allowCredentials)
-            let extensions = try prfs.getAssertionInput()
-
-            var allowList: [WebAuthn.CredentialDescriptor]? = nil
-
-            // If the user selected a specific Passkey, use that.
-            if let selectedCredential = selectedCredential {
-                allowList = [selectedCredential]
-            }
-            else if let credentials = r.allowCredentials {
-                allowList = credentials.compactMap({ $0.descriptor })
-            }
-
-            let response = try await session.getAssertion(
-                parameters: .init(
-                    rpId: r.rpId,
-                    clientDataHash: clientDataJson.hash,
-                    allowList: allowList,
-                    extensions: extensions
-                ),
-                token: token).value
-
-            // There's multiple credentials on the YubiKey. Fetch their IDs and
-            // show it to the user for selection.
-            if let credCount = response.numberOfCredentials, credCount > 1 {
-                var responses = [response]
-
-                for _ in 1 ..< credCount {
-                    for try await nextResponse in await session.getNextAssertion() {
-                        if case .finished(let response) = nextResponse {
-                            responses.append(response)
+                    for _ in 1 ..< credCount {
+                        for try await nextResponse in await session.getNextAssertion() {
+                            if case .finished(let response) = nextResponse {
+                                responses.append(response)
+                            }
                         }
+                    }
+
+                    if responses.count > 1 {
+                        throw Errors.multipleCredentials(responses)
                     }
                 }
 
-                if responses.count > 1 {
-                    throw Errors.multipleCredentials(responses)
-                }
+                let credentials = try Credentials(clientDataJson, response, prfs)
+
+                let json = String(data: try JSONEncoder().encode(ResponseWrapper(credentials, "get")), encoding: .utf8)
+
+                log.debug("\(json ?? "(nil)")")
+
+                // Remove user selection again after use.
+                selectedCredential = nil
+
+                return ["data": json]
             }
-
-            let credentials = try Credentials(clientDataJson, response, prfs)
-
-            let json = String(data: try JSONEncoder().encode(ResponseWrapper(credentials, "get")), encoding: .utf8)
-
-            log.debug("\(json ?? "(nil)")")
-
-            await conn?.close()
-
-            // Remove user selection again after use.
-            selectedCredential = nil
-
-            return ["data": json]
         }
         catch {
             switch error {
-            case CTAP2.SessionError.ctapError(let error, source: _):
-                await conn?.close(error: error)
+            case CTAP2.Error.pinInvalid, CTAP2.Error.puatRequired:
+                await acquirePin(message)
 
-                log.error("\(error)")
-
-                switch error {
-                case CTAP2.Error.pinInvalid, CTAP2.Error.puatRequired:
-                    await acquirePin(message)
-
-                    // User cancelled.
-                    if pin?.isEmpty ?? true {
-                        return [:]
-                    }
-
-                    return try await didReceiveGet(message)
-
-                default:
-                    selectedCredential = nil
-                    throw error
+                // User cancelled.
+                if pin?.isEmpty ?? true {
+                    return [:]
                 }
 
-            case Errors.multipleCredentials(let responses):
-                await conn?.close()
+                return try await didReceiveGet(message)
 
+            case Errors.multipleCredentials(let responses):
                 log.error("\(error)")
 
                 try await Task.sleep(nanoseconds: 1 * NSEC_PER_SEC)
@@ -275,8 +247,6 @@ import FaceTecSDK
                 return try await didReceiveGet(message)
 
             default:
-                await conn?.close(error: error)
-
                 log.error("\(error)")
 
                 selectedCredential = nil
@@ -365,6 +335,18 @@ import FaceTecSDK
 #endif
     }
 
+    func loginStatusChanged(_ message: WKScriptMessage) async throws {
+        if await message.stringBody == "unlocked" {
+            try Lock.unlock()
+        }
+        else {
+            try Lock.lock()
+        }
+    }
+
+
+    // MARK: Private Methods
+
     /// Presents `error` as a simple alert and waits until the user dismisses
     /// it. The bridge call waits on this, so it must always return.
     ///
@@ -402,15 +384,6 @@ import FaceTecSDK
         }
     }
 
-    func loginStatusChanged(_ message: WKScriptMessage) async throws {
-        if await message.stringBody == "unlocked" {
-            try Lock.unlock()
-        }
-        else {
-            try Lock.lock()
-        }
-    }
-
     @MainActor
     private func acquirePin(_ message: WKScriptMessage) async {
         pin = await withCheckedContinuation { continuation in
@@ -440,6 +413,53 @@ import FaceTecSDK
             else {
                 continuation.resume(returning: nil)
             }
+        }
+    }
+
+    /**
+     Fetches either a wired connection, if a security key is plugged in, or initiates an NFC connection if not, then execute the given block with that connection.
+
+     Will close an established connection properly.
+
+     - parameter block: The code to execute after successful wired or NFC connection establishment.
+     - throws: When a connection cannot be established or when your block throws. Will automatically unwrap any `CTAP2.SessionError`s  and return the underlying `CTAP2.Error` instead.
+     */
+    private func withConnection<T>(_ block: (SmartCardConnection) async throws -> T) async throws -> T {
+        let conn: SmartCardConnection
+
+        // Use a wired connection, if the user plugged in a key in the meantime,
+        // otherwise initiate a NFC connection.
+        if let wired = await WiredConnectionManager.shared.wiredConnection {
+            conn = wired
+        }
+        else {
+            conn = try await NFCSmartCardConnection.makeConnection()
+        }
+
+        do {
+            let result = try await block(conn)
+
+            await conn.close(error: nil)
+
+            return result
+        }
+        catch {
+            switch error {
+            case CTAP2.SessionError.ctapError(let ctapError, source: _):
+                await conn.close(error: ctapError)
+
+                throw ctapError
+
+            case Errors.multipleCredentials(_):
+                // Do NOT show this as an error in the UI.
+                // This will trigger another modal for credential selection instead.
+                await conn.close(error: nil)
+
+            default:
+                await conn.close(error: error)
+            }
+
+            throw error
         }
     }
 }

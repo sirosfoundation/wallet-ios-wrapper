@@ -26,5 +26,7 @@
 	<array>
 		<string>$(APP_GROUP)</string>
 	</array>
+	<key>com.apple.security.smartcard</key>
+	<true/>
 </dict>
 </plist>

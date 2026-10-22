@@ -10,6 +10,11 @@ import SwiftUI
 @main
 struct wwWalletApp: App {
 
+    init() {
+        // Start to listen for USB-C/Lightning connections right away, so we have it, when we need it.
+        _ = WiredConnectionManager.shared
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()

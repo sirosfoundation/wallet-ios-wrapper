@@ -30,6 +30,7 @@
 		A0A611002DE9C7B800BF10CE /* SwiftCBOR in Frameworks */ = {isa = PBXBuildFile; productRef = A0A610FF2DE9C7B800BF10CE /* SwiftCBOR */; };
 		A0A7BEC62F8FEB0B00F27AE1 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A7BEC52F8FEB0B00F27AE1 /* Extensions.swift */; };
 		A0D3D81A3087C88F0075B8F2 /* PinEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D3D8193087C88F0075B8F2 /* PinEntryView.swift */; };
+		A0D3D71030879AB40075B8F2 /* WiredConnectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D3D70F30879AB40075B8F2 /* WiredConnectionManager.swift */; };
 		A0E498052E42194300AA9C23 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A0E498042E42194300AA9C23 /* Settings.bundle */; };
 		A0F7A1792DB68B5A009F3178 /* Logger+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F7A1782DB68B5A009F3178 /* Logger+Extensions.swift */; };
 		B40A36272CFA01CA0044D2C6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B40A361C2CFA01CA0044D2C6 /* Assets.xcassets */; };
@@ -103,6 +104,7 @@
 		A099D37D2DB6A1F7007F6983 /* WKUserContentController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WKUserContentController+Extensions.swift"; sourceTree = "<group>"; };
 		A0A7BEC52F8FEB0B00F27AE1 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		A0D3D8193087C88F0075B8F2 /* PinEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinEntryView.swift; sourceTree = "<group>"; };
+		A0D3D70F30879AB40075B8F2 /* WiredConnectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WiredConnectionManager.swift; sourceTree = "<group>"; };
 		A0E498042E42194300AA9C23 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		A0F7A1782DB68B5A009F3178 /* Logger+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Logger+Extensions.swift"; sourceTree = "<group>"; };
 		B40A35F42CF9DB6A0044D2C6 /* wwWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wwWallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -242,6 +244,7 @@
 			isa = PBXGroup;
 			children = (
 				B40A361D2CFA01CA0044D2C6 /* BridgeModel.swift */,
+				A0D3D70F30879AB40075B8F2 /* WiredConnectionManager.swift */,
 				A08D82802DA91AE6009373AB /* Errors.swift */,
 				A08D827E2DA91A5D009373AB /* JsonModels.swift */,
 				A003932C2F1A69010072EDF5 /* PrfExtensions.swift */,
@@ -639,6 +642,7 @@
 				B40A362C2CFA01CA0044D2C6 /* wwWalletApp.swift in Sources */,
 				A0F7A1792DB68B5A009F3178 /* Logger+Extensions.swift in Sources */,
 				A0D3D81A3087C88F0075B8F2 /* PinEntryView.swift in Sources */,
+				A0D3D71030879AB40075B8F2 /* WiredConnectionManager.swift in Sources */,
 				B40A362D2CFA01CA0044D2C6 /* WebView.swift in Sources */,
 				A093B0072FB4BEB600FE09F2 /* WebAuthn.User+Extensions.swift in Sources */,
 				FACE7EC0FACE7EC0FACE0008 /* FaceTecConfig.swift in Sources */,
