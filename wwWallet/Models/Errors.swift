@@ -26,7 +26,7 @@ enum Errors: LocalizedError {
     /// in `credentialIssueErrorCode`.
     case faceTecIssuanceRefused(code: String)
 
-    var localizedDescription: String {
+    var errorDescription: String? {
         switch self {
         case .cannotDecodeMessage:
             return NSLocalizedString("Cannot decode message.", comment: "")
