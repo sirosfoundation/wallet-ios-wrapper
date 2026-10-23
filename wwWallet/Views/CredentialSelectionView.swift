@@ -63,12 +63,10 @@ struct CredentialSelectionView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 8))
                 .padding(.vertical, 16)
 
-                Button {
+                Button(NSLocalizedString("Cancel", comment: "")) {
                     onFinished(nil)
 
                     dismiss()
-                } label: {
-                    Text(NSLocalizedString("Cancel", comment: ""))
                 }
                 .padding(.vertical, 8)
                 .buttonStyle(.outlineButton)

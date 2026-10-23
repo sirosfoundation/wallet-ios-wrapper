@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct KeyTouchInfoView: View {
+
     var body: some View {
         Modal {
             VStack {

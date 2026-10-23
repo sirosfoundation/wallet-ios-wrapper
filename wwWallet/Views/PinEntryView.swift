@@ -38,25 +38,22 @@ struct PinEntryView: View {
                     .autocorrectionDisabled()
                     .textFieldStyle(.roundedBorder)
                     .padding(.vertical, 8)
+                    .onSubmit {
+                        confirm()
+                    }
 
-                Button {
-                    onFinished(pin)
-
-                    dismiss()
-                } label: {
-                    Text(NSLocalizedString("Confirm", comment: ""))
+                Button(NSLocalizedString("Confirm", comment: "")) {
+                    confirm()
                 }
                 .disabled(pin.isEmpty)
                 .padding(.top, 32)
                 .padding(.vertical, 8)
                 .buttonStyle(.primaryButton)
 
-                Button {
+                Button(NSLocalizedString("Cancel", comment: "")) {
                     onFinished(nil)
 
                     dismiss()
-                } label: {
-                    Text(NSLocalizedString("Cancel", comment: ""))
                 }
                 .padding(.vertical, 8)
                 .buttonStyle(.outlineButton)
@@ -64,6 +61,15 @@ struct PinEntryView: View {
         }
         .onAppear {
             pinFieldFocused = true
+        }
+    }
+
+
+    private func confirm() {
+        if !pin.isEmpty {
+            onFinished(pin)
+
+            dismiss()
         }
     }
 }
