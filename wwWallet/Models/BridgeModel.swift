@@ -507,12 +507,6 @@ import FaceTecSDK
                 errorToReturn = error
             }
 
-            // YubiKit implemented proper error descriptions almost nowhere, hence we show a
-            // generic message. As currently only NFC has error UI, it's fine to refer to NFC here.
-            if errorToShow != nil && errorToShow is CTAP2.SessionError {
-                errorToShow = Errors.genericNfc
-            }
-
             await conn.close(error: errorToShow)
 
             throw errorToReturn ?? error

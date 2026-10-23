@@ -15,7 +15,6 @@ enum Errors: LocalizedError {
     case cannotCreateUserEntity
     case error0x19
     case multipleCredentials(_ responses: [CTAP2.GetAssertion.Response])
-    case genericNfc
     case faceTecNotAvailable
     case faceTecNotConfigured
     case faceTecNoPresenter
@@ -43,9 +42,6 @@ enum Errors: LocalizedError {
 
         case .multipleCredentials(let responses):
             return "Multiple credentials available: \(responses.map({ $0.user?.fallbackName }))"
-
-        case .genericNfc:
-            return NSLocalizedString("Hold the security key against your device's NFC reader until it is recognized.", comment: "")
 
         case .faceTecNotAvailable:
             return NSLocalizedString("FaceTec Scan Physical ID is not available in this build.", comment: "")
@@ -116,5 +112,35 @@ enum Errors: LocalizedError {
                 return NSLocalizedString("Your identity could not be verified, so no credential was issued. Please try again.", comment: "")
             }
         }
+    }
+}
+
+extension CTAP2.Error: @retroactive LocalizedError {
+
+    public var errorDescription: String? {
+        switch self {
+        case .pinInvalid:
+            return NSLocalizedString("The provided PIN is invalid.", comment: "")
+
+        case .pinNotSet:
+            return NSLocalizedString("A PIN needs to be set.", comment: "")
+
+        case .puatRequired:
+            return NSLocalizedString("Please provide PIN.", comment: "")
+
+        default:
+            return NSLocalizedString("Hold the security key against your device's NFC reader until it is recognized.", comment: "")
+        }
+    }
+}
+
+extension CTAP2.SessionError: @retroactive LocalizedError {
+
+    /**
+     YubiKit implemented proper error descriptions almost nowhere, hence we show a
+     generic message. As currently only NFC has error UI, it's fine to refer to NFC here.
+     */
+    public var errorDescription: String? {
+        return NSLocalizedString("Hold the security key against your device's NFC reader until it is recognized.", comment: "")
     }
 }
