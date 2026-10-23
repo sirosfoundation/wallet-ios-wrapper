@@ -40,6 +40,8 @@ import FaceTecSDK
         }
     }
 
+    private var newPin: String?
+
     private var selectedCredential: WebAuthn.CredentialDescriptor? = nil
 
     private let log: Logger = Logger(for: BridgeModel.self)
@@ -64,6 +66,32 @@ import FaceTecSDK
         do {
             return try await withConnection { conn in
                 let session = try await CTAP2.Session.makeSession(connection: conn)
+
+                // Check, if the security key is fresh and doesn't have a PIN set.
+                let info = try await session.getInfo()
+                if info.options.clientPin == false {
+                    if let newPin {
+                        // Second round: If the user gave us a new PIN to set, let's do that!
+                        do {
+                            try await session.setPin(newPin)
+                        }
+                        catch {
+                            // If there was an error setting the PIN, forget it first,
+                            // so the user will see the UI again. It would be super-confusing
+                            // if the PIN would be set automatically during a new session.
+                            // Or the user could have switched security keys in between.
+                            self.newPin = nil
+                            throw error
+                        }
+
+                        pin = newPin
+                        self.newPin = nil
+                    }
+                    else {
+                        // First round: Stop this session again and show new PIN entry UI.
+                        throw CTAP2.Error.pinNotSet
+                    }
+                }
 
                 let r = request.request
                 var token: CTAP2.Token? = nil
@@ -120,6 +148,16 @@ import FaceTecSDK
 
                 // User cancelled.
                 if pin?.isEmpty ?? true {
+                    return [:]
+                }
+
+                return try await didReceiveCreate(message)
+
+            case CTAP2.Error.pinNotSet:
+                newPin = await getNewPin(message)
+
+                // User cancelled.
+                if newPin?.isEmpty ?? true {
                     return [:]
                 }
 
