@@ -444,6 +444,22 @@ import FaceTecSDK
         return nil
     }
 
+    @MainActor
+    private func getNewPin(_ message: WKScriptMessage) async -> String? {
+        return await withCheckedContinuation { continuation in
+            if let topVc = message.topVc {
+                let vc = ModalViewController(rootView: SetPinView({ pin in
+                    continuation.resume(returning: pin)
+                }))
+
+                topVc.present(vc, animated: true)
+            }
+            else {
+                continuation.resume(returning: nil)
+            }
+        }
+    }
+
     /**
      Fetches either a wired connection, if a security key is plugged in, or initiates an NFC connection if not, then execute the given block with that connection.
 

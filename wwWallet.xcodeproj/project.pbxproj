@@ -32,6 +32,7 @@
 		A0D3D71030879AB40075B8F2 /* WiredConnectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D3D70F30879AB40075B8F2 /* WiredConnectionManager.swift */; };
 		A0D3D81A3087C88F0075B8F2 /* PinEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D3D8193087C88F0075B8F2 /* PinEntryView.swift */; };
 		A0DAF6D8308A4718009F4DC9 /* KeyTouchInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DAF6D7308A4718009F4DC9 /* KeyTouchInfoView.swift */; };
+		A0DAF73C308A6F67009F4DC9 /* SetPinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DAF73B308A6F67009F4DC9 /* SetPinView.swift */; };
 		A0E498052E42194300AA9C23 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A0E498042E42194300AA9C23 /* Settings.bundle */; };
 		A0F7A1792DB68B5A009F3178 /* Logger+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F7A1782DB68B5A009F3178 /* Logger+Extensions.swift */; };
 		B40A36272CFA01CA0044D2C6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B40A361C2CFA01CA0044D2C6 /* Assets.xcassets */; };
@@ -107,6 +108,7 @@
 		A0D3D70F30879AB40075B8F2 /* WiredConnectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WiredConnectionManager.swift; sourceTree = "<group>"; };
 		A0D3D8193087C88F0075B8F2 /* PinEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinEntryView.swift; sourceTree = "<group>"; };
 		A0DAF6D7308A4718009F4DC9 /* KeyTouchInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyTouchInfoView.swift; sourceTree = "<group>"; };
+		A0DAF73B308A6F67009F4DC9 /* SetPinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetPinView.swift; sourceTree = "<group>"; };
 		A0E498042E42194300AA9C23 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		A0F7A1782DB68B5A009F3178 /* Logger+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Logger+Extensions.swift"; sourceTree = "<group>"; };
 		B40A35F42CF9DB6A0044D2C6 /* wwWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wwWallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -283,6 +285,7 @@
 				A0D3D8193087C88F0075B8F2 /* PinEntryView.swift */,
 				A0833D08308914780037EFB5 /* Title.swift */,
 				B40A36232CFA01CA0044D2C6 /* WebView.swift */,
+				A0DAF73B308A6F67009F4DC9 /* SetPinView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -630,6 +633,7 @@
 				A003932D2F1A69050072EDF5 /* PrfExtensions.swift in Sources */,
 				A06638E82EBE657D00D6799D /* Color+Extensions.swift in Sources */,
 				A08D82812DA91AE6009373AB /* Errors.swift in Sources */,
+				A0DAF73C308A6F67009F4DC9 /* SetPinView.swift in Sources */,
 				A099D37E2DB6A1F7007F6983 /* WKUserContentController+Extensions.swift in Sources */,
 				B40A36292CFA01CA0044D2C6 /* BridgeModel.swift in Sources */,
 				B43CB36F2D030CD900634811 /* WKScriptMessage+Extensions.swift in Sources */,
