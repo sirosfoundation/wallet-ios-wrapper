@@ -116,7 +116,7 @@ import FaceTecSDK
 
             switch error {
             case CTAP2.Error.pinInvalid, CTAP2.Error.puatRequired:
-                await acquirePin(message)
+                pin = await getPin(message)
 
                 // User cancelled.
                 if pin?.isEmpty ?? true {
@@ -151,7 +151,7 @@ import FaceTecSDK
 
         // At the first time, this PIN will be empty, so we ask right away before we even establish a connection.
         if needsPin && (pin?.isEmpty ?? true) {
-            await acquirePin(message)
+            pin = await getPin(message)
 
             // User cancelled.
             if pin?.isEmpty ?? true {
@@ -241,7 +241,7 @@ import FaceTecSDK
 
             switch error {
             case CTAP2.Error.pinInvalid, CTAP2.Error.puatRequired:
-                await acquirePin(message)
+                pin = await getPin(message)
 
                 // User cancelled.
                 if pin?.isEmpty ?? true {
@@ -255,7 +255,7 @@ import FaceTecSDK
 
                 try await Task.sleep(nanoseconds: 1 * NSEC_PER_SEC)
 
-                await acquireCredential(message, responses)
+                selectedCredential = await getCredential(message, responses)
 
                 if selectedCredential == nil {
                     // User cancelled.
@@ -393,8 +393,8 @@ import FaceTecSDK
     }
 
     @MainActor
-    private func acquirePin(_ message: WKScriptMessage) async {
-        pin = await withCheckedContinuation { continuation in
+    private func getPin(_ message: WKScriptMessage) async -> String? {
+        await withCheckedContinuation { continuation in
             if let topVc = message.topVc {
                 let vc = ModalViewController(rootView: PinEntryView({ pin in
                     continuation.resume(returning: pin)
@@ -409,8 +409,9 @@ import FaceTecSDK
     }
 
     @MainActor
-    private func acquireCredential(_ message: WKScriptMessage, _ responses: [CTAP2.GetAssertion.Response]) async {
-        selectedCredential = await withCheckedContinuation { continuation in
+    private func getCredential(_ message: WKScriptMessage, _ responses: [CTAP2.GetAssertion.Response]) async -> WebAuthn.CredentialDescriptor?
+    {
+        await withCheckedContinuation { continuation in
             if let topVc = message.topVc {
                 let vc = ModalViewController(rootView: CredentialSelectionView(responses, { user in
                     continuation.resume(returning: user)
@@ -446,7 +447,7 @@ import FaceTecSDK
 
     @MainActor
     private func getNewPin(_ message: WKScriptMessage) async -> String? {
-        return await withCheckedContinuation { continuation in
+        await withCheckedContinuation { continuation in
             if let topVc = message.topVc {
                 let vc = ModalViewController(rootView: SetPinView({ pin in
                     continuation.resume(returning: pin)
