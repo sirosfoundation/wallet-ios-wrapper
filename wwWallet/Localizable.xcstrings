@@ -417,6 +417,34 @@
         }
       }
     },
+    "Your document's chip could not be verified, so no credential was issued. Only information signed by your document's chip can be used. Please use a passport or a national identity card with a readable chip." : {
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Το τσιπ του εγγράφου σας δεν μπόρεσε να επαληθευτεί, επομένως δεν εκδόθηκε πιστοποιητικό. Μπορούν να χρησιμοποιηθούν μόνο δεδομένα υπογεγραμμένα από το τσιπ του εγγράφου. Χρησιμοποιήστε διαβατήριο ή εθνική ταυτότητα με αναγνώσιμο τσιπ."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Asiakirjasi sirua ei voitu varmentaa, joten todistusta ei myönnetty. Vain asiakirjan sirun allekirjoittamia tietoja voidaan käyttää. Käytä passia tai kansallista henkilökorttia, jossa on luettava siru."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não foi possível verificar o chip do seu documento, pelo que não foi emitida nenhuma credencial. Só podem ser utilizados dados assinados pelo chip do documento. Utilize um passaporte ou um cartão de identificação nacional com um chip legível."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dokumentets chip kunde inte verifieras, så inget intyg utfärdades. Endast uppgifter som är signerade av dokumentets chip kan användas. Använd ett pass eller ett nationellt identitetskort med läsbart chip."
+          }
+        }
+      }
+    },
     "Your face did not match the photo stored in your document's chip, so no credential was issued. Please try again, or use another identity document." : {
       "localizations" : {
         "el" : {
