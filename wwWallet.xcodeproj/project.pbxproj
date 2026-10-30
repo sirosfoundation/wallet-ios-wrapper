@@ -107,6 +107,7 @@
 		A0A7BEC52F8FEB0B00F27AE1 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		A0D3D70F30879AB40075B8F2 /* WiredConnectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WiredConnectionManager.swift; sourceTree = "<group>"; };
 		A0D3D8193087C88F0075B8F2 /* PinEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinEntryView.swift; sourceTree = "<group>"; };
+		A0DA33933094E26400DBF0F1 /* xcode-cloud.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "xcode-cloud.md"; sourceTree = SOURCE_ROOT; };
 		A0DAF6D7308A4718009F4DC9 /* KeyTouchInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyTouchInfoView.swift; sourceTree = "<group>"; };
 		A0DAF73B308A6F67009F4DC9 /* SetPinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetPinView.swift; sourceTree = "<group>"; };
 		A0E498042E42194300AA9C23 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
@@ -263,6 +264,7 @@
 			children = (
 				A0918949306528E80089AD5C /* README.md */,
 				A031F7052F8D380300EE5ACF /* CHANGELOG.md */,
+				A0DA33933094E26400DBF0F1 /* xcode-cloud.md */,
 				A04B0A002DD2035C00A1BFF7 /* Config.xcconfig */,
 				A08D82832DA93BE4009373AB /* .gitignore */,
 				A04B09E72DD1FEB900A1BFF7 /* wwWallet-Info.plist */,
