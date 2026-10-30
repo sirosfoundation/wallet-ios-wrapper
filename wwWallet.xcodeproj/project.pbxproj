@@ -99,6 +99,7 @@
 		A099D37D2DB6A1F7007F6983 /* WKUserContentController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WKUserContentController+Extensions.swift"; sourceTree = "<group>"; };
 		A0A7BEC52F8FEB0B00F27AE1 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		A0D3D70F30879AB40075B8F2 /* WiredConnectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WiredConnectionManager.swift; sourceTree = "<group>"; };
+		A0DA33933094E26400DBF0F1 /* xcode-cloud.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "xcode-cloud.md"; sourceTree = SOURCE_ROOT; };
 		A0E498042E42194300AA9C23 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		A0F7A1782DB68B5A009F3178 /* Logger+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Logger+Extensions.swift"; sourceTree = "<group>"; };
 		B40A35F42CF9DB6A0044D2C6 /* wwWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wwWallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -252,6 +253,7 @@
 			children = (
 				A0918949306528E80089AD5C /* README.md */,
 				A031F7052F8D380300EE5ACF /* CHANGELOG.md */,
+				A0DA33933094E26400DBF0F1 /* xcode-cloud.md */,
 				A04B0A002DD2035C00A1BFF7 /* Config.xcconfig */,
 				A08D82832DA93BE4009373AB /* .gitignore */,
 				A04B09E72DD1FEB900A1BFF7 /* wwWallet-Info.plist */,
