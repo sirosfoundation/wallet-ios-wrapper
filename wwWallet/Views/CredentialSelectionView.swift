@@ -35,9 +35,9 @@ struct CredentialSelectionView: View {
     var body: some View {
         Modal {
             VStack {
-                Title(NSLocalizedString("Select Passkey to Use", comment: ""))
+                Title(NSLocalizedString("Multiple Passkeys Found", comment: ""))
 
-                Text(NSLocalizedString("The security key can have several passkeys on it. Please choose which passkey you would like to log in with.", comment: ""))
+                Text(NSLocalizedString("Which wallet account would you like to use?", comment: ""))
                     .font(.callout)
                     .frame(alignment: .center)
                     .multilineTextAlignment(.center)
