@@ -179,24 +179,6 @@ import FaceTecSDK
 
         let request: GetRequestWrapper = try await message.decode()
 
-        // If wwWallet wants user verification, we *do need to use a PIN*.
-        // For subsequent calls, we then have the PIN available.
-        // See https://developers.yubico.com/WebAuthn/WebAuthn_Developer_Guide/User_Presence_vs_User_Verification.html
-        //
-        // Also, the PRF extension *always requires* user verification, so force it,
-        // even when the frontend didn't explicitly ask for it.
-        let needsPin = request.request.userVerification?.lowercased() == "required" || request.request.extensions?["prf"] != nil
-
-        // At the first time, this PIN will be empty, so we ask right away before we even establish a connection.
-        if needsPin && (pin?.isEmpty ?? true) {
-            pin = await getPin(message)
-
-            // User cancelled.
-            if pin?.isEmpty ?? true {
-                return [:]
-            }
-        }
-
         var infoVc: UIViewController?
 
         do {
@@ -206,10 +188,35 @@ import FaceTecSDK
                 let r = request.request
                 var token: CTAP2.Token? = nil
 
+                // If wwWallet wants user verification, we *do need to use a PIN*.
+                // See https://developers.yubico.com/WebAuthn/WebAuthn_Developer_Guide/User_Presence_vs_User_Verification.html
+                //
+                // Also, the PRF extension *always requires* user verification, so force it,
+                // even when the frontend didn't explicitly ask for it.
+                //
+                // We only evaluate this *after* starting the session, because if we
+                // do it right up front, that *would* save the user a key tap,
+                // *but* they would also be confused about what the PIN is actually for, lacking context.
+                // So we first ask them to tap the key, *then* we tell them they'll need to provide
+                // the PIN for the key. (Now, there's the context for the user.)
+                //
+                // Note that Apple does it the same way, actually.
+                //
+                // We *cannot* rely on the `getAssertion` call below failing like we do in
+                // `didReceiveCreate`, because it will not fail. The security key instead
+                // will sign with different sub-keys of the selected Passkey failing
+                // the signature check in the web frontend later when not provided with the PIN.
+                let needsPin = request.request.userVerification?.lowercased() == "required" || request.request.extensions?["prf"] != nil
+
+                // At the first time, this PIN will be empty, so we ask right away before we even establish a connection.
+                if needsPin && (pin?.isEmpty ?? true) {
+                    throw CTAP2.Error.puatRequired
+                }
+
                 // For subsequent calls, we have the PIN available and try to verify it.
-                if needsPin {
-                    pin = pin // Refresh timer
-                    token = try await session.getPinUVToken(using: .pin(pin ?? ""), permissions: .getAssertion, rpId: r.rpId)
+                if let pin = pin, !pin.isEmpty {
+                    self.pin = pin // Refresh timer
+                    token = try await session.getPinUVToken(using: .pin(pin), permissions: .getAssertion, rpId: r.rpId)
                 }
 
                 guard let clientData = r.clientData else {
