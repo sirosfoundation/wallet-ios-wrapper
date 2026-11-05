@@ -19,8 +19,7 @@ struct Modal<Content: View>: View {
 
     var body: some View {
         ZStack {
-            Color(.label).opacity(0.4)
-                .ignoresSafeArea()
+            Color.modalBackground
 
             content()
             .padding()

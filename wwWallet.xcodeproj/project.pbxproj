@@ -16,7 +16,6 @@
 		A04B09EF2DD2021000A1BFF7 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A04B09EE2DD2021000A1BFF7 /* AuthenticationServices.framework */; };
 		A04B09FA2DD2021000A1BFF7 /* AutoFillExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A04B09EC2DD2021000A1BFF7 /* AutoFillExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A05D7AC82DBFB8FB001940B3 /* WebBluetooth.js in Resources */ = {isa = PBXBuildFile; fileRef = A05D7AC72DBFB8F7001940B3 /* WebBluetooth.js */; };
-		A06638E82EBE657D00D6799D /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A06638E72EBE657D00D6799D /* Color+Extensions.swift */; };
 		A0833D09308914780037EFB5 /* Title.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0833D08308914780037EFB5 /* Title.swift */; };
 		A0833D0B30891BD30037EFB5 /* ModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0833D0A30891BD30037EFB5 /* ModalViewController.swift */; };
 		A08D827F2DA91A5D009373AB /* JsonModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D827E2DA91A5D009373AB /* JsonModels.swift */; };
@@ -90,7 +89,6 @@
 		A04B09EE2DD2021000A1BFF7 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
 		A04B0A002DD2035C00A1BFF7 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = SOURCE_ROOT; };
 		A05D7AC72DBFB8F7001940B3 /* WebBluetooth.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = WebBluetooth.js; sourceTree = "<group>"; };
-		A06638E72EBE657D00D6799D /* Color+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
 		A0833D08308914780037EFB5 /* Title.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Title.swift; sourceTree = "<group>"; };
 		A0833D0A30891BD30037EFB5 /* ModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalViewController.swift; sourceTree = "<group>"; };
 		A08D827E2DA91A5D009373AB /* JsonModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonModels.swift; sourceTree = "<group>"; };
@@ -233,7 +231,6 @@
 		A08D82762DA9141A009373AB /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				A06638E72EBE657D00D6799D /* Color+Extensions.swift */,
 				A0F7A1782DB68B5A009F3178 /* Logger+Extensions.swift */,
 				A0833D0A30891BD30037EFB5 /* ModalViewController.swift */,
 				A00436A92DA7F41D00002721 /* UIViewController+Extensions.swift */,
@@ -633,7 +630,6 @@
 				A0DAF6D8308A4718009F4DC9 /* KeyTouchInfoView.swift in Sources */,
 				A0833D0B30891BD30037EFB5 /* ModalViewController.swift in Sources */,
 				A003932D2F1A69050072EDF5 /* PrfExtensions.swift in Sources */,
-				A06638E82EBE657D00D6799D /* Color+Extensions.swift in Sources */,
 				A08D82812DA91AE6009373AB /* Errors.swift in Sources */,
 				A0DAF73C308A6F67009F4DC9 /* SetPinView.swift in Sources */,
 				A099D37E2DB6A1F7007F6983 /* WKUserContentController+Extensions.swift in Sources */,

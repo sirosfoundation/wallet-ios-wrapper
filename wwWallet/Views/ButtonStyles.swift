@@ -20,20 +20,20 @@ public struct WwWalletButtonStyle: ButtonStyle {
                 Color.white
 
             case .outline:
-                Color(hex: "0c0e11")!
+                Color.outlineButtonForeground
             }
         }
 
         var backgroundColor: Color {
             switch self {
             case .basic:
-                Color(red: 0, green: 52 / 255, blue: 118 / 255)
+                Color.accent
 
             case .primary:
-                Color(hex: "1c4587")!
+                Color.accent
 
             case .outline:
-                Color(hex: "f8f9f9")!
+                Color.outlineButtonBackground
             }
         }
 
@@ -43,7 +43,7 @@ public struct WwWalletButtonStyle: ButtonStyle {
                 nil
 
             case .outline:
-                Color(hex: "6e7582")!
+                Color.outlineButtonBorder
             }
         }
     }
