@@ -532,12 +532,20 @@ import FaceTecSDK
 
             switch error {
             case CTAP2.SessionError.ctapError(let ctapError, source: _):
-                errorToShow = ctapError
+                if case CTAP2.Error.pinNotSet = ctapError {
+                    // Do NOT show this as an error in the UI.
+                    // This will trigger another modal for PIN creation instead.
+                    errorToShow = nil
+                }
+                else {
+                    errorToShow = ctapError
+                }
+
                 errorToReturn = ctapError
 
-            case Errors.multipleCredentials(_):
+            case Errors.multipleCredentials(_), CTAP2.Error.pinNotSet:
                 // Do NOT show this as an error in the UI.
-                // This will trigger another modal for credential selection instead.
+                // This will trigger another modal for credential selection/PIN creation instead.
                 errorToShow = nil
                 errorToReturn = error
 
