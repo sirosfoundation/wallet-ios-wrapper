@@ -64,7 +64,7 @@ import FaceTecSDK
         var infoVc: UIViewController?
 
         do {
-            return try await withConnection { conn in
+            return try await withConnection(message) { conn in
                 let session = try await CTAP2.Session.makeSession(connection: conn)
 
                 // Check, if the security key is fresh and doesn't have a PIN set.
@@ -182,7 +182,7 @@ import FaceTecSDK
         var infoVc: UIViewController?
 
         do {
-            return try await withConnection { conn in
+            return try await withConnection(message) { conn in
                 let session = try await CTAP2.Session.makeSession(connection: conn)
 
                 let r = request.request
@@ -506,15 +506,32 @@ import FaceTecSDK
         }
     }
 
+    @MainActor
+    private func showError(_ message: WKScriptMessage, _ error: Error) async {
+        await withCheckedContinuation { continuation in
+            if let topVc = message.topVc {
+                let vc = ModalViewController(rootView: ErrorView(error.localizedDescription, {
+                    continuation.resume(returning: ())
+                }))
+
+                topVc.present(vc, animated: true)
+            }
+            else {
+                continuation.resume(returning: ())
+            }
+        }
+    }
+
     /**
      Fetches either a wired connection, if a security key is plugged in, or initiates an NFC connection if not, then execute the given block with that connection.
 
      Will close an established connection properly.
 
+     - parameter message: The current `WKScriptMessage` object, needed to find the current view controller displayed on top, so error messages can be shown for wired connections.
      - parameter block: The code to execute after successful wired or NFC connection establishment.
      - throws: When a connection cannot be established or when your block throws. Will automatically unwrap any `CTAP2.SessionError`s  and return the underlying `CTAP2.Error` instead.
      */
-    private func withConnection<T>(_ block: (SmartCardConnection) async throws -> T) async throws -> T {
+    private func withConnection<T>(_ message: WKScriptMessage, _ block: (SmartCardConnection) async throws -> T) async throws -> T {
         let conn: SmartCardConnection
 
         // Use a wired connection, if the user plugged in a key in the meantime,
@@ -562,6 +579,12 @@ import FaceTecSDK
             }
 
             await conn.close(error: errorToShow)
+
+            // Wired connections do not have system UI.
+            // In that case, show our own.
+            if let errorToShow, !(conn is NFCSmartCardConnection) {
+                await showError(message, errorToShow)
+            }
 
             throw errorToReturn ?? error
         }

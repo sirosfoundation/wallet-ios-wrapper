@@ -13,6 +13,7 @@
 		A00436AA2DA7F42C00002721 /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00436A92DA7F41D00002721 /* UIViewController+Extensions.swift */; };
 		A02CF3992F11675C009D2603 /* YubiKit in Frameworks */ = {isa = PBXBuildFile; productRef = A02CF3982F11675C009D2603 /* YubiKit */; };
 		A02CF39B2F11676F009D2603 /* WebAuthnClientData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02CF39A2F11676F009D2603 /* WebAuthnClientData.swift */; };
+		A035CEC6309CE1F900998380 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A035CEC5309CE1F900998380 /* ErrorView.swift */; };
 		A04B09EF2DD2021000A1BFF7 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A04B09EE2DD2021000A1BFF7 /* AuthenticationServices.framework */; };
 		A04B09FA2DD2021000A1BFF7 /* AutoFillExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A04B09EC2DD2021000A1BFF7 /* AutoFillExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A05D7AC82DBFB8FB001940B3 /* WebBluetooth.js in Resources */ = {isa = PBXBuildFile; fileRef = A05D7AC72DBFB8F7001940B3 /* WebBluetooth.js */; };
@@ -84,6 +85,7 @@
 		A00436A92DA7F41D00002721 /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 		A02CF39A2F11676F009D2603 /* WebAuthnClientData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebAuthnClientData.swift; sourceTree = "<group>"; };
 		A031F7052F8D380300EE5ACF /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = SOURCE_ROOT; };
+		A035CEC5309CE1F900998380 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 		A04B09E72DD1FEB900A1BFF7 /* wwWallet-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "wwWallet-Info.plist"; sourceTree = SOURCE_ROOT; };
 		A04B09EC2DD2021000A1BFF7 /* AutoFillExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AutoFillExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		A04B09EE2DD2021000A1BFF7 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
@@ -279,6 +281,7 @@
 				B49F14712D12BEBE0063C12F /* ButtonStyles.swift */,
 				A0991DD6308A34D8005C3B98 /* CredentialSelectionView.swift */,
 				B40A361E2CFA01CA0044D2C6 /* ContentView.swift */,
+				A035CEC5309CE1F900998380 /* ErrorView.swift */,
 				A0DAF6D7308A4718009F4DC9 /* KeyTouchInfoView.swift */,
 				A0991DD7308A34D8005C3B98 /* Modal.swift */,
 				A0D3D8193087C88F0075B8F2 /* PinEntryView.swift */,
@@ -634,6 +637,7 @@
 				A0DAF73C308A6F67009F4DC9 /* SetPinView.swift in Sources */,
 				A099D37E2DB6A1F7007F6983 /* WKUserContentController+Extensions.swift in Sources */,
 				B40A36292CFA01CA0044D2C6 /* BridgeModel.swift in Sources */,
+				A035CEC6309CE1F900998380 /* ErrorView.swift in Sources */,
 				B43CB36F2D030CD900634811 /* WKScriptMessage+Extensions.swift in Sources */,
 				A0991DD8308A34D8005C3B98 /* Modal.swift in Sources */,
 				A0991DD9308A34D8005C3B98 /* CredentialSelectionView.swift in Sources */,
