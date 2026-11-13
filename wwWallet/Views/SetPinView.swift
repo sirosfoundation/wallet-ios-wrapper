@@ -59,26 +59,36 @@ struct SetPinView: View {
 
     private var step1: some View {
         VStack {
-            Title(NSLocalizedString("Important Information", comment: ""))
+            Title(NSLocalizedString("No PIN Set", comment: ""))
 
-            Text(NSLocalizedString("Please remember your PIN, as you will need it to unlock your security key. This PIN is unique to this specific key and is separate from your main wallet account. Only you know the PIN. We can not help you reset the pin if you forget it.", comment: ""))
+            Text(NSLocalizedString("Please create a PIN for your security key to protect the Passkeys stored there.", comment: ""))
                 .font(.callout)
                 .frame(alignment: .center)
                 .multilineTextAlignment(.center)
                 .padding(.bottom, 16)
 
+            VStack {
+                Text(NSLocalizedString("IMPORTANT!", comment: ""))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .multilineTextAlignment(.leading)
+                    .font(.headline)
+                    .padding(.bottom)
 
-            Toggle(
-                NSLocalizedString("I understand that I must remember this PIN, as it cannot be recovered.", comment: ""),
-                isOn: $accepted)
-            .padding(.vertical, 16)
+                Text(NSLocalizedString("Please remember your PIN, as you will need it to unlock your security key. This PIN is unique to this specific key and is separate from your main wallet account. Only you know the PIN. We can not help you reset the PIN if you forget it.", comment: ""))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .multilineTextAlignment(.leading)
+                    .font(.callout)
+            }
+            .padding()
+            .background(Color(uiColor: .tertiarySystemBackground))
+            .cornerRadius(8)
+
 
             Button(NSLocalizedString("Continue", comment: "")) {
                 withAnimation {
                     showStep1 = false
                 }
             }
-            .disabled(!accepted)
             .padding(.top, 32)
             .padding(.vertical, 8)
             .buttonStyle(.primaryButton)
@@ -109,10 +119,16 @@ struct SetPinView: View {
                     confirm()
                 }
 
+            Toggle(isOn: $accepted) {
+                Text(NSLocalizedString("I understand that I must remember this PIN, as it cannot be recovered.", comment: ""))
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .padding(.vertical)
+
             Button(NSLocalizedString("Confirm", comment: "")) {
                 confirm()
             }
-            .disabled(pin1.isEmpty || pin1 != pin2)
+            .disabled(!accepted || pin1.isEmpty || pin1 != pin2)
             .padding(.top, 32)
             .padding(.vertical, 8)
             .buttonStyle(.primaryButton)

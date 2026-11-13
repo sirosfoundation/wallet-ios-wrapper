@@ -20,8 +20,7 @@ struct KeyTouchInfoView: View {
                     .multilineTextAlignment(.center)
                     .padding(.bottom, 16)
 
-                // TODO: Waiting on icon to show here.
-
+                Image("ic-tap-security-key")
             }
         }
     }
