@@ -16,11 +16,44 @@
 default_platform(:ios)
 
 platform :ios do
+
+  # Helper method to read the version from Config.xcconfig
+  def get_marketing_version
+    config_path = "../Config.xcconfig"
+    # Search for the line starting with MARKETING_VERSION=
+    version_line = File.readlines(config_path).find { |line| line.start_with?("MARKETING_VERSION") }
+    return nil unless version_line
+    # Extract the value after the = sign and strip whitespace/quotes
+    version_line.split('=').last.strip.gsub(/['"]/, '')
+  end
+
+desc "Upload App Store Metadata using an API key"
+  lane :upload_metadata_github do
+    # Authenticate with App Store Connect API key.
+    # These environment variables are passed from the GitHub Action.
+    api_key = app_store_connect_api_key(
+      key_id: ENV["APP_STORE_CONNECT_API_KEY_KEY_ID"],
+      issuer_id: ENV["APP_STORE_CONNECT_API_KEY_ISSUER_ID"],
+      key_content: ENV["APP_STORE_CONNECT_API_KEY_KEY"],
+    )
+
+    deliver(
+      app_version: get_marketing_version,
+      skip_binary_upload: true,
+
+      skip_screenshots: true,
+
+      force: true,
+
+      api_key: api_key
+    )
+  end
+
   desc "Upload App Store Metadata"
   lane :upload_metadata do
     deliver(
+      app_version: get_marketing_version,
       skip_binary_upload: true,
-      skip_app_version_update: true,
 
       skip_screenshots: true,
 
