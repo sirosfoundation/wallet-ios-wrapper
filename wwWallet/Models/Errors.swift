@@ -87,6 +87,9 @@ enum Errors: LocalizedError {
             case "chip_untrusted":
                 return NSLocalizedString("The chip in your document could not be confirmed as issued by a recognised authority, so no credential was issued.", comment: "")
 
+            case "chip_data_unverified":
+                return NSLocalizedString("Your document's chip could not be verified, so no credential was issued. Only information signed by your document's chip can be used. Please use a passport or a national identity card with a readable chip.", comment: "")
+
             case "policy_rejected":
                 return NSLocalizedString("Your scan could not be accepted: your face did not match the document photo closely enough, or this type of document is not accepted. Please try again in good light, or use another identity document.", comment: "")
 
