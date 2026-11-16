@@ -67,31 +67,72 @@ struct SetPinView: View {
                 .multilineTextAlignment(.center)
                 .padding(.bottom, 16)
 
-            VStack {
-                Text(NSLocalizedString("IMPORTANT!", comment: ""))
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .multilineTextAlignment(.leading)
-                    .font(.headline)
-                    .padding(.bottom)
+            HStack {
+                VStack {
+                    Text(NSLocalizedString("Please remember your PIN", comment: ""))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .font(.headline)
 
-                Text(NSLocalizedString("Please remember your PIN, as you will need it to unlock your security key. This PIN is unique to this specific key and is separate from your main wallet account. Only you know the PIN. We can not help you reset the PIN if you forget it.", comment: ""))
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .multilineTextAlignment(.leading)
-                    .font(.callout)
-            }
+                    Text(NSLocalizedString("You need a unique PIN to unlock this security key.", comment: ""))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .font(.callout)
+                        .padding(.bottom, 8)
+
+                    Text(NSLocalizedString("• Separate from your wallet", comment: ""))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .font(.callout)
+
+                    Text(NSLocalizedString("• Known only to you", comment: ""))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .font(.callout)
+
+                    Text(NSLocalizedString("• Cannot be reset if forgotten", comment: ""))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .font(.callout)
+                }
+
+                Image(systemName: "exclamationmark.triangle")
+                    .font(.system(size: 40))
+                    .foregroundStyle(Color.accent)
+           }
             .padding()
             .background(Color(uiColor: .tertiarySystemBackground))
             .cornerRadius(8)
 
+            Toggle(isOn: $accepted) {
+                Text(NSLocalizedString("I understand that I must remember this PIN, as it cannot be recovered.", comment: ""))
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .toggleStyle(CheckboxToggleStyle())
+            .padding(.top, 8)
 
-            Button(NSLocalizedString("Continue", comment: "")) {
+            Button(NSLocalizedString("Create PIN", comment: "")) {
                 withAnimation {
                     showStep1 = false
                 }
             }
+            .disabled(!accepted)
             .padding(.top, 32)
             .padding(.vertical, 8)
             .buttonStyle(.primaryButton)
+
+            Button(NSLocalizedString("Cancel", comment: "")) {
+                onFinished(nil)
+
+                dismiss()
+            }
+            .padding(.vertical, 8)
+            .buttonStyle(.outlineButton)
         }
     }
 
@@ -119,16 +160,10 @@ struct SetPinView: View {
                     confirm()
                 }
 
-            Toggle(isOn: $accepted) {
-                Text(NSLocalizedString("I understand that I must remember this PIN, as it cannot be recovered.", comment: ""))
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            .padding(.vertical)
-
             Button(NSLocalizedString("Confirm", comment: "")) {
                 confirm()
             }
-            .disabled(!accepted || pin1.isEmpty || pin1 != pin2)
+            .disabled(pin1.isEmpty || pin1 != pin2)
             .padding(.top, 32)
             .padding(.vertical, 8)
             .buttonStyle(.primaryButton)
