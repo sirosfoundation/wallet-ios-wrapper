@@ -128,6 +128,9 @@ extension CTAP2.Error: @retroactive LocalizedError {
         case .puatRequired:
             return NSLocalizedString("Please provide PIN.", comment: "")
 
+        case .noCredentials:
+            return NSLocalizedString("There is no passkey for this site on this security key. Please add one or find another method for accessing this site.", comment: "")
+
         default:
             return NSLocalizedString("Hold the security key against your device's NFC reader until it is recognized.", comment: "")
         }
