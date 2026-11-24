@@ -480,7 +480,11 @@ import FaceTecSDK
         if !(conn is NFCSmartCardConnection) {
             let vc = ModalViewController(rootView: KeyTouchInfoView())
 
-            top.present(vc, animated: true)
+            await withCheckedContinuation { continuation in
+                top.present(vc, animated: true) {
+                    continuation.resume()
+                }
+            }
 
             return vc
         }
