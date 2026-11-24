@@ -163,7 +163,7 @@ struct SetPinView: View {
             Button(NSLocalizedString("Confirm", comment: "")) {
                 confirm()
             }
-            .disabled(pin1.isEmpty || pin1 != pin2)
+            .disabled(!checkPin(pin: pin1) || pin1 != pin2)
             .padding(.top, 32)
             .padding(.vertical, 8)
             .buttonStyle(.primaryButton)
@@ -182,11 +182,28 @@ struct SetPinView: View {
     }
 
     private func confirm() {
-        if !pin1.isEmpty && pin1 == pin2 {
+        if checkPin(pin: pin1) && pin1 == pin2 {
             onFinished(pin1)
 
             dismiss()
         }
+    }
+
+    /**
+     Copied from `CTAP2.ClientPin.ProtocolVersion.padPin(:)`, this checks, if a
+     given PIN has valid length.
+
+     - Equal or more than 4 unicode code points.
+     - Equal or less than 63 bytes of UTF-8 bytes.
+
+     - parameter pin: The PIN to check.
+     - returns: `true` if PIN valid, `false` if invalid.
+     */
+    private func checkPin(pin: String) -> Bool {
+        let normalizedPin = pin.precomposedStringWithCanonicalMapping
+        let pinData = Data(normalizedPin.utf8)
+
+        return normalizedPin.unicodeScalars.count >= 4 && pinData.count <= 63
     }
 }
 
