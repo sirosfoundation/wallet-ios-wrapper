@@ -20,11 +20,18 @@ struct Modal<Content: View>: View {
     var body: some View {
         ZStack {
             Color.modalBackground
+                .ignoresSafeArea()
 
-            content()
+            ViewThatFits(in: [.vertical]) {
+                content()
+
+                ScrollView {
+                    content()
+                }
+            }
             .padding()
             .background(Color(.secondarySystemBackground))
-            .cornerRadius(16)
+            .clipShape(.rect(cornerRadius: 16))
             .shadow(radius: 10)
             .padding()
             .frame(maxWidth: 400)
@@ -32,8 +39,20 @@ struct Modal<Content: View>: View {
     }
 }
 
-#Preview {
+#Preview("Small Content") {
     Modal {
         Text("Hello World!")
+    }
+}
+
+#Preview("Large Content") {
+    Modal {
+        VStack(spacing: 20) {
+            Text("I am very long content!")
+                .font(.title)
+            ForEach(0..<25) { i in
+                Text("Item line number \(i)")
+            }
+        }
     }
 }
