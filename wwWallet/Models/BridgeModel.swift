@@ -216,7 +216,7 @@ import FaceTecSDK
                 }
 
                 // For subsequent calls, we have the PIN available and try to verify it.
-                if let pin = pin, !pin.isEmpty {
+                if needsPin, let pin = pin, !pin.isEmpty {
                     self.pin = pin // Refresh timer
                     token = try await session.getPinUVToken(using: .pin(pin), permissions: .getAssertion, rpId: r.rpId)
                 }
