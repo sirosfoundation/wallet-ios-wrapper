@@ -44,17 +44,17 @@ struct CredentialSelectionView: View {
 
                 List {
                     ForEach(responses) { response in
-                        VStack {
-                            Text(response.name)
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .listRowBackground(Color(.tertiarySystemBackground))
-                        .contentShape(Rectangle())
-                        .onTapGesture {
+                        Button {
                             onFinished(response.credential)
 
                             dismiss()
+                        } label: {
+                            Text(response.name)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .contentShape(Rectangle())
                         }
+                        .buttonStyle(.plain)
+                        .listRowBackground(Color(.tertiarySystemBackground))
                     }
                 }
                 .frame(maxHeight: 300)
