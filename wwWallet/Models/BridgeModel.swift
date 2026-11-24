@@ -83,6 +83,10 @@ import FaceTecSDK
                         throw CTAP2.Error.pinNotSet
                     }
                 }
+                else {
+                    // Make sure, the user doesn't play switch-and-bait with us.
+                    newPin = nil
+                }
 
                 let r = request.request
                 var token: CTAP2.Token? = nil
