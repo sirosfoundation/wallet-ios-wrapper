@@ -179,6 +179,10 @@ struct WebView: UIViewRepresentable {
             runJavaScriptAlertPanelWithMessage message: String,
             initiatedByFrame frame: WKFrameInfo
         ) async {
+            guard let top = await webView.window?.rootViewController?.getTopWait() else {
+                return
+            }
+
             await withCheckedContinuation { continuation in
                 let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
 
@@ -186,7 +190,7 @@ struct WebView: UIViewRepresentable {
                     continuation.resume()
                 })
 
-                webView.window?.rootViewController?.top.present(alert, animated: true)
+                top.present(alert, animated: true)
             }
         }
 
@@ -196,7 +200,11 @@ struct WebView: UIViewRepresentable {
             defaultText: String?,
             initiatedByFrame frame: WKFrameInfo
         ) async -> String? {
-            await withCheckedContinuation { continuation in
+            guard let top = await webView.window?.rootViewController?.getTopWait() else {
+                return nil
+            }
+
+            return await withCheckedContinuation { continuation in
                 let alert = UIAlertController(title: nil, message: prompt, preferredStyle: .alert)
 
                 alert.addAction(.init(title: NSLocalizedString("Ok", comment: ""), style: .default) { _ in
@@ -216,7 +224,7 @@ struct WebView: UIViewRepresentable {
                     }
                 }
 
-                webView.window?.rootViewController?.top.present(alert, animated: true)
+                top.present(alert, animated: true)
             }
         }
 
@@ -225,7 +233,11 @@ struct WebView: UIViewRepresentable {
             runJavaScriptConfirmPanelWithMessage message: String,
             initiatedByFrame frame: WKFrameInfo
         ) async -> Bool {
-            await withCheckedContinuation { continuation in
+            guard let top = await webView.window?.rootViewController?.getTopWait() else {
+                return false
+            }
+
+            return await withCheckedContinuation { continuation in
                 let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
 
                 alert.addAction(.init(title: NSLocalizedString("Ok", comment: ""), style: .default) { _ in
@@ -236,7 +248,7 @@ struct WebView: UIViewRepresentable {
                     continuation.resume(returning: false)
                 })
 
-                webView.window?.rootViewController?.top.present(alert, animated: true)
+                top.present(alert, animated: true)
             }
         }
     }

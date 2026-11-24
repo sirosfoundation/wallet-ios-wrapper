@@ -331,7 +331,7 @@ import FaceTecSDK
 
         let bearerToken = Config.faceTecApiBearerToken
 
-        guard let presentingVc = await message.topVc else {
+        guard let presentingVc = await message.getTopWait() else {
             throw Errors.faceTecNoPresenter
         }
 
@@ -348,7 +348,7 @@ import FaceTecSDK
         // The web app ignores this call's result, so an error the user can act
         // on is shown natively; anything else is only thrown, as before.
         guard provider.isNFCReadingAvailable() else {
-            await showAlert(Errors.faceTecNFCUnavailable, on: await message.topVc ?? presentingVc)
+            await showAlert(Errors.faceTecNFCUnavailable, on: await message.getTopWait() ?? presentingVc)
             throw Errors.faceTecNFCUnavailable
         }
 
@@ -356,9 +356,11 @@ import FaceTecSDK
         do {
             credentialOfferURI = try await provider.startVerification(presentingViewController: presentingVc)
         }
-        catch Errors.faceTecIssuanceRefused(let code) {
-            let error = Errors.faceTecIssuanceRefused(code: code)
-            await showAlert(error, on: await message.topVc ?? presentingVc, title: NSLocalizedString("No credential issued", comment: ""))
+        catch {
+            if case Errors.faceTecIssuanceRefused(_) = error {
+                await showAlert(error, on: await message.getTopWait() ?? presentingVc, title: NSLocalizedString("No credential issued", comment: ""))
+            }
+
             throw error
         }
 
@@ -417,58 +419,44 @@ import FaceTecSDK
      The bridge call waits on this, so it must always return.
      */
     @MainActor
-    private func showAlert(_ error: Errors, on viewController: UIViewController, title: String? = nil) async {
-        let once = AlertContinuation()
+    private func showAlert(_ error: Error, on viewController: UIViewController, title: String? = nil) async {
         await withCheckedContinuation { (continuation: CheckedContinuation<Void, Never>) in
-            once.continuation = continuation
-
             let alert = UIAlertController(title: title, message: error.localizedDescription, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default) { _ in
-                once.resume()
+                continuation.resume()
             })
 
-            // This should not happen anymore, since you should call this with a
-            // fresh vc reference, which *isn't currently dismissed* (use `WkScriptMessage.topVC`!),
-            // but just in case, we're checking anyway.
-            if viewController.isBeingDismissed {
-                once.resume()
-            }
-            else {
-                viewController.present(alert, animated: true)
-            }
+            viewController.present(alert, animated: true)
         }
     }
 
     @MainActor
     private func getPin(_ message: WKScriptMessage) async -> String? {
-        await withCheckedContinuation { continuation in
-            if let topVc = message.topVc {
-                let vc = ModalViewController(rootView: PinEntryView({ pin in
-                    continuation.resume(returning: pin)
-                }))
+        guard let top = await message.getTopWait() else {
+            return nil
+        }
 
-                topVc.present(vc, animated: true)
-            }
-            else {
-                continuation.resume(returning: nil)
-            }
+        return await withCheckedContinuation { continuation in
+            let vc = ModalViewController(rootView: PinEntryView({ pin in
+                continuation.resume(returning: pin)
+            }))
+
+            top.present(vc, animated: true)
         }
     }
 
     @MainActor
-    private func getCredential(_ message: WKScriptMessage, _ responses: [CTAP2.GetAssertion.Response]) async -> WebAuthn.CredentialDescriptor?
-    {
-        await withCheckedContinuation { continuation in
-            if let topVc = message.topVc {
-                let vc = ModalViewController(rootView: CredentialSelectionView(responses, { user in
-                    continuation.resume(returning: user)
-                }))
+    private func getCredential(_ message: WKScriptMessage, _ responses: [CTAP2.GetAssertion.Response]) async -> WebAuthn.CredentialDescriptor? {
+        guard let top = await message.getTopWait() else {
+            return nil
+        }
 
-                topVc.present(vc, animated: true)
-            }
-            else {
-                continuation.resume(returning: nil)
-            }
+        return await withCheckedContinuation { continuation in
+            let vc = ModalViewController(rootView: CredentialSelectionView(responses, { user in
+                continuation.resume(returning: user)
+            }))
+
+            top.present(vc, animated: true)
         }
     }
 
@@ -480,11 +468,15 @@ import FaceTecSDK
      - returns: The modal UIViewController, if one has been presented.
      */
     @MainActor
-    private func showKeyTouchInfo(_ message: WKScriptMessage, _ conn: SmartCardConnection) -> UIViewController? {
-        if !(conn is NFCSmartCardConnection), let topVc = message.topVc {
+    private func showKeyTouchInfo(_ message: WKScriptMessage, _ conn: SmartCardConnection) async -> UIViewController? {
+        guard let top = await message.getTopWait() else {
+            return nil
+        }
+
+        if !(conn is NFCSmartCardConnection) {
             let vc = ModalViewController(rootView: KeyTouchInfoView())
 
-            topVc.present(vc, animated: true)
+            top.present(vc, animated: true)
 
             return vc
         }
@@ -494,33 +486,31 @@ import FaceTecSDK
 
     @MainActor
     private func getNewPin(_ message: WKScriptMessage) async -> String? {
-        await withCheckedContinuation { continuation in
-            if let topVc = message.topVc {
-                let vc = ModalViewController(rootView: SetPinView({ pin in
-                    continuation.resume(returning: pin)
-                }))
+        guard let top = await message.getTopWait() else {
+            return nil
+        }
 
-                topVc.present(vc, animated: true)
-            }
-            else {
-                continuation.resume(returning: nil)
-            }
+        return await withCheckedContinuation { continuation in
+            let vc = ModalViewController(rootView: SetPinView({ pin in
+                continuation.resume(returning: pin)
+            }))
+
+            top.present(vc, animated: true)
         }
     }
 
     @MainActor
     private func showError(_ message: WKScriptMessage, _ error: Error) async {
-        await withCheckedContinuation { continuation in
-            if let topVc = message.topVc {
-                let vc = ModalViewController(rootView: ErrorView(error.localizedDescription, {
-                    continuation.resume(returning: ())
-                }))
+        guard let top = await message.getTopWait() else {
+            return
+        }
 
-                topVc.present(vc, animated: true)
-            }
-            else {
+        await withCheckedContinuation { continuation in
+            let vc = ModalViewController(rootView: ErrorView(error.localizedDescription, {
                 continuation.resume(returning: ())
-            }
+            }))
+
+            top.present(vc, animated: true)
         }
     }
 
@@ -590,17 +580,5 @@ import FaceTecSDK
 
             throw errorToReturn ?? error
         }
-    }
-}
-
-/// Resumes a continuation at most once, from whichever of the alert's OK
-/// button or its presentation check gets there first.
-@MainActor
-private final class AlertContinuation {
-    var continuation: CheckedContinuation<Void, Never>?
-
-    func resume() {
-        continuation?.resume()
-        continuation = nil
     }
 }

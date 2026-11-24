@@ -21,10 +21,13 @@ extension WKScriptMessage {
     }
 
     /**
-     Returns the top-most view controller, which *isn't currently being dismissed.*
+     If this is called during a dismissal of a view controller, it will wait until the dismissal is finished,
+     so you can be pretty sure that you can then use it for presenting a new one.
+
+     - returns: The top-most view controller which is also ready to be used for presenting a new one.
      */
-    var topVc: UIViewController? {
-        webView?.window?.rootViewController?.top
+    func getTopWait() async -> UIViewController? {
+        await webView?.window?.rootViewController?.getTopWait()
     }
 
 
