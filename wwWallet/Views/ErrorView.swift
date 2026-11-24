@@ -38,20 +38,14 @@ struct ErrorView : View {
                     .font(.system(size: 60))
                     .foregroundStyle(Color.red)
                     .padding()
-            }
-        }
-        .onAppear {
-            Task { @MainActor in
-                do {
-                    try await Task.sleep(nanoseconds: 3 * NSEC_PER_SEC)
-                }
-                catch {
-                    // Ignored
-                }
 
-                onFinished()
+                Button(NSLocalizedString("Cancel", comment: "")) {
+                    onFinished()
 
-                dismiss()
+                    dismiss()
+                }
+                .padding(.vertical, 8)
+                .buttonStyle(.outlineButton)
             }
         }
     }
