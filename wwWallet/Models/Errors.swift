@@ -131,8 +131,17 @@ extension CTAP2.Error: @retroactive LocalizedError {
         case .noCredentials:
             return NSLocalizedString("There is no passkey for this site on this security key. Please add one or find another method for accessing this site.", comment: "")
 
+        case .pinAuthBlocked:
+            return NSLocalizedString("PIN entry is temporarily blocked. Disconnect and reconnect the security key before trying again.", comment: "")
+
+        case .pinBlocked:
+            return NSLocalizedString("The security key PIN is blocked. Use another security key or consult your key's recovery instructions.", comment: "")
+
+        case .pinPolicyViolation:
+            return NSLocalizedString("The PIN does not meet this security key's PIN requirements.", comment: "")
+
         default:
-            return NSLocalizedString("Hold the security key against your device's NFC reader until it is recognized.", comment: "")
+            return NSLocalizedString("The security key could not complete the request. Please try again.", comment: "")
         }
     }
 }
@@ -141,9 +150,9 @@ extension CTAP2.SessionError: @retroactive LocalizedError {
 
     /**
      YubiKit implemented proper error descriptions almost nowhere, hence we show a
-     generic message. As currently only NFC has error UI, it's fine to refer to NFC here.
+     generic message.
      */
     public var errorDescription: String? {
-        return NSLocalizedString("Hold the security key against your device's NFC reader until it is recognized.", comment: "")
+        return NSLocalizedString("The security key could not complete the request. Please try again.", comment: "")
     }
 }
