@@ -72,19 +72,10 @@ import FaceTecSDK
                 if info.options.clientPin == false {
                     if let newPin {
                         // Second round: If the user gave us a new PIN to set, let's do that!
-                        do {
-                            try await session.setPin(newPin)
-                        }
-                        catch {
-                            // If there was an error setting the PIN, forget it first,
-                            // so the user will see the UI again. It would be super-confusing
-                            // if the PIN would be set automatically during a new session.
-                            // Or the user could have switched security keys in between.
-                            self.newPin = nil
-                            throw error
-                        }
+                        try await session.setPin(newPin)
 
-                        pin = newPin
+                        // Force user to re-enter their newly created PIN, so they'll learn it.
+                        pin = nil
                         self.newPin = nil
                     }
                     else {
@@ -140,6 +131,11 @@ import FaceTecSDK
             }
         }
         catch {
+            // Whatever happened while trying to set a new PIN on a fresh security key,
+            // we make sure the new PIN is forgotten and not accidentally re-used in
+            // another run.
+            newPin = nil
+
             await infoVc?.dismiss(animated: true)
 
             switch error {
