@@ -348,7 +348,7 @@ import FaceTecSDK
         // The web app ignores this call's result, so an error the user can act
         // on is shown natively; anything else is only thrown, as before.
         guard provider.isNFCReadingAvailable() else {
-            await showAlert(Errors.faceTecNFCUnavailable, on: await message.getTopWait() ?? presentingVc)
+            await showAlert(Errors.faceTecNFCUnavailable, on: message)
             throw Errors.faceTecNFCUnavailable
         }
 
@@ -358,7 +358,7 @@ import FaceTecSDK
         }
         catch {
             if case Errors.faceTecIssuanceRefused(_) = error {
-                await showAlert(error, on: await message.getTopWait() ?? presentingVc, title: NSLocalizedString("No credential issued", comment: ""))
+                await showAlert(error, on: message, title: NSLocalizedString("No credential issued", comment: ""))
             }
 
             throw error
@@ -419,14 +419,18 @@ import FaceTecSDK
      The bridge call waits on this, so it must always return.
      */
     @MainActor
-    private func showAlert(_ error: Error, on viewController: UIViewController, title: String? = nil) async {
+    private func showAlert(_ error: Error, on message: WKScriptMessage, title: String? = nil) async {
+        guard let top = await message.getTopWait() else {
+            return
+        }
+
         await withCheckedContinuation { (continuation: CheckedContinuation<Void, Never>) in
             let alert = UIAlertController(title: title, message: error.localizedDescription, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default) { _ in
                 continuation.resume()
             })
 
-            viewController.present(alert, animated: true)
+            top.present(alert, animated: true)
         }
     }
 
