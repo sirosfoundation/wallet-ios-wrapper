@@ -22,5 +22,10 @@ struct CheckboxToggleStyle: ToggleStyle {
             }
         }
         .buttonStyle(.plain)
+        .accessibilityRepresentation {
+            Toggle(isOn: .constant(configuration.isOn)) {
+                configuration.label
+            }
+        }
     }
 }
