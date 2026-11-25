@@ -70,18 +70,17 @@ import FaceTecSDK
                 // Check, if the security key is fresh and doesn't have a PIN set.
                 let info = try await session.getInfo()
                 if info.options.clientPin == false {
-                    if let newPin {
-                        // Second round: If the user gave us a new PIN to set, let's do that!
-                        try await session.setPin(newPin)
-
-                        // Force user to re-enter their newly created PIN, so they'll learn it.
-                        pin = nil
-                        self.newPin = nil
-                    }
-                    else {
+                    guard let newPin else {
                         // First round: Stop this session again and show new PIN entry UI.
                         throw CTAP2.Error.pinNotSet
                     }
+
+                    // Second round: If the user gave us a new PIN to set, let's do that!
+                    try await session.setPin(newPin)
+
+                    // Force user to re-enter their newly created PIN, so they'll learn it.
+                    pin = nil
+                    self.newPin = nil
                 }
                 else {
                     // Make sure, the user doesn't play switch-and-bait with us.
@@ -473,23 +472,21 @@ import FaceTecSDK
      */
     @MainActor
     private func showKeyTouchInfo(_ message: WKScriptMessage, _ conn: SmartCardConnection) async -> UIViewController? {
-        guard let top = await message.getTopWait() else {
+        guard let top = await message.getTopWait(),
+              !(conn is NFCSmartCardConnection)
+        else {
             return nil
         }
 
-        if !(conn is NFCSmartCardConnection) {
-            let vc = ModalViewController(rootView: KeyTouchInfoView())
+        let vc = ModalViewController(rootView: KeyTouchInfoView())
 
-            await withCheckedContinuation { continuation in
-                top.present(vc, animated: true) {
-                    continuation.resume()
-                }
+        await withCheckedContinuation { continuation in
+            top.present(vc, animated: true) {
+                continuation.resume()
             }
-
-            return vc
         }
 
-        return nil
+        return vc
     }
 
     @MainActor

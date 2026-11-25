@@ -48,22 +48,22 @@ extension UIViewController {
      - returns: The top-most view controller which is also ready to be used for presenting a new one.
      */
     public func getTopWait() async -> UIViewController {
-        if let vc = subViewController {
-            if vc.isBeingDismissed {
-                // Wait until the dismissal of the subViewController is done.
-                while subViewController != nil {
-                    try? await Task.sleep(nanoseconds: UInt64(0.1 * Double(NSEC_PER_SEC)))
-                }
-
-                // Only then return ourselves, to avoid a race condition, where we
-                // cannot present a new view controller because an old one is still
-                // being dismissed.
-                return self
-            }
-
-            return await vc.getTopWait()
+        guard let vc = subViewController else {
+            return self
         }
 
-        return self
+        if vc.isBeingDismissed {
+            // Wait until the dismissal of the subViewController is done.
+            while subViewController != nil {
+                try? await Task.sleep(nanoseconds: UInt64(0.1 * Double(NSEC_PER_SEC)))
+            }
+
+            // Only then return ourselves, to avoid a race condition, where we
+            // cannot present a new view controller because an old one is still
+            // being dismissed.
+            return self
+        }
+
+        return await vc.getTopWait()
     }
 }
