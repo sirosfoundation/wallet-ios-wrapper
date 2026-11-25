@@ -39,7 +39,7 @@ struct ErrorView : View {
                     .foregroundStyle(Color.red)
                     .padding()
 
-                Button(NSLocalizedString("Cancel", comment: "")) {
+                Button(NSLocalizedString("OK", comment: "")) {
                     dismiss()
 
                     onFinished()
