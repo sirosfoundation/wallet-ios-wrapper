@@ -51,9 +51,9 @@ struct PinEntryView: View {
                 .buttonStyle(.primaryButton)
 
                 Button(NSLocalizedString("Cancel", comment: "")) {
-                    onFinished(nil)
-
                     dismiss()
+
+                    onFinished(nil)
                 }
                 .padding(.vertical, 8)
                 .buttonStyle(.outlineButton)
@@ -67,9 +67,9 @@ struct PinEntryView: View {
 
     private func confirm() {
         if !pin.isEmpty {
-            onFinished(pin)
-
             dismiss()
+
+            onFinished(pin)
         }
     }
 }

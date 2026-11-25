@@ -45,9 +45,9 @@ struct CredentialSelectionView: View {
                 List {
                     ForEach(responses) { response in
                         Button {
-                            onFinished(response.credential)
-
                             dismiss()
+
+                            onFinished(response.credential)
                         } label: {
                             Text(response.name)
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -64,9 +64,9 @@ struct CredentialSelectionView: View {
                 .padding(.vertical, 16)
 
                 Button(NSLocalizedString("Cancel", comment: "")) {
-                    onFinished(nil)
-
                     dismiss()
+
+                    onFinished(nil)
                 }
                 .padding(.vertical, 8)
                 .buttonStyle(.outlineButton)

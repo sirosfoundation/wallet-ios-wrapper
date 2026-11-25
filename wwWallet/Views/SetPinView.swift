@@ -127,9 +127,9 @@ struct SetPinView: View {
             .buttonStyle(.primaryButton)
 
             Button(NSLocalizedString("Cancel", comment: "")) {
-                onFinished(nil)
-
                 dismiss()
+
+                onFinished(nil)
             }
             .padding(.vertical, 8)
             .buttonStyle(.outlineButton)
@@ -169,9 +169,9 @@ struct SetPinView: View {
             .buttonStyle(.primaryButton)
 
             Button(NSLocalizedString("Cancel", comment: "")) {
-                onFinished(nil)
-
                 dismiss()
+
+                onFinished(nil)
             }
             .padding(.vertical, 8)
             .buttonStyle(.outlineButton)
@@ -183,9 +183,9 @@ struct SetPinView: View {
 
     private func confirm() {
         if checkPin(pin: pin1) && pin1 == pin2 {
-            onFinished(pin1)
-
             dismiss()
+
+            onFinished(pin1)
         }
     }
 

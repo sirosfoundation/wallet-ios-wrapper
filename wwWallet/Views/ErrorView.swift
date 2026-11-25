@@ -40,9 +40,9 @@ struct ErrorView : View {
                     .padding()
 
                 Button(NSLocalizedString("Cancel", comment: "")) {
-                    onFinished()
-
                     dismiss()
+
+                    onFinished()
                 }
                 .padding(.vertical, 8)
                 .buttonStyle(.outlineButton)
