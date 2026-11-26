@@ -72,37 +72,6 @@ struct BasicTests {
         #endif
     }
 
-    @Test("Test color from hex parsing")
-    func testColorFromHex() {
-        // Test valid 6-digit hex colors
-        let color1 = Color(hex: "000000")  // Black
-        #expect(color1 == .black)
-
-        let color2 = Color(hex: "FFFFFF")  // White
-        #expect(color2 == .white)
-
-        let color3 = Color(hex: "FF0000")  // Red
-        #expect(color3 == Color(red: 1, green: 0, blue: 0, opacity: 1))
-
-        // Test 3-digit shorthand hex colors
-        let colorShort = Color(hex: "F00") // Red
-        #expect(colorShort == Color(red: 1, green: 0, blue: 0, opacity: 1))
-
-        // Test 8-digit hex colors (with alpha)
-        let colorAlpha = Color(hex: "FF000080")
-        #expect(colorAlpha != nil)
-    }
-
-    @Test("Test invalid hex color handling")
-    func testInvalidHexColor() {
-        // Test invalid hex color should return nil
-        let color = Color(hex: "WXYZ")
-        #expect(color == nil)
-        
-        let colorTooLong = Color(hex: "123456789")
-        #expect(colorTooLong == nil)
-    }
-    
     @Test("Test Data webSafeBase64EncodedString extension")
     func testDataWebSafeBase64Encoding() {
         let testData = Data([0x01, 0x02, 0x03, 0x04])

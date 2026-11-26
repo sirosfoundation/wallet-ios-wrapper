@@ -40,6 +40,8 @@ import FaceTecSDK
         }
     }
 
+    private var newPin: String?
+
     private var selectedCredential: WebAuthn.CredentialDescriptor? = nil
 
     private let log: Logger = Logger(for: BridgeModel.self)
@@ -59,9 +61,31 @@ import FaceTecSDK
 
         let request: CreateRequestWrapper = try await message.decode()
 
+        var infoVc: UIViewController?
+
         do {
-            return try await withConnection { conn in
+            return try await withConnection(message) { conn in
                 let session = try await CTAP2.Session.makeSession(connection: conn)
+
+                // Check, if the security key is fresh and doesn't have a PIN set.
+                let info = try await session.getInfo()
+                if info.options.clientPin == false {
+                    guard let newPin else {
+                        // First round: Stop this session again and show new PIN entry UI.
+                        throw CTAP2.Error.pinNotSet
+                    }
+
+                    // Second round: If the user gave us a new PIN to set, let's do that!
+                    try await session.setPin(newPin)
+
+                    // Force user to re-enter their newly created PIN, so they'll learn it.
+                    pin = nil
+                    self.newPin = nil
+                }
+                else {
+                    // Make sure, the user doesn't play switch-and-bait with us.
+                    newPin = nil
+                }
 
                 let r = request.request
                 var token: CTAP2.Token? = nil
@@ -83,6 +107,9 @@ import FaceTecSDK
                 let prfs = try await PrfExtensions(session, r.extensions)
                 let extensions = try prfs.makeCredentialInput()
 
+                // Eventually show instructions for wired security keys.
+                infoVc = await showKeyTouchInfo(message, conn)
+
                 let response = try await session.makeCredential(
                     parameters: .init(
                         clientDataHash: clientDataJson.hash,
@@ -95,6 +122,8 @@ import FaceTecSDK
                     ),
                     token: token).value
 
+                await infoVc?.dismiss(animated: true)
+
                 let credentials = try Credentials(clientDataJson, response, prfs)
 
                 let json = String(data: try JSONEncoder().encode(ResponseWrapper(credentials, "create")), encoding: .utf8)
@@ -105,12 +134,29 @@ import FaceTecSDK
             }
         }
         catch {
+            // Whatever happened while trying to set a new PIN on a fresh security key,
+            // we make sure the new PIN is forgotten and not accidentally re-used in
+            // another run.
+            newPin = nil
+
+            await infoVc?.dismiss(animated: true)
+
             switch error {
             case CTAP2.Error.pinInvalid, CTAP2.Error.puatRequired:
-                await acquirePin(message)
+                pin = await getPin(message)
 
                 // User cancelled.
                 if pin?.isEmpty ?? true {
+                    return [:]
+                }
+
+                return try await didReceiveCreate(message)
+
+            case CTAP2.Error.pinNotSet:
+                newPin = await getNewPin(message)
+
+                // User cancelled.
+                if newPin?.isEmpty ?? true {
                     return [:]
                 }
 
@@ -126,41 +172,52 @@ import FaceTecSDK
         }
     }
 
+    // https://design.penpot.app/?screen=workspace&team-id=20e128ff-6495-80ff-8007-13474a61d51e&file-id=ce180602-f36b-8035-8008-d053c0c6cc9b&page-id=ce180602-f36b-8035-8008-d053c0c6cc9c&layout=layers
+
     func didReceiveGet(_ message: WKScriptMessage) async throws -> [String: String?] {
         let sb = await message.stringBody
         log.debug("\(sb ?? "(nil)")")
 
         let request: GetRequestWrapper = try await message.decode()
 
-        // If wwWallet wants user verification, we *do need to use a PIN*.
-        // For subsequent calls, we then have the PIN available.
-        // See https://developers.yubico.com/WebAuthn/WebAuthn_Developer_Guide/User_Presence_vs_User_Verification.html
-        //
-        // Also, the PRF extension *always requires* user verification, so force it,
-        // even when the frontend didn't explicitly ask for it.
-        let needsPin = request.request.userVerification?.lowercased() == "required" || request.request.extensions?["prf"] != nil
-
-        // At the first time, this PIN will be empty, so we ask right away before we even establish a connection.
-        if needsPin && (pin?.isEmpty ?? true) {
-            await acquirePin(message)
-
-            // User cancelled.
-            if pin?.isEmpty ?? true {
-                return [:]
-            }
-        }
+        var infoVc: UIViewController?
 
         do {
-            return try await withConnection { conn in
+            return try await withConnection(message) { conn in
                 let session = try await CTAP2.Session.makeSession(connection: conn)
 
                 let r = request.request
                 var token: CTAP2.Token? = nil
 
+                // If wwWallet wants user verification, we *do need to use a PIN*.
+                // See https://developers.yubico.com/WebAuthn/WebAuthn_Developer_Guide/User_Presence_vs_User_Verification.html
+                //
+                // Also, the PRF extension *always requires* user verification, so force it,
+                // even when the frontend didn't explicitly ask for it.
+                //
+                // We only evaluate this *after* starting the session, because if we
+                // do it right up front, that *would* save the user a key tap,
+                // *but* they would also be confused about what the PIN is actually for, lacking context.
+                // So we first ask them to tap the key, *then* we tell them they'll need to provide
+                // the PIN for the key. (Now, there's the context for the user.)
+                //
+                // Note that Apple does it the same way, actually.
+                //
+                // We *cannot* rely on the `getAssertion` call below failing like we do in
+                // `didReceiveCreate`, because it will not fail. The security key instead
+                // will sign with different sub-keys of the selected Passkey failing
+                // the signature check in the web frontend later when not provided with the PIN.
+                let needsPin = request.request.userVerification?.lowercased() == "required" || request.request.extensions?["prf"] != nil
+
+                // At the first time, this PIN will be empty, so we ask right away before we even establish a connection.
+                if needsPin && (pin?.isEmpty ?? true) {
+                    throw CTAP2.Error.puatRequired
+                }
+
                 // For subsequent calls, we have the PIN available and try to verify it.
-                if needsPin {
-                    pin = pin // Refresh timer
-                    token = try await session.getPinUVToken(using: .pin(pin ?? ""), permissions: .getAssertion, rpId: r.rpId)
+                if needsPin, let pin = pin, !pin.isEmpty {
+                    self.pin = pin // Refresh timer
+                    token = try await session.getPinUVToken(using: .pin(pin), permissions: .getAssertion, rpId: r.rpId)
                 }
 
                 guard let clientData = r.clientData else {
@@ -181,6 +238,9 @@ import FaceTecSDK
                     allowList = credentials.compactMap({ $0.descriptor })
                 }
 
+                // Eventually show instructions for wired security keys.
+                infoVc = await showKeyTouchInfo(message, conn)
+
                 let response = try await session.getAssertion(
                     parameters: .init(
                         rpId: r.rpId,
@@ -189,6 +249,8 @@ import FaceTecSDK
                         extensions: extensions
                     ),
                     token: token).value
+
+                await infoVc?.dismiss(animated: true)
 
                 // There's multiple credentials on the YubiKey. Fetch their IDs and
                 // show it to the user for selection.
@@ -221,9 +283,11 @@ import FaceTecSDK
             }
         }
         catch {
+            await infoVc?.dismiss(animated: true)
+
             switch error {
             case CTAP2.Error.pinInvalid, CTAP2.Error.puatRequired:
-                await acquirePin(message)
+                pin = await getPin(message)
 
                 // User cancelled.
                 if pin?.isEmpty ?? true {
@@ -237,7 +301,7 @@ import FaceTecSDK
 
                 try await Task.sleep(nanoseconds: 1 * NSEC_PER_SEC)
 
-                await acquireCredential(message, responses)
+                selectedCredential = await getCredential(message, responses)
 
                 if selectedCredential == nil {
                     // User cancelled.
@@ -266,7 +330,7 @@ import FaceTecSDK
 
         let bearerToken = Config.faceTecApiBearerToken
 
-        guard let presentingVc = await message.webView?.window?.rootViewController?.top else {
+        guard let presentingVc = await message.getTopWait() else {
             throw Errors.faceTecNoPresenter
         }
 
@@ -283,7 +347,7 @@ import FaceTecSDK
         // The web app ignores this call's result, so an error the user can act
         // on is shown natively; anything else is only thrown, as before.
         guard provider.isNFCReadingAvailable() else {
-            await showAlert(Errors.faceTecNFCUnavailable, on: presentingVc)
+            await showAlert(Errors.faceTecNFCUnavailable, on: message)
             throw Errors.faceTecNFCUnavailable
         }
 
@@ -291,9 +355,11 @@ import FaceTecSDK
         do {
             credentialOfferURI = try await provider.startVerification(presentingViewController: presentingVc)
         }
-        catch Errors.faceTecIssuanceRefused(let code) {
-            let error = Errors.faceTecIssuanceRefused(code: code)
-            await showAlert(error, on: presentingVc, title: NSLocalizedString("No credential issued", comment: ""))
+        catch {
+            if case Errors.faceTecIssuanceRefused(_) = error {
+                await showAlert(error, on: message, title: NSLocalizedString("No credential issued", comment: ""))
+            }
+
             throw error
         }
 
@@ -347,75 +413,109 @@ import FaceTecSDK
 
     // MARK: Private Methods
 
-    /// Presents `error` as a simple alert and waits until the user dismisses
-    /// it. The bridge call waits on this, so it must always return.
-    ///
-    /// `viewController` is the one that presented the FaceTec session, which
-    /// may still be dismissing when `onFaceTecExit` fires; UIKit refuses to
-    /// present from a controller in that state. So this waits (bounded) for
-    /// the dismissal to finish and presents from whatever is then on top; if
-    /// UIKit still refuses, it gives up rather than leave the call suspended.
+    /**
+     Presents `error` as a simple alert and waits until the user dismisses it.
+     The bridge call waits on this, so it must always return.
+     */
     @MainActor
-    private func showAlert(_ error: Errors, on viewController: UIViewController, title: String? = nil) async {
-        var waited = 0
-        while viewController.presentedViewController?.isBeingDismissed == true, waited < 30 {
-            try? await Task.sleep(nanoseconds: 100_000_000)
-            waited += 1
+    private func showAlert(_ error: Error, on message: WKScriptMessage, title: String? = nil) async {
+        guard let top = await message.getTopWait() else {
+            return
         }
 
-        let once = AlertContinuation()
         await withCheckedContinuation { (continuation: CheckedContinuation<Void, Never>) in
-            once.continuation = continuation
-
             let alert = UIAlertController(title: title, message: error.localizedDescription, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default) { _ in
-                once.resume()
+                continuation.resume()
             })
 
-            viewController.top.present(alert, animated: true)
-
-            Task { @MainActor in
-                try? await Task.sleep(nanoseconds: 1_000_000_000)
-                if alert.presentingViewController == nil {
-                    self.log.error("Could not present the FaceTec refusal alert: \(error.localizedDescription)")
-                    once.resume()
-                }
-            }
-        }
-    }
-
-    private func acquirePin(_ message: WKScriptMessage) async {
-        do {
-            let value = try await message.webView?.callAsyncJavaScript(
-                "return prompt(\"\(NSLocalizedString("Please enter your FIDO2/WebAuthn PIN.", comment: ""))\", \"\(WebView.isSecureTextEntry)\")",
-                contentWorld: message.world)
-
-            pin = value as? String
-        }
-        catch {
-            pin = nil
+            top.present(alert, animated: true)
         }
     }
 
     @MainActor
-    private func acquireCredential(_ message: WKScriptMessage, _ responses: [CTAP2.GetAssertion.Response]) async {
-        selectedCredential = await withCheckedContinuation { continuation in
-            if let topVc = message.webView?.window?.rootViewController?.top, !topVc.isBeingDismissed {
-                let vc = CredentialSelectionViewController()
-                vc.responses = responses
-                vc.resultCallback = {
-                    vc.resultCallback = nil // Remove circular reference so ARC can deinit view controller.
+    private func getPin(_ message: WKScriptMessage) async -> String? {
+        guard let top = await message.getTopWait() else {
+            return nil
+        }
 
-                    continuation.resume(returning: $0)
-                }
+        return await withCheckedContinuation { continuation in
+            let vc = ModalViewController(rootView: PinEntryView({ pin in
+                continuation.resume(returning: pin)
+            }))
 
-                let navC = UINavigationController(rootViewController: vc)
+            top.present(vc, animated: true)
+        }
+    }
 
-                topVc.present(navC, animated: true)
+    @MainActor
+    private func getCredential(_ message: WKScriptMessage, _ responses: [CTAP2.GetAssertion.Response]) async -> WebAuthn.CredentialDescriptor? {
+        guard let top = await message.getTopWait() else {
+            return nil
+        }
+
+        return await withCheckedContinuation { continuation in
+            let vc = ModalViewController(rootView: CredentialSelectionView(responses, { user in
+                continuation.resume(returning: user)
+            }))
+
+            top.present(vc, animated: true)
+        }
+    }
+
+    /**
+     Show a modal with instructions for wired security keys. *only*, if wired. When NFC, the OS will display its own UI.
+
+     - parameter message: Used to find the top-most UIViewController to present this modal on top of.
+     - parameter conn: The currently used connection to evaluate, if this is a wired connection or not.
+     - returns: The modal UIViewController, if one has been presented.
+     */
+    @MainActor
+    private func showKeyTouchInfo(_ message: WKScriptMessage, _ conn: SmartCardConnection) async -> UIViewController? {
+        guard let top = await message.getTopWait(),
+              !(conn is NFCSmartCardConnection)
+        else {
+            return nil
+        }
+
+        let vc = ModalViewController(rootView: KeyTouchInfoView())
+
+        await withCheckedContinuation { continuation in
+            top.present(vc, animated: true) {
+                continuation.resume()
             }
-            else {
-                continuation.resume(returning: nil)
-            }
+        }
+
+        return vc
+    }
+
+    @MainActor
+    private func getNewPin(_ message: WKScriptMessage) async -> String? {
+        guard let top = await message.getTopWait() else {
+            return nil
+        }
+
+        return await withCheckedContinuation { continuation in
+            let vc = ModalViewController(rootView: SetPinView({ pin in
+                continuation.resume(returning: pin)
+            }))
+
+            top.present(vc, animated: true)
+        }
+    }
+
+    @MainActor
+    private func showError(_ message: WKScriptMessage, _ error: Error) async {
+        guard let top = await message.getTopWait() else {
+            return
+        }
+
+        await withCheckedContinuation { continuation in
+            let vc = ModalViewController(rootView: ErrorView(error.localizedDescription, {
+                continuation.resume(returning: ())
+            }))
+
+            top.present(vc, animated: true)
         }
     }
 
@@ -424,10 +524,11 @@ import FaceTecSDK
 
      Will close an established connection properly.
 
+     - parameter message: The current `WKScriptMessage` object, needed to find the current view controller displayed on top, so error messages can be shown for wired connections.
      - parameter block: The code to execute after successful wired or NFC connection establishment.
      - throws: When a connection cannot be established or when your block throws. Will automatically unwrap any `CTAP2.SessionError`s  and return the underlying `CTAP2.Error` instead.
      */
-    private func withConnection<T>(_ block: (SmartCardConnection) async throws -> T) async throws -> T {
+    private func withConnection<T>(_ message: WKScriptMessage, _ block: (SmartCardConnection) async throws -> T) async throws -> T {
         let conn: SmartCardConnection
 
         // Use a wired connection, if the user plugged in a key in the meantime,
@@ -447,34 +548,43 @@ import FaceTecSDK
             return result
         }
         catch {
+            var errorToShow: Error?
+            var errorToReturn: Error?
+
             switch error {
             case CTAP2.SessionError.ctapError(let ctapError, source: _):
-                await conn.close(error: ctapError)
+                switch ctapError {
+                case CTAP2.Error.pinNotSet, CTAP2.Error.puatRequired:
+                    // Do NOT show this as an error in the UI.
+                    // This will trigger another modal for PIN creation instead.
+                    errorToShow = nil
 
-                throw ctapError
+                default:
+                    errorToShow = ctapError
+                }
 
-            case Errors.multipleCredentials(_):
+                errorToReturn = ctapError
+
+            case Errors.multipleCredentials(_), CTAP2.Error.pinNotSet, CTAP2.Error.puatRequired:
                 // Do NOT show this as an error in the UI.
-                // This will trigger another modal for credential selection instead.
-                await conn.close(error: nil)
+                // This will trigger another modal for credential selection/PIN creation/PIN entry instead.
+                errorToShow = nil
+                errorToReturn = error
 
             default:
-                await conn.close(error: error)
+                errorToShow = error
+                errorToReturn = error
             }
 
-            throw error
+            await conn.close(error: errorToShow)
+
+            // Wired connections do not have system UI.
+            // In that case, show our own.
+            if let errorToShow, !(conn is NFCSmartCardConnection) {
+                await showError(message, errorToShow)
+            }
+
+            throw errorToReturn ?? error
         }
-    }
-}
-
-/// Resumes a continuation at most once, from whichever of the alert's OK
-/// button or its presentation check gets there first.
-@MainActor
-private final class AlertContinuation {
-    var continuation: CheckedContinuation<Void, Never>?
-
-    func resume() {
-        continuation?.resume()
-        continuation = nil
     }
 }

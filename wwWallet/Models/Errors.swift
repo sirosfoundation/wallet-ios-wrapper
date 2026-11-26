@@ -26,7 +26,7 @@ enum Errors: LocalizedError {
     /// in `credentialIssueErrorCode`.
     case faceTecIssuanceRefused(code: String)
 
-    var localizedDescription: String {
+    var errorDescription: String? {
         switch self {
         case .cannotDecodeMessage:
             return NSLocalizedString("Cannot decode message.", comment: "")
@@ -112,5 +112,47 @@ enum Errors: LocalizedError {
                 return NSLocalizedString("Your identity could not be verified, so no credential was issued. Please try again.", comment: "")
             }
         }
+    }
+}
+
+extension CTAP2.Error: @retroactive LocalizedError {
+
+    public var errorDescription: String? {
+        switch self {
+        case .pinInvalid:
+            return NSLocalizedString("The provided PIN is invalid.", comment: "")
+
+        case .pinNotSet:
+            return NSLocalizedString("A PIN needs to be set.", comment: "")
+
+        case .puatRequired:
+            return NSLocalizedString("Please provide PIN.", comment: "")
+
+        case .noCredentials:
+            return NSLocalizedString("There is no passkey for this site on this security key. Please add one or find another method for accessing this site.", comment: "")
+
+        case .pinAuthBlocked:
+            return NSLocalizedString("PIN entry is temporarily blocked. Disconnect and reconnect the security key before trying again.", comment: "")
+
+        case .pinBlocked:
+            return NSLocalizedString("The security key PIN is blocked. Use another security key or consult your key's recovery instructions.", comment: "")
+
+        case .pinPolicyViolation:
+            return NSLocalizedString("The PIN does not meet this security key's PIN requirements.", comment: "")
+
+        default:
+            return NSLocalizedString("The security key could not complete the request. Please try again.", comment: "")
+        }
+    }
+}
+
+extension CTAP2.SessionError: @retroactive LocalizedError {
+
+    /**
+     YubiKit implemented proper error descriptions almost nowhere, hence we show a
+     generic message.
+     */
+    public var errorDescription: String? {
+        return NSLocalizedString("The security key could not complete the request. Please try again.", comment: "")
     }
 }

@@ -15,7 +15,7 @@ enum Errors: LocalizedError {
     case keyInvalidLength(length: Int, firstByte: UInt8)
     case unknownCoseAlgo
 
-    var localizedDescription: String {
+    var errorDescription: String? {
         switch self {
         case .couldNotEncodeRpId:
             return "Could not encode Relying Party ID!"

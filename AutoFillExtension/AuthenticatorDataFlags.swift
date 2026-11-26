@@ -13,7 +13,7 @@ struct AuthenticatorDataFlags {
 
         case invalidCombination(UInt8)
 
-        var localizedDescription: String {
+        var errorDescription: String? {
             switch self {
             case .invalidCombination(let value):
                 return "Flag combination BE=0, BS=1 is invalid: \(value)"
